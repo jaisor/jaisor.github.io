@@ -1,0 +1,20 @@
+title: Jordan Marinov
+description: >-
+  FPV drones, RC multirotors, guitars, and the DIY/maker & software projects behind them.
+baseurl: ""
+url: "https://jaisor.github.io"
+github_username: jaisor
+
+theme: minima
+
+header_pages:
+  - projects.md
+
+plugins:
+  - jekyll-feed
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - vendor

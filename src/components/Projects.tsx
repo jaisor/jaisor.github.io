@@ -14,34 +14,43 @@ export function Projects() {
   );
 
   return (
-    <section aria-label="Projects">
-      <h2 className="text-center text-2xl font-bold tracking-tight text-white">
-        Projects
-      </h2>
+    <section
+      id="projects"
+      aria-label="Projects"
+      className="min-h-screen snap-start px-6 py-24"
+    >
+      <div className="mx-auto max-w-4xl">
+        <h2 className="text-center text-2xl font-bold tracking-tight text-white sm:text-3xl">
+          Projects
+        </h2>
 
-      <div className="mt-5 flex flex-wrap justify-center gap-2">
-        <FilterPill
-          active={filter === "all"}
-          onClick={() => setFilter("all")}
-        >
-          All
-        </FilterPill>
-        {buckets.map(({ id, label, icon: Icon }) => (
+        <div className="mt-5 flex flex-wrap justify-center gap-2">
           <FilterPill
-            key={id}
-            active={filter === id}
-            onClick={() => setFilter(id)}
+            active={filter === "all"}
+            onClick={() => setFilter("all")}
           >
-            <Icon size={14} />
-            {label}
+            All
           </FilterPill>
-        ))}
-      </div>
+          {buckets.map(({ id, label, icon: Icon }) => (
+            <FilterPill
+              key={id}
+              active={filter === id}
+              onClick={() => setFilter(id)}
+            >
+              <Icon size={14} />
+              {label}
+            </FilterPill>
+          ))}
+        </div>
 
-      <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {visible.map((project) => (
-          <ProjectCard key={`${project.bucket}-${project.title}`} {...project} />
-        ))}
+        <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {visible.map((project) => (
+            <ProjectCard
+              key={`${project.bucket}-${project.title}`}
+              {...project}
+            />
+          ))}
+        </div>
       </div>
     </section>
   );

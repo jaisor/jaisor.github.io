@@ -1,9 +1,13 @@
+import { ChevronDown } from "lucide-react";
 import profile from "../assets/profile.jpg";
 import { socialLinks } from "../data/social";
 
 export function Header() {
   return (
-    <header className="flex flex-col items-center gap-6 text-center">
+    <header
+      id="home"
+      className="relative flex min-h-screen snap-start flex-col items-center justify-center gap-6 px-6 text-center"
+    >
       <img
         src={profile}
         alt="Jordan Marinov"
@@ -41,6 +45,11 @@ export function Header() {
           </a>
         ))}
       </nav>
+
+      <ChevronDown
+        aria-hidden
+        className="absolute bottom-10 h-6 w-6 animate-bounce text-neutral-600"
+      />
     </header>
   );
 }

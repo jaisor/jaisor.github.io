@@ -15,7 +15,7 @@ export function Projects() {
 
   return (
     <section aria-label="Projects">
-      <h2 className="text-center text-xl font-semibold text-slate-900 dark:text-white">
+      <h2 className="text-center text-xl font-semibold text-white">
         Projects
       </h2>
 
@@ -62,8 +62,8 @@ function FilterPill({
       onClick={onClick}
       className={`inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-sm font-medium transition ${
         active
-          ? "border-slate-900 bg-slate-900 text-white dark:border-white dark:bg-white dark:text-slate-900"
-          : "border-slate-200 text-slate-600 hover:border-slate-300 hover:text-slate-900 dark:border-slate-700 dark:text-slate-400 dark:hover:border-slate-600 dark:hover:text-white"
+          ? "border-amber-400 bg-amber-400 text-neutral-950"
+          : "border-neutral-800 bg-neutral-900/50 text-neutral-400 hover:border-neutral-700 hover:text-white"
       }`}
     >
       {children}

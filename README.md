@@ -1,39 +1,31 @@
 # jaisor.github.io
 
-Personal site, built with [Jekyll](https://jekyllrb.com/) and hosted on [GitHub Pages](https://pages.github.com/).
+Personal homepage — React + TypeScript + Vite + Tailwind CSS.
 
-## One-time setup
+## Develop
 
-1. Push this repo to GitHub as `jaisor.github.io` (the exact repo name matters for a user site).
-2. In the repo settings → Pages, set the source to the `main` branch (root). GitHub will build and publish automatically on every push — no Actions workflow needed for a stock Jekyll site like this one.
-3. Site will be live at `https://jaisor.github.io/`.
-
-## Adding a new article
-
-Create a new file in `_posts/` named `YYYY-MM-DD-title.md`:
-
-```markdown
----
-layout: post
-title: "Your Title"
-date: YYYY-MM-DD
-categories: [diy, fpv, software]  # optional
----
-
-Your content here, in Markdown.
+```sh
+npm install
+npm run dev
 ```
 
-Commit and push — GitHub Pages rebuilds automatically, and the new post shows up on the home page.
+## Build
 
-## Updating the Projects overview
-
-Edit `projects.md` directly.
-
-## Local preview
-
-```
-bundle install
-bundle exec jekyll serve
+```sh
+npm run build   # outputs to dist/
+npm run preview # serve the production build locally
 ```
 
-Then open http://localhost:4000
+## Deploy
+
+Pushes to the `react` branch build and deploy automatically via
+[`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) to
+GitHub Pages. To make this the site's permanent source, merge into
+`main` and point the workflow's trigger branch (and the repo's Pages
+settings, under Settings → Pages → Source → GitHub Actions) at `main`.
+
+## Content
+
+- [`src/data/social.ts`](src/data/social.ts) — social links shown in the header.
+- [`src/data/projects.ts`](src/data/projects.ts) — hobby buckets and the
+  projects listed under each one.

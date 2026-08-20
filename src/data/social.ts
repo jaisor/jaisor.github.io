@@ -1,5 +1,5 @@
 import type { IconType } from "react-icons";
-import { SiGithub, SiInstagram, SiYoutube, SiFacebook } from "react-icons/si";
+import { SiGithub, SiInstagram, SiYoutube, SiBambulab } from "react-icons/si";
 import { FaLinkedin } from "react-icons/fa";
 
 export interface SocialLink {
@@ -22,8 +22,8 @@ export const socialLinks: SocialLink[] = [
   },
   { label: "LinkedIn", url: "https://www.linkedin.com/in/jaisor", icon: FaLinkedin },
   {
-    label: "Facebook",
-    url: "https://www.facebook.com/jordan.marinov.7",
-    icon: SiFacebook,
+    label: "Makerworld",
+    url: "https://makerworld.com/en/@jaisor",
+    icon: SiBambulab,
   },
 ];

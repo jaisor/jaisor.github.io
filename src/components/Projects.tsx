@@ -15,7 +15,7 @@ export function Projects() {
 
   return (
     <section aria-label="Projects">
-      <h2 className="text-center text-xl font-semibold text-white">
+      <h2 className="text-center text-2xl font-bold tracking-tight text-white">
         Projects
       </h2>
 

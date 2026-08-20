@@ -13,7 +13,7 @@ export function Header() {
       />
 
       <div>
-        <h1 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+        <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl">
           Jordan Marinov
         </h1>
         <p className="mt-3 max-w-xl text-balance text-neutral-400">

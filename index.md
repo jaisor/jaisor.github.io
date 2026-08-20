@@ -1,5 +1,5 @@
 ---
-layout: home
+layout: default
 title: Jordan Marinov
 ---
 
@@ -11,9 +11,21 @@ Outside of work: FPV drones, embedded electronics and microcontrollers, 3D print
 
 ### Find me elsewhere
 
+- [Projects](/projects/)
 - [YouTube — FPV flying & builds](https://www.youtube.com/channel/UCVHbnEiLt9DymbX9XdnYadQ)
 - [YouTube — general channel](https://www.youtube.com/user/jaisor)
 - [GitHub](https://github.com/jaisor)
 - [LinkedIn](https://www.linkedin.com/in/jaisor)
 - [Instagram](https://www.instagram.com/jaisorbl/)
 - [Facebook](https://www.facebook.com/jordan.marinov.7)
+
+### Latest posts
+
+<ul>
+{% for post in site.posts %}
+  <li>
+    <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+    <small>— {{ post.date | date: "%b %-d, %Y" }}</small>
+  </li>
+{% endfor %}
+</ul>

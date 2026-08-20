@@ -1,8 +1,10 @@
 ---
-layout: page
+layout: default
 title: Projects
 permalink: /projects/
 ---
+
+[← Back home](/)
 
 An overview of the things I've built over the years, grouped roughly by category. This page is a summary rather than a project-by-project archive — ongoing updates and new write-ups show up as posts on the [home page](/).
 

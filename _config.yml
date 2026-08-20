@@ -5,10 +5,7 @@ baseurl: ""
 url: "https://jaisor.github.io"
 github_username: jaisor
 
-theme: minima
-
-header_pages:
-  - projects.md
+theme: jekyll-theme-leap-day
 
 plugins:
   - jekyll-feed

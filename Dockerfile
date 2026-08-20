@@ -1,6 +1,7 @@
-# Compiles the site and serves the production build for preview,
-# using Vite's own `preview` server (matches what `npm run build` +
-# `npm run preview` do locally, and the Node version CI builds with).
+# Live-reloading dev preview: the site's source is bind-mounted in via
+# docker-compose.yml, so edits on the host show up without rebuilding
+# the image. Run `docker compose up --build` (not `docker build` +
+# `docker run`) to get the mount.
 FROM node:22-alpine
 
 WORKDIR /app
@@ -9,8 +10,7 @@ COPY package.json package-lock.json ./
 RUN npm ci
 
 COPY . .
-RUN npm run build
 
-EXPOSE 4173
+EXPOSE 5173
 
-CMD ["npm", "run", "preview", "--", "--host", "0.0.0.0"]
+CMD ["npm", "run", "dev"]

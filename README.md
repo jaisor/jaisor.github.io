@@ -16,6 +16,16 @@ npm run build   # outputs to dist/
 npm run preview # serve the production build locally
 ```
 
+## Docker preview
+
+```sh
+docker compose up --build
+```
+
+Serves the dev server at http://localhost:5173/ with the source
+bind-mounted, so edits on the host trigger hot reload inside the
+container — no rebuild needed. Stop with `docker compose down`.
+
 ## Deploy
 
 Pushes to the `react` branch build and deploy automatically via

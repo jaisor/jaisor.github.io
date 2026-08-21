@@ -83,7 +83,8 @@ src/components/
   TagChips.tsx        # non-interactive tag labels (spans — cards are anchors)
   ScrollCue.tsx       # clickable bouncing chevron under a section's content,
                       #   hidden when that section overflows the viewport
-  SectionNav.tsx      # fixed top nav bar, IntersectionObserver-driven
+  SectionNav.tsx      # IntersectionObserver-driven section nav: a fixed top
+                      #   bar on lg+, a hamburger dropdown below it
   Footer.tsx          # copyright
 src/data/
   social.ts           # header social links
@@ -199,9 +200,15 @@ in `src/data/*.ts`.
 - **Anchors don't nest.** `PostCard` wraps the whole tile in an `<a>`,
   so tag chips inside it are `<span>`/`<li>`, never links or buttons.
 - **Responsive:** mobile-first base styles, `sm:`/`lg:`/`xl:` to scale
-  up. `SectionNav` is `hidden lg:flex` by design — a fixed bar would
-  cost vertical space phones can't spare, and `ScrollCue` already
-  covers section-to-section movement there.
+  up. `SectionNav` renders **two** controls off one shared observer: a
+  full-width bar (`hidden lg:flex`) and, below `lg`, a hamburger button
+  with a dropdown (`lg:hidden`). A fixed bar on a phone would cost
+  vertical space, so the button sits in the 0&ndash;48px band above the
+  section heading (`top-2 right-2`, 38px tall) &mdash; sections are
+  `py-12` there, which puts every `h2` at exactly 48px, so nothing
+  overlaps. Keep that arithmetic in mind before changing either number.
+  Both controls share the `pastHero` fade, so neither shows over the
+  hero.
 - **Accessibility:** sections carry `aria-label`; decorative layers and
   icons carry `aria-hidden`; icon-only links carry an `sr-only` label.
   Keep that up.

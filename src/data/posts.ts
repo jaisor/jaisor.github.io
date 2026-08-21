@@ -1,32 +1,32 @@
 import type { TagId } from "./tags";
-import warlockHero from "../assets/posts/warlock-hero.jpg";
-import warlockDryfit from "../assets/posts/warlock-dryfit.jpg";
-import warlockParts from "../assets/posts/warlock-parts.jpg";
-import warlockFrets from "../assets/posts/warlock-frets.jpg";
-import warlockPrimer from "../assets/posts/warlock-primer.jpg";
-import warlockDetail from "../assets/posts/warlock-detail.jpg";
-import warlockBack from "../assets/posts/warlock-back.jpg";
-import warlockFinished from "../assets/posts/warlock-finished.jpg";
-import warlockDryfitFull from "../assets/posts/warlock-dryfit-hires.jpg";
-import warlockPartsFull from "../assets/posts/warlock-parts-hires.jpg";
-import warlockFretsFull from "../assets/posts/warlock-frets-hires.jpg";
-import warlockPrimerFull from "../assets/posts/warlock-primer-hires.jpg";
-import warlockDetailFull from "../assets/posts/warlock-detail-hires.jpg";
-import warlockBackFull from "../assets/posts/warlock-back-hires.jpg";
-import warlockFinishedFull from "../assets/posts/warlock-finished-hires.jpg";
-import xracerHero from "../assets/posts/xracer-hero.jpg";
-import xracerArms from "../assets/posts/xracer-arms.jpg";
-import xracerArmsFull from "../assets/posts/xracer-arms-hires.jpg";
-import xracerCage from "../assets/posts/xracer-cage.jpg";
-import xracerCageFull from "../assets/posts/xracer-cage-hires.jpg";
-import xracerStack from "../assets/posts/xracer-stack.jpg";
-import xracerStackFull from "../assets/posts/xracer-stack-hires.jpg";
-import xracerFinished from "../assets/posts/xracer-finished.jpg";
-import xracerFinishedFull from "../assets/posts/xracer-finished-hires.jpg";
-import xracerLow from "../assets/posts/xracer-low.jpg";
-import xracerLowFull from "../assets/posts/xracer-low-hires.jpg";
-import xracerHand from "../assets/posts/xracer-hand.jpg";
-import xracerHandFull from "../assets/posts/xracer-hand-hires.jpg";
+import warlockHero from "../assets/posts/3d-printed-warlock-death-tribute/hero.jpg";
+import warlockDryfit from "../assets/posts/3d-printed-warlock-death-tribute/dryfit.jpg";
+import warlockParts from "../assets/posts/3d-printed-warlock-death-tribute/parts.jpg";
+import warlockFrets from "../assets/posts/3d-printed-warlock-death-tribute/frets.jpg";
+import warlockPrimer from "../assets/posts/3d-printed-warlock-death-tribute/primer.jpg";
+import warlockDetail from "../assets/posts/3d-printed-warlock-death-tribute/detail.jpg";
+import warlockBack from "../assets/posts/3d-printed-warlock-death-tribute/back.jpg";
+import warlockFinished from "../assets/posts/3d-printed-warlock-death-tribute/finished.jpg";
+import warlockDryfitFull from "../assets/posts/3d-printed-warlock-death-tribute/dryfit-hires.jpg";
+import warlockPartsFull from "../assets/posts/3d-printed-warlock-death-tribute/parts-hires.jpg";
+import warlockFretsFull from "../assets/posts/3d-printed-warlock-death-tribute/frets-hires.jpg";
+import warlockPrimerFull from "../assets/posts/3d-printed-warlock-death-tribute/primer-hires.jpg";
+import warlockDetailFull from "../assets/posts/3d-printed-warlock-death-tribute/detail-hires.jpg";
+import warlockBackFull from "../assets/posts/3d-printed-warlock-death-tribute/back-hires.jpg";
+import warlockFinishedFull from "../assets/posts/3d-printed-warlock-death-tribute/finished-hires.jpg";
+import xracerHero from "../assets/posts/building-an-x-racer/hero.jpg";
+import xracerArms from "../assets/posts/building-an-x-racer/arms.jpg";
+import xracerArmsFull from "../assets/posts/building-an-x-racer/arms-hires.jpg";
+import xracerCage from "../assets/posts/building-an-x-racer/cage.jpg";
+import xracerCageFull from "../assets/posts/building-an-x-racer/cage-hires.jpg";
+import xracerStack from "../assets/posts/building-an-x-racer/stack.jpg";
+import xracerStackFull from "../assets/posts/building-an-x-racer/stack-hires.jpg";
+import xracerFinished from "../assets/posts/building-an-x-racer/finished.jpg";
+import xracerFinishedFull from "../assets/posts/building-an-x-racer/finished-hires.jpg";
+import xracerLow from "../assets/posts/building-an-x-racer/low.jpg";
+import xracerLowFull from "../assets/posts/building-an-x-racer/low-hires.jpg";
+import xracerHand from "../assets/posts/building-an-x-racer/hand.jpg";
+import xracerHandFull from "../assets/posts/building-an-x-racer/hand-hires.jpg";
 
 /**
  * A body block. A bare string is a paragraph — the common case — so
@@ -70,7 +70,8 @@ export interface Post {
   tags: TagId[];
   /**
    * Main photo. Import the asset so Vite fingerprints it, e.g.
-   * `import hero from "../assets/posts/my-post.jpg"`. Cards and post
+   * `import hero from "../assets/posts/<slug>/hero.jpg"` — each post
+   * keeps its photos in its own folder. Cards and post
    * pages fall back to a generated placeholder when this is absent.
    */
   image?: string;

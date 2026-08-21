@@ -95,7 +95,8 @@ src/data/
   patents.ts          # Patent[] — rendered compactly in About's
                       #   Braggables list
 src/assets/           # background.jpg, profile.jpg (imported so Vite fingerprints them)
-  posts/              # per-post photos, likewise imported, not linked by path
+  posts/<slug>/       # one folder per post, named for its slug; photos are
+                      #   imported, never linked by path
 public/favicon.jpg    # copied verbatim to dist/
 ```
 
@@ -152,7 +153,12 @@ components.** Components are presentation only.
   placeholder carrying the first tag's icon, so no stock photo or
   remote image is ever needed.
 - **Post photos are imported assets, never paths.** Put them in
-  `src/assets/posts/`, `import` them at the top of `data/posts.ts`, and
+  `src/assets/posts/<slug>/` — one folder per post, named for its slug,
+  so a post's photos stay together and its filenames need no prefix
+  (`hero.jpg`, not `warlock-hero.jpg`). Repeated basenames across
+  folders are fine: Vite fingerprints by content, so two `hero.jpg`
+  files emit as two distinct hashed assets. `import` them at the top of
+  `data/posts.ts`, and
   hand the binding to `Post.image` or an `image` block — a string path
   would skip Vite's fingerprinting and 404 in `dist/`. Resize before
   committing (long edge ~1400px landscape / ~950px portrait, JPEG q80,

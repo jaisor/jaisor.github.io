@@ -77,6 +77,7 @@ src/components/
   Posts.tsx           # #posts — tag-filterable card grid + FilterPill
   PostCard.tsx        # one post teaser: photo, date, excerpt, tags, link
   PostPage.tsx        # the /posts/<slug>/ page + PostNotFound
+  PostBody.tsx        # renders Block[] — paragraphs, code, tables, callouts
   PostImage.tsx       # post photo, or a gradient+icon placeholder if absent
   TagChips.tsx        # non-interactive tag labels (spans — cards are anchors)
   SectionNav.tsx      # right-side dot nav, IntersectionObserver-driven
@@ -111,7 +112,12 @@ components.** Components are presentation only.
   Vite picks the directory up as a build entry on its own. Skipping
   step 2 leaves a card linking to a 404; skipping step 1 builds a page
   that renders `PostNotFound`.
-  `body` is a `string[]` — one paragraph per string, plain text only.
+  `body` is a `Block[]`: a bare string is a paragraph, and the tagged
+  variants (`heading`, `code`, `list`, `note`/`warn`, `steps`, `table`)
+  cover longer technical posts. `PostBody.tsx` renders them. Inside any
+  text field, backtick-delimited spans become inline code — that is the
+  *only* markup, and it is still plain text React escapes, so the
+  no-unescaped-HTML rule holds.
   `image` is optional; without it, cards and pages draw a gradient
   placeholder carrying the first tag's icon, so no stock photo or
   remote image is ever needed.

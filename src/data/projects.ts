@@ -14,15 +14,52 @@ export interface Bucket {
   id: BucketId;
   label: string;
   icon: LucideIcon;
+  description: string;
 }
 
 export const buckets: Bucket[] = [
-  { id: "software-engineering", label: "Software Engineering", icon: Code2 },
-  { id: "3d-printing", label: "3D Printing", icon: Box },
-  { id: "electronics", label: "Electronics", icon: CircuitBoard },
-  { id: "fpv-drones", label: "FPV Drones", icon: Drone },
-  { id: "motorcycles", label: "Motorcycles", icon: Bike },
-  { id: "guitars", label: "Guitars", icon: Guitar },
+  {
+    id: "software-engineering",
+    label: "Software Engineering",
+    icon: Code2,
+    description:
+      "Outside of the day job, I like keeping my hands on real code: home-monitoring dashboards, ESP32-based sensor and lighting controllers, and the occasional off-topic experiment just to see if something works. Most of it lives on GitHub and quietly powers the other hobbies below.",
+  },
+  {
+    id: "3d-printing",
+    label: "3D Printing",
+    icon: Box,
+    description:
+      "An Ender 3 has been running reliably since I got it dialed in — bed leveling, extruder tuning, and enough troubleshooting to feel like a hobby on its own. Most prints feed straight back into the other hobbies here: camera mounts and canopies for the drones, enclosures for electronics builds, and the occasional replacement part around the house.",
+  },
+  {
+    id: "electronics",
+    label: "Electronics",
+    icon: CircuitBoard,
+    description:
+      "ESP32s show up in most of my builds: a Smart Pool Thermometer reporting to Prometheus and Grafana, a yard speaker rebuilt around a Raspberry Pi and a proper amp, and various sensor and lighting controllers scattered around the house. I like the loop of embedded hardware talking to software I also wrote.",
+  },
+  {
+    id: "fpv-drones",
+    label: "FPV Drones",
+    icon: Drone,
+    description:
+      "A string of custom FPV quads going back to 2015 — Zax, Tangra, an X-frame racer, SiganX, KISS X210/QAV210, and Shrieka 130 — each one an excuse to try a new frame, stack, or motor combo. Along the way that meant flight-controller tuning on Cleanflight/Betaflight, bench-testing motor and ESC combos, and eventually getting FCC-licensed (Technician class, callsign KK6VYN) to legally run higher-power video gear.",
+  },
+  {
+    id: "motorcycles",
+    label: "Motorcycles",
+    icon: Bike,
+    description:
+      "One of my newer hobbies — still early days, learning the ropes on riding and maintenance. More to come here as the garage fills in.",
+  },
+  {
+    id: "guitars",
+    label: "Guitars",
+    icon: Guitar,
+    description:
+      "A hobby that's still taking shape — details on gear and playing coming soon.",
+  },
 ];
 
 export interface Project {

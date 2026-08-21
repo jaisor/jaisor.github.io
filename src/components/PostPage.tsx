@@ -1,6 +1,7 @@
 import { formatPostDate, type Post } from "../data/posts";
 import { Backdrop } from "./Backdrop";
 import { Footer } from "./Footer";
+import { PostBody } from "./PostBody";
 import { PostImage } from "./PostImage";
 import { TagChips } from "./TagChips";
 
@@ -46,13 +47,7 @@ export function PostPage({ post }: { post: Post }) {
           className="mt-10 h-64 rounded-xl border border-neutral-800 [corner-shape:bevel] lg:h-80"
         />
 
-        <div className="mt-10 space-y-5 text-neutral-300">
-          {body.map((paragraph, i) => (
-            <p key={i} className="lg:text-lg">
-              {paragraph}
-            </p>
-          ))}
-        </div>
+        <PostBody body={body} />
       </article>
 
       <Footer />

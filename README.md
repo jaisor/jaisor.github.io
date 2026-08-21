@@ -65,9 +65,10 @@ Two steps, both required:
 
 1. Append a `Post` to `posts` in
    [`src/data/posts.ts`](src/data/posts.ts) with a unique `slug` and
-   `tags` drawn from `TagId`. `body` is one string per paragraph;
-   `image` is optional (without it the card and page draw a gradient
-   placeholder).
+   `tags` drawn from `TagId`. `body` is a list of blocks — a bare
+   string is a paragraph, and tagged blocks add headings, code,
+   lists, callouts, steps and tables. `image` is optional (without it
+   the card and page draw a gradient placeholder).
 2. Create `posts/<slug>/index.html` — copy an existing one and update
    the `<title>`, the meta `description`, and `data-slug`.
 

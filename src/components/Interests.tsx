@@ -16,7 +16,7 @@ export function Interests() {
           {buckets.map(({ id, label, icon: Icon, description, link, linkLabel }) => (
             <div
               key={id}
-              className="rounded-xl border border-neutral-800 bg-neutral-900/50 p-6 text-left [corner-shape:bevel] lg:p-8"
+              className="rounded-xl border border-neutral-800 bg-neutral-900/50 p-6 text-left shadow-sm shadow-black/20 transition [corner-shape:bevel] hover:border-amber-500/40 hover:shadow-md hover:shadow-black/30 lg:p-8"
             >
               <div className="flex items-center gap-3">
                 <Icon className="h-6 w-6 shrink-0 text-amber-500 lg:h-7 lg:w-7" />

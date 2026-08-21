@@ -17,7 +17,7 @@ function App() {
           filter: "brightness(1.8) contrast(1.1)",
         }}
       />
-      <div aria-hidden className="fixed inset-0 -z-10 bg-neutral-950/55" />
+      <div aria-hidden className="fixed inset-0 -z-10 bg-neutral-950/80" />
       <div
         aria-hidden
         className="pointer-events-none fixed -top-40 -right-40 -z-10 h-96 w-96 rounded-full bg-amber-500/15 blur-3xl"

@@ -23,7 +23,7 @@ export function Interests() {
         {buckets.map(({ id, label, icon: Icon }) => (
           <li
             key={id}
-            className="flex flex-col items-center gap-2 rounded-xl border border-neutral-800 bg-neutral-900 px-6 py-5 text-sm font-medium text-neutral-300 lg:gap-3 lg:px-8 lg:py-7 lg:text-base"
+            className="flex flex-col items-center gap-2 rounded-xl border border-neutral-800 bg-neutral-900/50 px-6 py-5 text-sm font-medium text-neutral-300 [corner-shape:bevel] lg:gap-3 lg:px-8 lg:py-7 lg:text-base"
           >
             <Icon className="h-6 w-6 text-amber-500 lg:h-8 lg:w-8" />
             {label}

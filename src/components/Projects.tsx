@@ -69,7 +69,7 @@ function FilterPill({
     <button
       type="button"
       onClick={onClick}
-      className={`inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-sm font-medium transition lg:gap-2 lg:px-5 lg:py-2 lg:text-base ${
+      className={`inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-sm font-medium transition [corner-shape:bevel] lg:gap-2 lg:px-5 lg:py-2 lg:text-base ${
         active
           ? "border-amber-400 bg-amber-400 text-neutral-950"
           : "border-neutral-800 bg-neutral-900/50 text-neutral-400 hover:border-neutral-700 hover:text-white"

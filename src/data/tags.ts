@@ -79,7 +79,7 @@ export const tags: Tag[] = [
     label: "FPV Drones",
     icon: Drone,
     description:
-      "I built my first FPV drone in 2015 and am addicted to flying and building ever since. The hobby is vast, allowing me to exercise coding, electronics, mechanical design, 3D printing and enjoy a substantial adrenaline rush. I took a short stab into [FPV racing](https://www.youtube.com/watch?v=TdSUKtazEAY) but have since settled into a calmer, [cinematic](https://www.youtube.com/watch?v=u_-RXqDzlsU) style of flying.",
+      "I built my first FPV drone in 2015 and am addicted to flying and building ever since. The hobby is vast, allowing me to exercise my coding, electronics, mechanical design, and 3D printing skills — and enjoy a substantial adrenaline rush. I took a short stab at [FPV racing](https://www.youtube.com/watch?v=TdSUKtazEAY) but have since settled into a calmer, [cinematic](https://www.youtube.com/watch?v=u_-RXqDzlsU) style of flying.",
   },
   {
     id: "motorcycles",

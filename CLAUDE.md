@@ -94,6 +94,7 @@ src/data/
   patents.ts          # Patent[] — rendered compactly in About's
                       #   Braggables list
 src/assets/           # background.jpg, profile.jpg (imported so Vite fingerprints them)
+  posts/              # per-post photos, likewise imported, not linked by path
 public/favicon.jpg    # copied verbatim to dist/
 ```
 
@@ -136,8 +137,8 @@ components.** Components are presentation only.
   step 2 leaves a card linking to a 404; skipping step 1 builds a page
   that renders `PostNotFound`.
   `body` is a `Block[]`: a bare string is a paragraph, and the tagged
-  variants (`heading`, `code`, `list`, `note`/`warn`, `steps`, `table`)
-  cover longer technical posts. `PostBody.tsx` renders them. Inside any
+  variants (`heading`, `code`, `list`, `note`/`warn`, `steps`, `table`,
+  `image`) cover longer technical posts. `PostBody.tsx` renders them. Inside any
   text field, backtick-delimited spans become inline code and
   `[label](href)` becomes a link — that is the *only* markup. Both are
   tokenised into React elements by
@@ -149,6 +150,20 @@ components.** Components are presentation only.
   `image` is optional; without it, cards and pages draw a gradient
   placeholder carrying the first tag's icon, so no stock photo or
   remote image is ever needed.
+- **Post photos are imported assets, never paths.** Put them in
+  `src/assets/posts/`, `import` them at the top of `data/posts.ts`, and
+  hand the binding to `Post.image` or an `image` block — a string path
+  would skip Vite's fingerprinting and 404 in `dist/`. Resize before
+  committing (long edge ~1400px landscape / ~950px portrait, JPEG q80,
+  which lands around 200–280KB each); the originals off a phone are
+  3–6MB apiece and this repo ships to Pages. `.NET` imaging via
+  PowerShell does the job without adding a dependency. Every `image`
+  block needs real `alt` text describing the photo.
+  `Post.image` is cropped to a landscape band (`h-40` on cards, `h-64`
+  /`lg:h-80` on the page), so give it a landscape crop — a portrait
+  photo there gets sliced through the middle. Body `image` blocks keep
+  their aspect ratio inside a `max-h-[36rem]` box, so portrait is fine
+  there.
 - **A non-post standalone page would need a manual Vite entry.** Only
   `posts/*/` is auto-globbed (via `postEntries()`); anything else must
   be added to `build.rollupOptions.input` by hand. `npm run dev`

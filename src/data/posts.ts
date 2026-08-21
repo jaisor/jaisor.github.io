@@ -1,12 +1,25 @@
 import type { TagId } from "./tags";
+import warlockHero from "../assets/posts/warlock-hero.jpg";
+import warlockDryfit from "../assets/posts/warlock-dryfit.jpg";
+import warlockParts from "../assets/posts/warlock-parts.jpg";
+import warlockFrets from "../assets/posts/warlock-frets.jpg";
+import warlockPrimer from "../assets/posts/warlock-primer.jpg";
+import warlockDetail from "../assets/posts/warlock-detail.jpg";
+import warlockBack from "../assets/posts/warlock-back.jpg";
+import warlockFull from "../assets/posts/warlock-full.jpg";
 
 /**
  * A body block. A bare string is a paragraph — the common case — so
  * simple posts stay readable as a plain list of strings.
  *
- * Inline `backticks` inside any text field render as inline code. That
- * is the only markup: everything is plain text that React escapes, so
- * there is still no unescaped-HTML surface anywhere on the site.
+ * Inline `backticks` render as inline code and [label](href) as a link
+ * inside any text field. That is the only markup: everything else is
+ * plain text that React escapes, so there is still no unescaped-HTML
+ * surface anywhere on the site.
+ *
+ * An `image` block's `src` is an imported asset, same as `Post.image`,
+ * so Vite fingerprints it. `alt` is required — write what the photo
+ * shows; `caption` is the visible line under it.
  */
 export type Block =
   | string
@@ -15,6 +28,7 @@ export type Block =
   | { kind: "list"; items: string[] }
   | { kind: "note" | "warn"; label: string; text: string }
   | { kind: "steps"; items: { title: string; text: string }[] }
+  | { kind: "image"; src: string; alt: string; caption?: string }
   | { kind: "table"; caption?: string; head: string[]; rows: string[][] };
 
 export interface Post {
@@ -244,6 +258,81 @@ export const posts: Post[] = [
     body: [
       "This is placeholder copy for an example post. Replace it with the real write-up.",
       "Body paragraphs are plain strings in src/data/posts.ts. Each string becomes its own paragraph, so there is no markup to escape and no HTML to sanitise.",
+    ],
+  },
+  {
+    slug: "3d-printed-warlock-death-tribute",
+    title: "A 3D-printed Warlock, splattered in blood",
+    date: "2026-07-30",
+    excerpt:
+      "A B.C. Rich Warlock body printed in sections, bonded, filled and primed, then finished in House of Kolor candy red — a Death tribute built as a gift for my son's friend.",
+    tags: ["guitars", "3d-printing"],
+    image: warlockHero,
+    body: [
+      "This one was a gift. My son has a friend who is a huge Death fan, and somewhere between \"I could probably print that\" and \"I should probably stop\", it turned into a full build.",
+      "The body is [this B.C. Rich Warlock model](https://makerworld.com/en/models/701362-bc-rich-warlock-a1-mini-guitar-body-single-pickup#profileId-630884) from MakerWorld — an A1 mini-sized single-pickup version, which means it comes split into sections small enough to fit a compact printer bed. Everything else is off-the-shelf guitar parts: a bought neck, a double-locking tremolo, and tuners.",
+      {
+        kind: "image",
+        src: warlockDryfit,
+        alt: "The raw white printed guitar body on a workbench with the neck, bridge and a pickup dry-fitted in place.",
+        caption:
+          "Dry fit first. Cheap insurance before any glue goes anywhere.",
+      },
+      { kind: "heading", text: "Printing and bonding" },
+      "Printing a body in sections means the real work starts after the printer stops. I glued the pieces with J-B Weld Plastic Bonder, which is the part of the build with no undo button — the seams have to line up the first time, because a guitar body that is 1mm out of true at the neck pocket is firewood.",
+      "The honeycomb interior is part of the model, not a slicer setting, and it stays open by design. It keeps the body light and it looks deliberate once the paint is on.",
+      {
+        kind: "image",
+        src: warlockParts,
+        alt: "Printed body sections laid out on a workbench, showing the open honeycomb interior, next to a can of J-B Weld Plastic Bonder, filler primer and a sanding block.",
+        caption: "The whole supporting cast: bonder, filler primer, sanding block.",
+      },
+      { kind: "heading", text: "Making a printed part stop looking printed" },
+      "This is the unglamorous majority of the project. Rustoleum filler primer, sand, look at it under a light, find every layer line you missed, primer again. Repeat until the surface reads as a solid object rather than a stack of extrusions.",
+      {
+        kind: "note",
+        label: "What actually matters",
+        text: "Nobody will ever notice the hours of sanding. They will notice the one layer line you left under a gloss coat.",
+      },
+      {
+        kind: "image",
+        src: warlockPrimer,
+        alt: "The guitar body hanging in a spray booth, coated in grey filler primer, with the neck masked off.",
+        caption: "Grey primer is the honest coat — it shows you everything you skipped.",
+      },
+      "The neck got its own attention: every fret masked off individually so the crowns could be polished without touching the fretboard.",
+      {
+        kind: "image",
+        src: warlockFrets,
+        alt: "A guitar fretboard with blue and yellow masking tape applied between every fret, exposing only the fret wire.",
+        caption: "Twenty-four frets, forty-eight pieces of tape, one podcast.",
+      },
+      { kind: "heading", text: "The blood" },
+      "White base coat, then Apple Red Kandy from House of Kolor for the blood. Candy is the right choice here for a reason that has nothing to do with the shade: it stacks on itself. Every pass over the same spot goes deeper and darker, so a single colour gives you thin arterial spray and thick pooling clots without ever mixing a second red. The Apple Red also happens to land almost exactly on the colour of the real thing.",
+      "There is no clever technique for the pattern. We loaded brushes and flicked and splattered the paint at the body by hand, which is enormously satisfying and completely uncontrollable. My garage woodshop looked like a murder scene by the end of it.",
+      "The splatter session is worth watching rather than describing — [here it is](https://www.youtube.com/shorts/S2uFrwL09KM).",
+      {
+        kind: "image",
+        src: warlockDetail,
+        alt: "Close-up of the finished guitar body: white with heavy red splatter across the honeycomb cutouts, a white pickup and a black tremolo bridge.",
+        caption:
+          "Thin spray, heavy runs and dense clots — all the same Apple Red, just more of it.",
+      },
+      { kind: "heading", text: "The pickup" },
+      "The last piece was the one that makes it a Death guitar rather than a red guitar. Out came the placeholder humbucker, in went a white DiMarzio X2N — the same pickup the late Chuck Schuldiner, Death's guitarist and vocalist, ran in his iconic B.C. Rich.",
+      "White on white, in the middle of all that red. It is the only part of the build I would call subtle.",
+      {
+        kind: "image",
+        src: warlockBack,
+        alt: "The back of the finished guitar, showing splatter running the full length of the neck and the Death logo on the lower body.",
+        caption: "The splatter carries over the back and up the neck.",
+      },
+      {
+        kind: "image",
+        src: warlockFull,
+        alt: "The finished guitar standing on a stand: white blood-splattered Warlock body, skull-and-crossbones fret markers and black hardware.",
+        caption: "Delivered.",
+      },
     ],
   },
   {

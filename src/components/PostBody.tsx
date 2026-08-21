@@ -99,6 +99,23 @@ function BlockView({ block }: { block: Block }) {
         </ol>
       );
 
+    case "image":
+      return (
+        <figure>
+          <img
+            src={block.src}
+            alt={block.alt}
+            loading="lazy"
+            className="mx-auto max-h-[36rem] w-auto max-w-full rounded-xl border border-neutral-800 object-contain shadow-sm shadow-black/20 [corner-shape:bevel]"
+          />
+          {block.caption && (
+            <figcaption className="mt-3 text-center text-sm text-neutral-500">
+              <Inline text={block.caption} />
+            </figcaption>
+          )}
+        </figure>
+      );
+
     case "table":
       return (
         <figure>

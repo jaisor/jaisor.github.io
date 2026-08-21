@@ -23,7 +23,7 @@ export function Header() {
         <div className="mt-3 max-w-xl space-y-4 text-neutral-400 lg:mt-5 lg:max-w-2xl lg:text-lg">
           <p className="text-balance">
             I am a technology executive with decades of experience building large-scale backend systems, hybrid cloud 
-            infrastructure, remote fleet management, and AI-driven applications. I love elegant simplicity, proof 
+            infrastructure, remote fleet management, web and mobile applications. I love elegant simplicity, proof 
             through data, scaling smart, and moving fast.
           </p>
           <p className="text-balance">
@@ -32,8 +32,9 @@ export function Header() {
             Atom Tickets, and Amazon.
           </p>
           <p className="text-balance">
-            Personally, I continue to build and explore the latest tech. tools. Applying software to real-life situations 
-            through electronics, rapid prototyping, and iteration is especially exciting to me.
+            Personally, I continue to build and explore the latest tech. tools. I am fascinatged by the intersection of 
+            software and hardware, and I enjoy tinkering with IoT devices, robotics, and embedded systems. The current AI 
+            revolution is particularly exciting, with its potential to accelerate and transform innovation.
           </p>
         </div>
       </div>

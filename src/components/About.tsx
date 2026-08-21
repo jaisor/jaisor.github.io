@@ -22,12 +22,12 @@ export function About() {
             technology teams at Honey, Atom Tickets, and Amazon.
           </p>
           <p>
-            Personally, I continue to build and explore the latest tech.
-            tools. I am fascinatged by the intersection of software and
+            Personally, I continue to pursue and build with the latest tech.
+            tools. I am fascinated by the intersection of software and
             hardware, and I enjoy tinkering with IoT devices, robotics, and
-            embedded systems. The current AI revolution is particularly
+            embedded systems. The recent AI revolution is particularly
             exciting, with its potential to accelerate and transform
-            innovation.
+            how we innovate.
           </p>
         </div>
 

@@ -81,7 +81,8 @@ src/components/
   PostBody.tsx        # renders Block[] — paragraphs, code, tables, callouts
   PostImage.tsx       # post photo, or a gradient+icon placeholder if absent
   TagChips.tsx        # non-interactive tag labels (spans — cards are anchors)
-  ScrollCue.tsx       # clickable bouncing chevron under a section's content
+  ScrollCue.tsx       # clickable bouncing chevron under a section's content,
+                      #   hidden when that section overflows the viewport
   SectionNav.tsx      # fixed top nav bar, IntersectionObserver-driven
   Footer.tsx          # copyright
 src/data/
@@ -178,10 +179,19 @@ in `src/data/*.ts`.
   section it now follows.
 - **Every section except the last ends with a `<ScrollCue>`** pointing
   at the next one's id — the site's scroll affordance. It sits in
-  normal flow *under* the content (not pinned to the viewport), so on
-  a section taller than the screen you reach it by scrolling. The
-  chevron bounces inside a stationary button so the hit target doesn't
-  move; keep it that way.
+  normal flow *under* the content, not pinned to the viewport, and
+  **shows itself only when its section fits the viewport**: it measures
+  the section against the scroll container (`section.parentElement`, not
+  `window.innerHeight`, which disagrees with `100vh` on mobile) via a
+  `ResizeObserver`. Once content overflows, the overflow *is* the
+  affordance and the cue would be below the fold anyway. It hides with
+  `invisible` (`visibility: hidden`) rather than unmounting, so the
+  space stays reserved — dropping it out of flow would shrink the
+  section back under the viewport and the measurement would oscillate.
+  Consequence: a section that overflows only slightly shows no cue and
+  keeps a small dead gap; that's the stable trade, don't "fix" it by
+  removing the element. The chevron bounces inside a stationary button
+  so the hit target doesn't move; keep it that way.
 - **Internal links are plain `<a href="/posts/…/">`** — a real
   navigation to a real page. Do *not* give them `target="_blank"`; that
   rule is for external links only. Post pages link back with

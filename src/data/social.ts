@@ -15,6 +15,7 @@ export const socialLinks: SocialLink[] = [
     url: "https://makerworld.com/en/@jaisor",
     icon: SiBambulab,
   },
+  { label: "LinkedIn", url: "https://www.linkedin.com/in/jaisor", icon: FaLinkedin },
   {
     label: "YouTube",
     url: "https://www.youtube.com/channel/UCVHbnEiLt9DymbX9XdnYadQ",
@@ -25,5 +26,4 @@ export const socialLinks: SocialLink[] = [
     url: "https://www.instagram.com/jaisorbl/",
     icon: SiInstagram,
   },
-  { label: "LinkedIn", url: "https://www.linkedin.com/in/jaisor", icon: FaLinkedin },
 ];

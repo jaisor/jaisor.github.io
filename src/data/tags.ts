@@ -23,7 +23,8 @@ export interface Tag {
   description: string;
   link?: string;
   linkLabel?: string;
-  repos?: { label: string; href: string }[];
+  /** Extra links under the description — repos, videos, whatever fits. */
+  links?: { label: string; href: string }[];
 }
 
 export const tags: Tag[] = [
@@ -42,7 +43,7 @@ export const tags: Tag[] = [
     icon: CircuitBoard,
     description:
       "I have been interested in electronics and schematics since childhood. I love the capabilities microcontrollers like Arduino and ESP provide in the areas of IoT and home automation. I have used this rich palette of tech to create projects like:",
-    repos: [
+    links: [
       {
         label: "WiFi Climate Sensor",
         href: "https://github.com/jaisor/wifi-climate-sensor",
@@ -75,7 +76,17 @@ export const tags: Tag[] = [
     label: "FPV Drones",
     icon: Drone,
     description:
-      "A string of custom FPV quads going back to 2015 — Zax, Tangra, an X-frame racer, SiganX, KISS X210/QAV210, and Shrieka 130 — each one an excuse to try a new frame, stack, or motor combo. Along the way that meant flight-controller tuning on Cleanflight/Betaflight, bench-testing motor and ESC combos, and eventually getting FCC-licensed (Technician class, callsign KK6VYN) to legally run higher-power video gear.",
+      "I built my first FPV drone in 2015 and have been addicted to flying — and building — ever since. It is a vast hobby that exercises just about everything I enjoy: coding and flight-controller tuning, electronics and soldering, mechanical and aero design, 3D printing for frames and mounts, and an adrenaline rush at the end of it. A long string of custom quads followed — Zax, Tangra, an X-frame racer, SiganX, KISS X210/QAV210, Shrieka 130 — each one an excuse to try a new frame, stack, or motor combo. I took a short stint into FPV racing, but have since settled into a calmer, cinematic style of flying:",
+    links: [
+      {
+        label: "Racing — Hesperia",
+        href: "https://www.youtube.com/watch?v=TdSUKtazEAY",
+      },
+      {
+        label: "Cinematic — Ocotillo Wells",
+        href: "https://www.youtube.com/watch?v=u_-RXqDzlsU",
+      },
+    ],
   },
   {
     id: "motorcycles",

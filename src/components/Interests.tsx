@@ -15,7 +15,7 @@ export function Interests() {
 
         <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:mt-14 lg:grid-cols-3 lg:gap-6">
           {tags.map(
-            ({ id, label, icon: Icon, description, repos, link, linkLabel }) => (
+            ({ id, label, icon: Icon, description, links, link, linkLabel }) => (
               <div
                 key={id}
                 className="rounded-xl border border-neutral-800 bg-neutral-900/50 p-6 text-left shadow-sm shadow-black/20 transition [corner-shape:bevel] hover:border-amber-500/40 hover:shadow-md hover:shadow-black/30 lg:p-8"
@@ -29,9 +29,9 @@ export function Interests() {
                 <p className="mt-3 text-sm text-neutral-400 lg:text-base">
                   {description}
                 </p>
-                {repos && (
+                {links && (
                   <ul className="mt-3 list-disc space-y-1.5 pl-5 marker:text-amber-500">
-                    {repos.map(({ label: repoLabel, href }) => (
+                    {links.map(({ label: linkText, href }) => (
                       <li key={href}>
                         <a
                           href={href}
@@ -39,7 +39,7 @@ export function Interests() {
                           rel="noreferrer"
                           className="text-sm font-medium text-amber-500 transition hover:text-amber-400"
                         >
-                          {repoLabel}
+                          {linkText}
                         </a>
                       </li>
                     ))}

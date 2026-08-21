@@ -110,10 +110,12 @@ components.** Components are presentation only.
   Hobbies cards (each `Tag` carries the hobby-card copy) and the Posts
   filter pills / chips. Add a `Tag`, add its `id` to the `TagId` union,
   and it shows up in both places.
-- Link repos from a hobby card → a `Tag` can carry `repos`
+- Add supporting links to a hobby card → a `Tag` can carry `links`
   (`{ label, href }[]`), rendered as a list of amber links under the
-  description. Use it when a card names several projects; `link` /
-  `linkLabel` remain the single trailing call-to-action.
+  description. Use it when a card points at several things — repos,
+  videos; `link` / `linkLabel` remain the single trailing
+  call-to-action. Label link rows with the real target title (check it,
+  don't guess) so the text matches where it lands.
 - **Add a post → two steps, and both are required:**
   1. append a `Post` to `posts` in `data/posts.ts` with a unique `slug`
      and `tags` drawn from `TagId`;

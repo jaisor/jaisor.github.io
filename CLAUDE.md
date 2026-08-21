@@ -81,6 +81,7 @@ src/components/
   PostBody.tsx        # renders Block[] — paragraphs, code, tables, callouts
   Inline.tsx          # shared inline markup: `code` and [label](href)
   PostImage.tsx       # post photo, or a gradient+icon placeholder if absent
+  Lightbox.tsx        # full-screen viewer for a clicked post photo
   TagChips.tsx        # non-interactive tag labels (spans — cards are anchors)
   ScrollCue.tsx       # clickable bouncing chevron under a section's content,
                       #   hidden when that section overflows the viewport
@@ -164,6 +165,19 @@ components.** Components are presentation only.
   photo there gets sliced through the middle. Body `image` blocks keep
   their aspect ratio inside a `max-h-[36rem]` box, so portrait is fine
   there.
+- **Two tiers per photo.** The inline one (above) plus an optional
+  `full` import — a `*-hires.jpg` at ~2560px long edge, q85, roughly
+  700–900KB — which makes the image open in
+  [`Lightbox`](src/components/Lightbox.tsx) when clicked. Deliberately
+  not the camera original: 3–6MB × a photo-heavy post is real weight on
+  a Pages site, and 2560px already exceeds any display. The trigger is a
+  real `<a href={full}>` whose handler calls `preventDefault()`, so the
+  hi-res file still opens if the JS never runs; it also `focus()`es
+  itself on click, because `Lightbox` restores focus to whatever was
+  active when it mounted and browsers don't focus a clicked anchor.
+  `Post.image` is *not* clickable — `PostImage` is shared with
+  `PostCard`, which already wraps the whole tile in an `<a>`, and
+  anchors can't nest.
 - **A non-post standalone page would need a manual Vite entry.** Only
   `posts/*/` is auto-globbed (via `postEntries()`); anything else must
   be added to `build.rollupOptions.input` by hand. `npm run dev`

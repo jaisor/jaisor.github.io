@@ -1,22 +1,36 @@
+import { useState } from "react";
 import type { Block } from "../data/posts";
 import { Inline } from "./Inline";
+import { Lightbox } from "./Lightbox";
 
 /**
  * Renders a post body. Everything here is plain text run through React,
  * so there is no unescaped-HTML surface — the only markup is the
  * backtick and link convention handled by <Inline>.
  */
+type Zoom = { src: string; alt: string; caption?: string };
+
 export function PostBody({ body }: { body: Block[] }) {
+  const [zoom, setZoom] = useState<Zoom | null>(null);
+
   return (
     <div className="mt-10 space-y-5">
       {body.map((block, i) => (
-        <BlockView key={i} block={block} />
+        <BlockView key={i} block={block} onZoom={setZoom} />
       ))}
+
+      {zoom && <Lightbox {...zoom} onClose={() => setZoom(null)} />}
     </div>
   );
 }
 
-function BlockView({ block }: { block: Block }) {
+function BlockView({
+  block,
+  onZoom,
+}: {
+  block: Block;
+  onZoom: (zoom: Zoom) => void;
+}) {
   if (typeof block === "string") {
     return (
       <p className="text-neutral-300 lg:text-lg">
@@ -99,22 +113,48 @@ function BlockView({ block }: { block: Block }) {
         </ol>
       );
 
-    case "image":
+    case "image": {
+      const { src, alt, caption, full } = block;
+      const image = (
+        <img
+          src={src}
+          alt={alt}
+          loading="lazy"
+          className="mx-auto max-h-[36rem] w-auto max-w-full rounded-xl border border-neutral-800 object-contain shadow-sm shadow-black/20 [corner-shape:bevel]"
+        />
+      );
+
       return (
         <figure>
-          <img
-            src={block.src}
-            alt={block.alt}
-            loading="lazy"
-            className="mx-auto max-h-[36rem] w-auto max-w-full rounded-xl border border-neutral-800 object-contain shadow-sm shadow-black/20 [corner-shape:bevel]"
-          />
-          {block.caption && (
+          {full ? (
+            // A real link to the hi-res file, so it still works if the
+            // JS never runs; the handler upgrades it to the Lightbox.
+            <a
+              href={full}
+              onClick={(event) => {
+                event.preventDefault();
+                // Clicking an anchor doesn't focus it in every browser,
+                // and the Lightbox restores focus to whatever was active
+                // when it mounted — so put it here explicitly.
+                event.currentTarget.focus();
+                onZoom({ src: full, alt, caption });
+              }}
+              className="block cursor-zoom-in transition hover:opacity-90"
+            >
+              {image}
+              <span className="sr-only">View full-size</span>
+            </a>
+          ) : (
+            image
+          )}
+          {caption && (
             <figcaption className="mt-3 text-center text-sm text-neutral-500">
-              <Inline text={block.caption} />
+              <Inline text={caption} />
             </figcaption>
           )}
         </figure>
       );
+    }
 
     case "table":
       return (

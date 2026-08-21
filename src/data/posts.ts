@@ -6,7 +6,14 @@ import warlockFrets from "../assets/posts/warlock-frets.jpg";
 import warlockPrimer from "../assets/posts/warlock-primer.jpg";
 import warlockDetail from "../assets/posts/warlock-detail.jpg";
 import warlockBack from "../assets/posts/warlock-back.jpg";
-import warlockFull from "../assets/posts/warlock-full.jpg";
+import warlockFinished from "../assets/posts/warlock-finished.jpg";
+import warlockDryfitFull from "../assets/posts/warlock-dryfit-hires.jpg";
+import warlockPartsFull from "../assets/posts/warlock-parts-hires.jpg";
+import warlockFretsFull from "../assets/posts/warlock-frets-hires.jpg";
+import warlockPrimerFull from "../assets/posts/warlock-primer-hires.jpg";
+import warlockDetailFull from "../assets/posts/warlock-detail-hires.jpg";
+import warlockBackFull from "../assets/posts/warlock-back-hires.jpg";
+import warlockFinishedFull from "../assets/posts/warlock-finished-hires.jpg";
 
 /**
  * A body block. A bare string is a paragraph — the common case — so
@@ -19,7 +26,8 @@ import warlockFull from "../assets/posts/warlock-full.jpg";
  *
  * An `image` block's `src` is an imported asset, same as `Post.image`,
  * so Vite fingerprints it. `alt` is required — write what the photo
- * shows; `caption` is the visible line under it.
+ * shows; `caption` is the visible line under it. Add `full` (a second,
+ * larger import) to make the photo open full-screen when clicked.
  */
 export type Block =
   | string
@@ -28,7 +36,14 @@ export type Block =
   | { kind: "list"; items: string[] }
   | { kind: "note" | "warn"; label: string; text: string }
   | { kind: "steps"; items: { title: string; text: string }[] }
-  | { kind: "image"; src: string; alt: string; caption?: string }
+  | {
+      kind: "image";
+      src: string;
+      alt: string;
+      caption?: string;
+      /** Hi-res version; when present the image opens in a Lightbox. */
+      full?: string;
+    }
   | { kind: "table"; caption?: string; head: string[]; rows: string[][] };
 
 export interface Post {
@@ -270,10 +285,11 @@ export const posts: Post[] = [
     image: warlockHero,
     body: [
       "My son has a friend who is a huge Death fan, and somewhere between \"I could probably print that\" and \"This will never work\", it turned into a full build.",
-      "The body is [this B.C. Rich Warlock model](https://makerworld.com/en/models/701362-bc-rich-warlock-a1-mini-guitar-body-single-pickup#profileId-630884) from MakerWorld - single-pickup version. It comes split into sections to be printed separately depending on the print volume supported. Everything else is off-the-shelf guitar parts: a bought neck, a double-locking tremolo, and tuners.",
+      "The body is [this B.C. Rich Warlock model](https://makerworld.com/en/models/701362-bc-rich-warlock-a1-mini-guitar-body-single-pickup#profileId-630884) from MakerWorld - single-pickup version. It comes split into sections to be printed separately depending on the available print volume. Everything else is off-the-shelf guitar parts: a bought neck, a double-locking tremolo, and tuners.",
       {
         kind: "image",
         src: warlockDryfit,
+        full: warlockDryfitFull,
         alt: "The raw white printed guitar body on a workbench with the neck, bridge and a pickup dry-fitted in place.",
         caption:
           "Dry fit first. Insurance before glue and paint.",
@@ -284,11 +300,12 @@ export const posts: Post[] = [
       {
         kind: "image",
         src: warlockParts,
+        full: warlockPartsFull,
         alt: "Printed body sections laid out on a workbench, showing the open honeycomb interior, next to a can of J-B Weld Plastic Bonder, filler primer and a sanding block.",
         caption: "The whole supporting cast: bonder, filler primer, sanding block.",
       },
-      { kind: "heading", text: "Making a printed part stop looking printed" },
-      "This is the unglamorous majority of the project. Rustoleum filler primer, sand, look at it under a light, find every layer line you missed, primer again. Repeat until the surface reads as a solid object rather than a stack of extrusions.",
+      { kind: "heading", text: "Making printed parts not look printed" },
+      "This is the unglamorous majority of the project. Rustoleum filler primer, sand, look at it under a light, find every layer line you missed, primer again. Repeat until the surface is as a solid object instead a stack of extrusions.",
       {
         kind: "note",
         label: "What actually matters",
@@ -297,39 +314,44 @@ export const posts: Post[] = [
       {
         kind: "image",
         src: warlockPrimer,
+        full: warlockPrimerFull,
         alt: "The guitar body hanging in a spray booth, coated in gray filler primer, with the neck masked off.",
         caption: "Gray primer is the honest coat — it shows you everything you skipped.",
       },
-      "The neck got its own attention: every fret masked off individually so the crowns could be polished without touching the fretboard.",
+      "The neck got a proper fretjob. As every fret was masked off individually, then leveled, crowned, rounded and polished. The fretboard was scrubbed with 0000 steel wool and conditioned with F-One oil.",
       {
         kind: "image",
         src: warlockFrets,
+        full: warlockFretsFull,
         alt: "A guitar fretboard with blue and yellow masking tape applied between every fret, exposing only the fret wire.",
         caption: "Twenty-four frets, forty-eight pieces of tape, and a can of elbow grease.",
       },
       { kind: "heading", text: "The blood" },
-      "White base coat, then Apple Red Kandy from House of Kolor for the blood. Candy is the right choice here for a reason that has nothing to do with the shade: it stacks on itself. Every pass over the same spot goes deeper and darker, so a single color gives you thin arterial spray and thick pooling clots without ever mixing a second red. The Apple Red also happens to land almost exactly on the color of the real thing.",
+      "White base coat, then Apple Red Kandy from House of Kolor for the blood. Candy is the right choice here as it stacks on itself. Every pass over the same spot goes deeper and darker, so a single color gives you thin arterial spray and thick pooling clots without ever mixing a second red. The Apple Red also happens to land almost exactly on the color of the real thing.",
       "There is no clever technique for the pattern. We loaded brushes and flicked and splattered the paint at the body by hand, which is enormously satisfying and completely uncontrollable. My garage woodshop looked like a murder scene by the end of it.",
-      "The splatter session is worth watching rather than describing — [here it is](https://www.youtube.com/shorts/S2uFrwL09KM).",
+      "Check out my attempts at making a [horror flick](https://www.youtube.com/shorts/S2uFrwL09KM) before cleaning up the mess.",
       {
         kind: "image",
         src: warlockDetail,
+        full: warlockDetailFull,
         alt: "Close-up of the finished guitar body: white with heavy red splatter across the honeycomb cutouts, a white pickup and a black tremolo bridge.",
         caption:
-          "Thin spray, heavy runs and dense clots — all the same Apple Red, just more of it.",
+          "The final result came together beautifully, paired with matching red knob, killswitch, and a Death logo sticker.",
       },
       { kind: "heading", text: "The pickup" },
-      "The last piece was the one that makes it a Death guitar rather than a red guitar. Out came the placeholder humbucker, in went a white DiMarzio X2N — the same pickup the late Chuck Schuldiner, Death's guitarist and vocalist, ran in his iconic B.C. Rich.",
-      "White on white, in the middle of all that red. It is the only part of the build I would call subtle.",
+      "The last piece was the one that makes it a Death guitar. We splurged on a white DiMarzio X2N — the same pickup the late Chuck Schuldiner, Death's guitarist and vocalist, ran in his iconic B.C. Rich.",
+      "The result was exactly what we were aiming for. The build was fun and creative, pushing me into a new area of guitar making and dealing with a 3D printed plastic body.",
       {
         kind: "image",
         src: warlockBack,
+        full: warlockBackFull,
         alt: "The back of the finished guitar, showing splatter running the full length of the neck and the Death logo on the lower body.",
         caption: "The splatter carries over the back and up the neck.",
       },
       {
         kind: "image",
-        src: warlockFull,
+        src: warlockFinished,
+        full: warlockFinishedFull,
         alt: "The finished guitar standing on a stand: white blood-splattered Warlock body, skull-and-crossbones fret markers and black hardware.",
         caption: "Delivered.",
       },

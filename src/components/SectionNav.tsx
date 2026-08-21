@@ -4,7 +4,7 @@ const sections = [
   { id: "home", label: "About Me" },
   { id: "hobbies", label: "Hobbies" },
   { id: "patents", label: "Patents" },
-  { id: "projects", label: "Projects" },
+  { id: "posts", label: "Blog & Posts" },
 ];
 
 export function SectionNav() {
@@ -14,7 +14,7 @@ export function SectionNav() {
   useEffect(() => {
     // A center-line rootMargin (rather than a size-based threshold) so
     // "active" tracks correctly even for sections taller than the
-    // viewport, like Projects.
+    // viewport, like Posts.
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {

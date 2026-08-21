@@ -11,9 +11,9 @@ export function Header() {
       <img
         src={profile}
         alt="Jordan Marinov"
-        width={128}
-        height={128}
-        className="h-32 w-32 rounded-full object-cover ring-4 ring-amber-500/30 shadow-lg shadow-black/40 lg:h-40 lg:w-40"
+        width={152}
+        height={152}
+        className="h-38 w-38 rounded-full object-cover ring-4 ring-amber-500/30 shadow-lg shadow-black/40 lg:h-48 lg:w-48"
       />
 
       <div>
@@ -27,13 +27,6 @@ export function Header() {
             through data, scaling smart, and moving fast.
           </p>
         </div>
-
-        <a
-          href="/about/"
-          className="mt-4 inline-block text-sm font-medium text-amber-500 transition hover:text-amber-400"
-        >
-          About Me →
-        </a>
       </div>
 
       <nav

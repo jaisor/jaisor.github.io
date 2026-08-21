@@ -7,13 +7,17 @@ import background from "./assets/background.jpg";
 
 function App() {
   return (
-    <div className="relative h-screen snap-y snap-proximity overflow-y-scroll scroll-smooth bg-neutral-950">
+    <div className="relative isolate h-screen snap-y snap-proximity overflow-y-scroll scroll-smooth bg-neutral-950">
       {/* Fixed (not scrolling) background layers, pinned behind all content. */}
       <div
         aria-hidden
         className="fixed inset-0 -z-10 bg-cover bg-center"
-        style={{ backgroundImage: `url(${background})` }}
+        style={{
+          backgroundImage: `url(${background})`,
+          filter: "brightness(1.8) contrast(1.1)",
+        }}
       />
+      <div aria-hidden className="fixed inset-0 -z-10 bg-neutral-950/55" />
       <div
         aria-hidden
         className="pointer-events-none fixed -top-40 -right-40 -z-10 h-96 w-96 rounded-full bg-amber-500/15 blur-3xl"

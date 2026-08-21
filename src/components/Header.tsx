@@ -20,14 +20,22 @@ export function Header() {
         <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
           Jordan Marinov
         </h1>
-        <p className="mt-3 max-w-xl text-balance text-neutral-400 lg:mt-5 lg:max-w-2xl lg:text-lg">
-          IT professional building, managing, and leading software teams
-          across backend systems, cloud computing, big data, DevOps, remote
-          fleet administration, and mobile applications. Previously at
-          PayPal, Honey, Atom Tickets, Amazon, and OvernightPrints.com.
-          Holder of three U.S. patents in device testing and content
-          management. Educated in California and Bulgaria.
-        </p>
+        <div className="mt-3 max-w-xl space-y-4 text-neutral-400 lg:mt-5 lg:max-w-2xl lg:text-lg">
+          <p className="text-balance">
+            I am a technology executive with decades of experience building large-scale backend systems, hybrid cloud 
+            infrastructure, remote fleet management, and AI-driven applications. I love elegant simplicity, proof 
+            through data, scaling smart, and moving fast.
+          </p>
+          <p className="text-balance">
+            Currently, I am an Engineering Director at PayPal, responsible for the Promotions Platform powering incentive 
+            campaigns and rewards across PayPal and Venmo. Previously, I led core technology teams at Honey, 
+            Atom Tickets, and Amazon.
+          </p>
+          <p className="text-balance">
+            Personally, I continue to build and explore the latest tech. tools. Applying software to real-life situations 
+            through electronics, rapid prototyping, and iteration is especially exciting to me.
+          </p>
+        </div>
       </div>
 
       <nav

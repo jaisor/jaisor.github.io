@@ -4,8 +4,8 @@ import { Drone } from "lucide-react";
 
 export type BucketId =
   | "software-engineering"
-  | "3d-printing"
   | "electronics"
+  | "3d-printing"
   | "fpv-drones"
   | "motorcycles"
   | "guitars";
@@ -15,6 +15,8 @@ export interface Bucket {
   label: string;
   icon: LucideIcon;
   description: string;
+  link?: string;
+  linkLabel?: string;
 }
 
 export const buckets: Bucket[] = [
@@ -23,14 +25,9 @@ export const buckets: Bucket[] = [
     label: "Software Engineering",
     icon: Code2,
     description:
-      "Outside of the day job, I like keeping my hands on real code: home-monitoring dashboards, ESP32-based sensor and lighting controllers, and the occasional off-topic experiment just to see if something works. Most of it lives on GitHub and quietly powers the other hobbies below.",
-  },
-  {
-    id: "3d-printing",
-    label: "3D Printing",
-    icon: Box,
-    description:
-      "An Ender 3 has been running reliably since I got it dialed in — bed leveling, extruder tuning, and enough troubleshooting to feel like a hobby on its own. Most prints feed straight back into the other hobbies here: camera mounts and canopies for the drones, enclosures for electronics builds, and the occasional replacement part around the house.",
+      "A way to stay current and keep my hands on real code. Most of the projects are paired with some kind of hardware component or ways to visualize data to satisdy my need for eye-candy dashboards. ",
+    link: "https://github.com/jaisor?tab=repositories",
+    linkLabel: "GitHub repos →",
   },
   {
     id: "electronics",
@@ -38,6 +35,13 @@ export const buckets: Bucket[] = [
     icon: CircuitBoard,
     description:
       "ESP32s show up in most of my builds: a Smart Pool Thermometer reporting to Prometheus and Grafana, a yard speaker rebuilt around a Raspberry Pi and a proper amp, and various sensor and lighting controllers scattered around the house. I like the loop of embedded hardware talking to software I also wrote.",
+  },
+  {
+    id: "3d-printing",
+    label: "3D Printing",
+    icon: Box,
+    description:
+      "An Ender 3 has been running reliably since I got it dialed in — bed leveling, extruder tuning, and enough troubleshooting to feel like a hobby on its own. Most prints feed straight back into the other hobbies here: camera mounts and canopies for the drones, enclosures for electronics builds, and the occasional replacement part around the house.",
   },
   {
     id: "fpv-drones",

@@ -46,7 +46,7 @@ export function Inline({ text }: { text: string }) {
       continue;
     }
 
-    // Underlined as well as amber: colour alone shouldn't be the only
+    // Underlined as well as amber: color alone shouldn't be the only
     // thing marking a link inside a run of prose.
     const external = /^https?:\/\//.test(href);
     out.push(

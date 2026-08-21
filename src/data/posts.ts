@@ -208,7 +208,7 @@ export const posts: Post[] = [
     tags: ["electronics", "software-engineering"],
     body: [
       "This is placeholder copy for an example post. Replace it with the real write-up.",
-      "Body paragraphs are plain strings in src/data/posts.ts. Each string becomes its own paragraph, so there is no markup to escape and no HTML to sanitise.",
+      "Body paragraphs are plain strings in src/data/posts.ts. Each string becomes its own paragraph, so there is no markup to escape and no HTML to sanitize.",
       "Add as many paragraphs as the post needs; the page layout handles the rest.",
     ],
   },
@@ -221,7 +221,7 @@ export const posts: Post[] = [
     tags: ["3d-printing"],
     body: [
       "This is placeholder copy for an example post. Replace it with the real write-up.",
-      "Body paragraphs are plain strings in src/data/posts.ts. Each string becomes its own paragraph, so there is no markup to escape and no HTML to sanitise.",
+      "Body paragraphs are plain strings in src/data/posts.ts. Each string becomes its own paragraph, so there is no markup to escape and no HTML to sanitize.",
     ],
   },
   {
@@ -233,7 +233,7 @@ export const posts: Post[] = [
     tags: ["fpv-drones", "3d-printing"],
     body: [
       "This is placeholder copy for an example post. Replace it with the real write-up.",
-      "Body paragraphs are plain strings in src/data/posts.ts. Each string becomes its own paragraph, so there is no markup to escape and no HTML to sanitise.",
+      "Body paragraphs are plain strings in src/data/posts.ts. Each string becomes its own paragraph, so there is no markup to escape and no HTML to sanitize.",
     ],
   },
   {
@@ -241,11 +241,11 @@ export const posts: Post[] = [
     title: "Parametric CAD is worth the learning curve",
     date: "2026-03-11",
     excerpt:
-      "Placeholder post. Why I stopped modelling enclosures in Blender and moved the whole workflow to Autodesk Fusion.",
+      "Placeholder post. Why I stopped modeling enclosures in Blender and moved the whole workflow to Autodesk Fusion.",
     tags: ["software-engineering", "3d-printing"],
     body: [
       "This is placeholder copy for an example post. Replace it with the real write-up.",
-      "Body paragraphs are plain strings in src/data/posts.ts. Each string becomes its own paragraph, so there is no markup to escape and no HTML to sanitise.",
+      "Body paragraphs are plain strings in src/data/posts.ts. Each string becomes its own paragraph, so there is no markup to escape and no HTML to sanitize.",
     ],
   },
   {
@@ -257,7 +257,7 @@ export const posts: Post[] = [
     tags: ["motorcycles"],
     body: [
       "This is placeholder copy for an example post. Replace it with the real write-up.",
-      "Body paragraphs are plain strings in src/data/posts.ts. Each string becomes its own paragraph, so there is no markup to escape and no HTML to sanitise.",
+      "Body paragraphs are plain strings in src/data/posts.ts. Each string becomes its own paragraph, so there is no markup to escape and no HTML to sanitize.",
     ],
   },
   {
@@ -269,17 +269,17 @@ export const posts: Post[] = [
     tags: ["guitars", "3d-printing"],
     image: warlockHero,
     body: [
-      "This one was a gift. My son has a friend who is a huge Death fan, and somewhere between \"I could probably print that\" and \"I should probably stop\", it turned into a full build.",
-      "The body is [this B.C. Rich Warlock model](https://makerworld.com/en/models/701362-bc-rich-warlock-a1-mini-guitar-body-single-pickup#profileId-630884) from MakerWorld — an A1 mini-sized single-pickup version, which means it comes split into sections small enough to fit a compact printer bed. Everything else is off-the-shelf guitar parts: a bought neck, a double-locking tremolo, and tuners.",
+      "My son has a friend who is a huge Death fan, and somewhere between \"I could probably print that\" and \"This will never work\", it turned into a full build.",
+      "The body is [this B.C. Rich Warlock model](https://makerworld.com/en/models/701362-bc-rich-warlock-a1-mini-guitar-body-single-pickup#profileId-630884) from MakerWorld - single-pickup version. It comes split into sections to be printed separately depending on the print volume supported. Everything else is off-the-shelf guitar parts: a bought neck, a double-locking tremolo, and tuners.",
       {
         kind: "image",
         src: warlockDryfit,
         alt: "The raw white printed guitar body on a workbench with the neck, bridge and a pickup dry-fitted in place.",
         caption:
-          "Dry fit first. Cheap insurance before any glue goes anywhere.",
+          "Dry fit first. Insurance before glue and paint.",
       },
       { kind: "heading", text: "Printing and bonding" },
-      "Printing a body in sections means the real work starts after the printer stops. I glued the pieces with J-B Weld Plastic Bonder, which is the part of the build with no undo button — the seams have to line up the first time, because a guitar body that is 1mm out of true at the neck pocket is firewood.",
+      "Printing a body in sections means the real work starts after the printer stops. I glued the pieces with J-B Weld Plastic Bonder, which is the part of the build with no undo button — the seams have to line up, because a guitar body out of alignment at the neck pocket is firewood. This one would not even qualify for that because it is made out of plastic.",
       "The honeycomb interior is part of the model, not a slicer setting, and it stays open by design. It keeps the body light and it looks deliberate once the paint is on.",
       {
         kind: "image",
@@ -297,18 +297,18 @@ export const posts: Post[] = [
       {
         kind: "image",
         src: warlockPrimer,
-        alt: "The guitar body hanging in a spray booth, coated in grey filler primer, with the neck masked off.",
-        caption: "Grey primer is the honest coat — it shows you everything you skipped.",
+        alt: "The guitar body hanging in a spray booth, coated in gray filler primer, with the neck masked off.",
+        caption: "Gray primer is the honest coat — it shows you everything you skipped.",
       },
       "The neck got its own attention: every fret masked off individually so the crowns could be polished without touching the fretboard.",
       {
         kind: "image",
         src: warlockFrets,
         alt: "A guitar fretboard with blue and yellow masking tape applied between every fret, exposing only the fret wire.",
-        caption: "Twenty-four frets, forty-eight pieces of tape, one podcast.",
+        caption: "Twenty-four frets, forty-eight pieces of tape, and a can of elbow grease.",
       },
       { kind: "heading", text: "The blood" },
-      "White base coat, then Apple Red Kandy from House of Kolor for the blood. Candy is the right choice here for a reason that has nothing to do with the shade: it stacks on itself. Every pass over the same spot goes deeper and darker, so a single colour gives you thin arterial spray and thick pooling clots without ever mixing a second red. The Apple Red also happens to land almost exactly on the colour of the real thing.",
+      "White base coat, then Apple Red Kandy from House of Kolor for the blood. Candy is the right choice here for a reason that has nothing to do with the shade: it stacks on itself. Every pass over the same spot goes deeper and darker, so a single color gives you thin arterial spray and thick pooling clots without ever mixing a second red. The Apple Red also happens to land almost exactly on the color of the real thing.",
       "There is no clever technique for the pattern. We loaded brushes and flicked and splattered the paint at the body by hand, which is enormously satisfying and completely uncontrollable. My garage woodshop looked like a murder scene by the end of it.",
       "The splatter session is worth watching rather than describing — [here it is](https://www.youtube.com/shorts/S2uFrwL09KM).",
       {
@@ -336,7 +336,7 @@ export const posts: Post[] = [
     ],
   },
   {
-    slug: "practising-with-a-metronome",
+    slug: "practicing-with-a-metronome",
     title: "The metronome is not optional",
     date: "2026-01-23",
     excerpt:
@@ -344,7 +344,7 @@ export const posts: Post[] = [
     tags: ["guitars"],
     body: [
       "This is placeholder copy for an example post. Replace it with the real write-up.",
-      "Body paragraphs are plain strings in src/data/posts.ts. Each string becomes its own paragraph, so there is no markup to escape and no HTML to sanitise.",
+      "Body paragraphs are plain strings in src/data/posts.ts. Each string becomes its own paragraph, so there is no markup to escape and no HTML to sanitize.",
     ],
   },
 ];

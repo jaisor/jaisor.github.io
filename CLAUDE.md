@@ -245,6 +245,10 @@ in `src/data/*.ts`.
 - **Accessibility:** sections carry `aria-label`; decorative layers and
   icons carry `aria-hidden`; icon-only links carry an `sr-only` label.
   Keep that up.
+- **American English everywhere** — prose, `alt` text, captions, code
+  comments and slugs alike: *color*, *gray*, *modeling*, *sanitize*,
+  *practicing*. Easy to reintroduce by habit; grep for `colour|grey|
+  sanitis|modelling|practis|behaviour|centre` before committing copy.
 - **Imports:** double-quoted, components from `./components/...`, types
   imported with `import type` (the tsconfig sets `verbatimModuleSyntax`).
 - `noUnusedLocals` and `noUnusedParameters` are on — dead variables fail

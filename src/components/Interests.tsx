@@ -1,4 +1,5 @@
 import { tags } from "../data/tags";
+import { Inline } from "./Inline";
 import { ScrollCue } from "./ScrollCue";
 
 export function Interests() {
@@ -27,7 +28,7 @@ export function Interests() {
                   </h3>
                 </div>
                 <p className="mt-3 text-sm text-neutral-400 lg:text-base">
-                  {description}
+                  <Inline text={description} />
                 </p>
                 {links && (
                   <ul className="mt-3 list-disc space-y-1.5 pl-5 marker:text-amber-500">

@@ -19,7 +19,10 @@ export interface Tag {
   id: TagId;
   label: string;
   icon: LucideIcon;
-  /** Hobby-card copy. Not shown on post tag chips. */
+  /**
+   * Hobby-card copy. Not shown on post tag chips. Supports the same
+   * inline markup as post bodies: `code` and [label](href).
+   */
   description: string;
   link?: string;
   linkLabel?: string;
@@ -76,17 +79,7 @@ export const tags: Tag[] = [
     label: "FPV Drones",
     icon: Drone,
     description:
-      "I built my first FPV drone in 2015 and have been addicted to flying — and building — ever since. It is a vast hobby that exercises just about everything I enjoy: coding and flight-controller tuning, electronics and soldering, mechanical and aero design, 3D printing for frames and mounts, and an adrenaline rush at the end of it. A long string of custom quads followed — Zax, Tangra, an X-frame racer, SiganX, KISS X210/QAV210, Shrieka 130 — each one an excuse to try a new frame, stack, or motor combo. I took a short stint into FPV racing, but have since settled into a calmer, cinematic style of flying:",
-    links: [
-      {
-        label: "Racing — Hesperia",
-        href: "https://www.youtube.com/watch?v=TdSUKtazEAY",
-      },
-      {
-        label: "Cinematic — Ocotillo Wells",
-        href: "https://www.youtube.com/watch?v=u_-RXqDzlsU",
-      },
-    ],
+      "I built my first FPV drone in 2015 and am addicted to flying and building ever since. The hobby is vast, allowing me to exercise coding, electronics, mechanical design, 3D printing and enjoy a substantial adrenaline rush. I took a short stab into [FPV racing](https://www.youtube.com/watch?v=TdSUKtazEAY) but have since settled into a calmer, [cinematic](https://www.youtube.com/watch?v=u_-RXqDzlsU) style of flying.",
   },
   {
     id: "motorcycles",

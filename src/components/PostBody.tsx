@@ -1,10 +1,10 @@
-import { Fragment } from "react";
 import type { Block } from "../data/posts";
+import { Inline } from "./Inline";
 
 /**
  * Renders a post body. Everything here is plain text run through React,
  * so there is no unescaped-HTML surface — the only markup is the
- * backtick convention handled by <Inline>.
+ * backtick and link convention handled by <Inline>.
  */
 export function PostBody({ body }: { body: Block[] }) {
   return (
@@ -13,26 +13,6 @@ export function PostBody({ body }: { body: Block[] }) {
         <BlockView key={i} block={block} />
       ))}
     </div>
-  );
-}
-
-/** Splits on backticks; odd segments become inline code. */
-function Inline({ text }: { text: string }) {
-  return (
-    <>
-      {text.split("`").map((part, i) =>
-        i % 2 === 1 ? (
-          <code
-            key={i}
-            className="rounded border border-neutral-800 bg-neutral-950/80 px-1.5 py-0.5 font-mono text-[0.85em] text-amber-300/90"
-          >
-            {part}
-          </code>
-        ) : (
-          <Fragment key={i}>{part}</Fragment>
-        ),
-      )}
-    </>
   );
 }
 

@@ -79,6 +79,7 @@ src/components/
   PostCard.tsx        # one post teaser: photo, date, excerpt, tags, link
   PostPage.tsx        # the /posts/<slug>/ page + PostNotFound
   PostBody.tsx        # renders Block[] — paragraphs, code, tables, callouts
+  Inline.tsx          # shared inline markup: `code` and [label](href)
   PostImage.tsx       # post photo, or a gradient+icon placeholder if absent
   TagChips.tsx        # non-interactive tag labels (spans — cards are anchors)
   ScrollCue.tsx       # clickable bouncing chevron under a section's content,
@@ -109,7 +110,10 @@ components.** Components are presentation only.
 - **Tags are one shared vocabulary.** `data/tags.ts` drives both the
   Hobbies cards (each `Tag` carries the hobby-card copy) and the Posts
   filter pills / chips. Add a `Tag`, add its `id` to the `TagId` union,
-  and it shows up in both places.
+  and it shows up in both places. A `Tag`'s `description` runs through
+  the same `Inline` renderer as post bodies, so it takes `code` and
+  `[label](href)` too — prefer an inline link inside a sentence over a
+  trailing one when the link belongs to a phrase.
 - Add supporting links to a hobby card → a `Tag` can carry `links`
   (`{ label, href }[]`), rendered as a list of amber links under the
   description. Use it when a card points at several things — repos,
@@ -127,9 +131,14 @@ components.** Components are presentation only.
   `body` is a `Block[]`: a bare string is a paragraph, and the tagged
   variants (`heading`, `code`, `list`, `note`/`warn`, `steps`, `table`)
   cover longer technical posts. `PostBody.tsx` renders them. Inside any
-  text field, backtick-delimited spans become inline code — that is the
-  *only* markup, and it is still plain text React escapes, so the
-  no-unescaped-HTML rule holds.
+  text field, backtick-delimited spans become inline code and
+  `[label](href)` becomes a link — that is the *only* markup. Both are
+  tokenised into React elements by
+  [`Inline.tsx`](src/components/Inline.tsx), never parsed as HTML, so
+  the no-unescaped-HTML rule holds. `Inline` fails closed on any href
+  that isn't `http(s):`, `mailto:`, `/`, or `#` (rendering the label as
+  plain text), and gives external ones `target="_blank" rel="noreferrer"`
+  automatically — so don't hand-write those attributes in copy.
   `image` is optional; without it, cards and pages draw a gradient
   placeholder carrying the first tag's icon, so no stock photo or
   remote image is ever needed.

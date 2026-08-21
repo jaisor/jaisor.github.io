@@ -1,4 +1,5 @@
 import { tags } from "../data/tags";
+import { ScrollCue } from "./ScrollCue";
 
 export function Interests() {
   return (
@@ -58,6 +59,12 @@ export function Interests() {
             )
           )}
         </div>
+
+        <ScrollCue
+          targetId="posts"
+          label="Blog & Posts"
+          className="mt-12 lg:mt-16"
+        />
       </div>
     </section>
   );

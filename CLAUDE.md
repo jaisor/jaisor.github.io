@@ -81,6 +81,7 @@ src/components/
   PostBody.tsx        # renders Block[] — paragraphs, code, tables, callouts
   PostImage.tsx       # post photo, or a gradient+icon placeholder if absent
   TagChips.tsx        # non-interactive tag labels (spans — cards are anchors)
+  ScrollCue.tsx       # clickable bouncing chevron under a section's content
   SectionNav.tsx      # right-side dot nav, IntersectionObserver-driven
   Footer.tsx          # copyright
 src/data/
@@ -171,6 +172,14 @@ in `src/data/*.ts`.
   `sections` array in
   [`SectionNav.tsx`](src/components/SectionNav.tsx) — the observer looks
   up elements by those ids, so a mismatch silently breaks the nav dot.
+  Also re-point the [`ScrollCue`](src/components/ScrollCue.tsx) of the
+  section it now follows.
+- **Every section except the last ends with a `<ScrollCue>`** pointing
+  at the next one's id — the site's scroll affordance. It sits in
+  normal flow *under* the content (not pinned to the viewport), so on
+  a section taller than the screen you reach it by scrolling. The
+  chevron bounces inside a stationary button so the hit target doesn't
+  move; keep it that way.
 - **Internal links are plain `<a href="/posts/…/">`** — a real
   navigation to a real page. Do *not* give them `target="_blank"`; that
   rule is for external links only. Post pages link back with

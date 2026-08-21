@@ -1,5 +1,6 @@
 import { Radio, ScrollText } from "lucide-react";
 import { patents } from "../data/patents";
+import { ScrollCue } from "./ScrollCue";
 
 export function About() {
   return (
@@ -31,7 +32,7 @@ export function About() {
         </div>
 
         <h3 className="mt-12 text-lg font-semibold text-white lg:mt-16 lg:text-xl">
-          Braggables
+          Patents & Braggables
         </h3>
 
         <ul className="mt-4 flex flex-col gap-3">
@@ -58,6 +59,12 @@ export function About() {
             FCC Amateur Radio (HAM) License holder &mdash; callsign KK6VYN
           </li>
         </ul>
+
+        <ScrollCue
+          targetId="hobbies"
+          label="Hobbies & Interests"
+          className="mt-12 lg:mt-16"
+        />
       </div>
     </section>
   );

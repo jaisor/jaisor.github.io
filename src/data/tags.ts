@@ -44,7 +44,7 @@ export const tags: Tag[] = [
     label: "Software Engineering",
     icon: Code2,
     description:
-      "A way to stay current and keep my hands on actual code. Most of the projects are paired with some kind of hardware component or ways to visualize data to satisfy my need for eye-candy dashboards. ",
+      "I build to stay current and keep my hands on actual code. Most of my projects are paired with some kind of hardware, or with a way to visualize data that satisfies my need for eye-candy dashboards.",
     link: "https://github.com/jaisor?tab=repositories",
     linkLabel: "GitHub repos →",
   },
@@ -53,7 +53,7 @@ export const tags: Tag[] = [
     label: "Electronics",
     icon: CircuitBoard,
     description:
-      "I have been interested in electronics and schematics since childhood. I love the capabilities microcontrollers like Arduino and ESP provide in the areas of IoT and home automation. I have used this rich palette of tech to create projects like:",
+      "I have been interested in electronics and schematics since childhood. I love the capabilities that microcontrollers like Arduino and ESP provide in IoT and home automation. I have used this rich toolkit to create projects like:",
     links: [
       {
         label: "WiFi Climate Sensor",
@@ -78,7 +78,7 @@ export const tags: Tag[] = [
     label: "3D Printing",
     icon: Box,
     description:
-      "It started as an extension of my FPV drone obsession. Over the years it has grown into multiple printers, modded and upgraded along the way, with a Bambu H2D as the main workhorse today. The modeling side grew with it: I started out in Blender and now do fully parametric CAD designs in Autodesk Fusion.",
+      "I picked this up as an extension of my FPV drone obsession. Over the years it has grown to multiple printers, modded and upgraded along the way, with a Bambu H2D as the main workhorse today. The modeling side came along with it: I started out in Blender and now do fully parametric CAD designs in Autodesk Fusion.",
     link: "https://makerworld.com/en/@jaisor/upload",
     linkLabel: "MakerWorld profile →",
   },
@@ -94,7 +94,7 @@ export const tags: Tag[] = [
     label: "Guitars",
     icon: Guitar,
     description:
-      "I always regretted not knowing how to play an instrument. During the pandemic, I jokingly offered to trade some of my drones for a few guitars from a good musician and RC buddy of mine. A few years of practice later, I would never claim mastery, but I have learned a thing or two and managed to write [50+ riff compositions](https://www.youtube.com/playlist?list=PLNeTetmujscX1pmeKIlLjW0Eo5L0S5yWF) based on Ola Englund's riff challenge.",
+      "I always regretted not knowing how to play an instrument. During the pandemic, I jokingly offered to trade some of my drones for a few guitars from a good musician and RC buddy of mine. A few years of practice later, I would never claim mastery, but I have learned a thing or two about metal guitar and managed to write [50+ riff compositions](https://www.youtube.com/playlist?list=PLNeTetmujscX1pmeKIlLjW0Eo5L0S5yWF) based on Ola Englund's riff challenge.",
   },
   {
     id: "motorcycles",
@@ -103,7 +103,7 @@ export const tags: Tag[] = [
     cardLabel: "More to come...",
     cardIcon: Sparkles,
     description:
-      "My list of hobbies continues to grow. It also includes woodworking, RV camping, motorcycles, mountain bikes, and more. I've been called a Renaissance man by my friends, and I take it as the highest form of compliment.",
+      "My list of hobbies continues to grow. It also includes woodworking, RV camping, motorcycles, mountain bikes, and more. My friends call me a Renaissance man, and I take it as the highest form of compliment.",
   },
 ];
 

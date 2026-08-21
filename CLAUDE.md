@@ -114,6 +114,13 @@ components.** Components are presentation only.
   the same `Inline` renderer as post bodies, so it takes `code` and
   `[label](href)` too — prefer an inline link inside a sentence over a
   trailing one when the link belongs to a phrase.
+- **Renaming a hobby card is not the same as renaming a tag.** `label`
+  and `icon` are the taxonomy: they render the Posts filter pill and the
+  chips on every post carrying that tag. To retitle just the card, set
+  `cardLabel` / `cardIcon` and leave `label` / `icon` alone. The
+  `motorcycles` tag is the live example — its card is the catch-all
+  "More to come..." (Sparkles), while the tag still labels the
+  *First season on two wheels* post.
 - Add supporting links to a hobby card → a `Tag` can carry `links`
   (`{ label, href }[]`), rendered as a list of amber links under the
   description. Use it when a card points at several things — repos,

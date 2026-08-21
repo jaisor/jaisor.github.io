@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import { Code2, Box, CircuitBoard, Bike, Guitar } from "lucide-react";
+import { Code2, Box, CircuitBoard, Bike, Guitar, Sparkles } from "lucide-react";
 import { Drone } from "lucide-react";
 
 export type TagId =
@@ -17,8 +17,16 @@ export type TagId =
  */
 export interface Tag {
   id: TagId;
+  /** Taxonomy name — drives the Posts filter pill and the chips on a post. */
   label: string;
   icon: LucideIcon;
+  /**
+   * Hobby-card overrides, for when the card's framing has drifted from
+   * the tag's. `motorcycles` is the case: the card is a catch-all for
+   * everything not worth its own tag, but the tag still labels a post.
+   */
+  cardLabel?: string;
+  cardIcon?: LucideIcon;
   /**
    * Hobby-card copy. Not shown on post tag chips. Supports the same
    * inline markup as post bodies: `code` and [label](href).
@@ -82,21 +90,22 @@ export const tags: Tag[] = [
       "I built my first FPV drone in 2015 and am addicted to flying and building ever since. The hobby is vast, allowing me to exercise my coding, electronics, mechanical design, and 3D printing skills — and enjoy a substantial adrenaline rush. I took a short stab at [FPV racing](https://www.youtube.com/watch?v=TdSUKtazEAY) but have since settled into a calmer, [cinematic](https://www.youtube.com/watch?v=u_-RXqDzlsU) style of flying.",
   },
   {
-    id: "motorcycles",
-    label: "Motorcycles",
-    icon: Bike,
-    description:
-      "One of my newer hobbies — still early days, learning the ropes on riding and maintenance. More to come here as the garage fills in.",
-  },
-  {
     id: "guitars",
     label: "Guitars",
     icon: Guitar,
     description:
       "A hobby that's still taking shape — details on gear and playing coming soon.",
   },
+  {
+    id: "motorcycles",
+    label: "Motorcycles",
+    icon: Bike,
+    cardLabel: "More to come...",
+    cardIcon: Sparkles,
+    description:
+      "My list of hobbies continues to grow. It also includes woodworking, RV camping, motorcycles, mountain bikes, and more. I've been called a Renaissance man by my friends, and I take it as the highest form of compliment.",
+  },
 ];
-
 
 /** Lookup for rendering a post's tag chips by id. */
 export const tagById = new Map<TagId, Tag>(tags.map((t) => [t.id, t]));

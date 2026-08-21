@@ -62,18 +62,23 @@ lint passed without having actually run it.**
 
 ```
 index.html            # main page shell — <title>, meta description, Google Fonts
+about/index.html      # the /about/ page shell — same pattern as a post page
 posts/<slug>/index.html   # one per post: same shell, own <title>/description,
                           #   and <div id="root" data-slug="<slug>">
-vite.config.ts        # globs posts/*/ into build.rollupOptions.input
+vite.config.ts        # explicit `about` entry + globs posts/*/ into
+                       #   build.rollupOptions.input
 src/main.tsx          # React root for the main page
+src/about.tsx         # React root for the /about/ page
 src/post.tsx          # React root for every post page; reads data-slug
 src/index.css         # Tailwind import + @theme font token + base body styles
 src/App.tsx           # scroll container + section order
 src/components/
-  Backdrop.tsx        # fixed background layers, shared by App and PostPage
-  Header.tsx          # #home — photo, bio paragraphs, social links
+  Backdrop.tsx        # fixed background layers, shared by every page
+  Header.tsx          # #home — photo, first bio paragraph, social links,
+                      #   plus an "About Me →" link to /about/
+  AboutPage.tsx       # the /about/ page: remaining bio paragraphs + the
+                      #   Braggables list (patents, HAM license)
   Interests.tsx       # #hobbies — cards rendered from data/tags
-  Patents.tsx         # #patents — cards from data/patents
   Posts.tsx           # #posts — tag-filterable card grid + FilterPill
   PostCard.tsx        # one post teaser: photo, date, excerpt, tags, link
   PostPage.tsx        # the /posts/<slug>/ page + PostNotFound
@@ -86,10 +91,16 @@ src/data/
   social.ts           # header social links
   tags.ts             # Tag[] — the shared taxonomy, typed by TagId
   posts.ts            # Post[] + postsByDate/postBySlug/postHref helpers
-  patents.ts          # Patent[]
+  patents.ts          # Patent[] — rendered compactly in AboutPage's
+                       #   Braggables list, not on the home page
 src/assets/           # background.jpg, profile.jpg (imported so Vite fingerprints them)
 public/favicon.jpg    # copied verbatim to dist/
 ```
+
+Patents used to be a home-page scroll-snap section; they now live on
+`/about/` alongside the rest of the bio, under a "Braggables" heading,
+shown as compact linked rows (number + title only, no long
+description) rather than full cards.
 
 ## Content is data, not markup
 
@@ -121,13 +132,27 @@ components.** Components are presentation only.
   `image` is optional; without it, cards and pages draw a gradient
   placeholder carrying the first tag's icon, so no stock photo or
   remote image is ever needed.
+- **Add a standalone page (like `/about/`) → also two steps:**
+  1. create `<slug>/index.html` (copy `about/index.html`) with its own
+     `<title>`/description and a script pointing at a new
+     `src/<slug>.tsx` entry;
+  2. add that entry explicitly to `build.rollupOptions.input` in
+     `vite.config.ts` — only `posts/*/` is auto-globbed via
+     `postEntries()`, everything else needs a manual line.
+  `npm run dev` doesn't care about this map (Vite's dev server resolves
+  any file on disk directly); only `vite build` reads it, so a missing
+  entry won't show up until you actually build.
 - Add a patent → append to `patents` in `data/patents.ts`. Each entry
   carries a plain-language `description` — keep that voice: explain what
-  the invention actually does, no patentese.
+  the invention actually does, no patentese. It's consumed by
+  `AboutPage.tsx`'s Braggables list, not rendered on the home page.
 - Add a social link → append to `socialLinks` in `data/social.ts`.
 
-Bio prose lives inline in [`Header.tsx`](src/components/Header.tsx) — it
-is the one place copy sits in a component.
+Bio prose lives inline in [`Header.tsx`](src/components/Header.tsx) (the
+first paragraph, shown on the home page) and
+[`AboutPage.tsx`](src/components/AboutPage.tsx) (the rest, plus the
+Braggables list) — these are the two places copy sits in a component
+rather than in `src/data/*.ts`.
 
 ## Conventions
 
@@ -137,7 +162,8 @@ is the one place copy sits in a component.
   layer to add to.
 - **Palette:** `neutral-950/900/800` surfaces, `neutral-300/400/500`
   text, `amber-400/500` accents. Stay inside it.
-- **Card pattern** (Hobbies, Patents, Posts share it):
+- **Card pattern** (Hobbies, Posts, and the Braggables rows on
+  `/about/` share it):
   `rounded-xl border border-neutral-800 bg-neutral-900/50 shadow-sm
   shadow-black/20 transition [corner-shape:bevel]
   hover:border-amber-500/40 hover:shadow-md hover:shadow-black/30`.
@@ -219,15 +245,15 @@ propose the static alternative rather than quietly adding the surface.
 
 ## Deployment
 
-Pushes to the **`react`** branch trigger
-[`.github/workflows/deploy.yml`](.github/workflows/deploy.yml), which
-builds and publishes `dist/` to GitHub Pages. `main` still holds the old
-Jekyll site. Making `react` the permanent source means merging into
-`main` and repointing both the workflow trigger and Settings → Pages →
-Source.
+`main` is now the permanent source — the React rewrite has been merged
+in (via PRs from `react`) and the old Jekyll site is gone. Pushes to
+**`main`** trigger [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml),
+which builds and publishes `dist/` to GitHub Pages. The `react` branch
+is where day-to-day work happens; it only goes live once merged into
+`main`, typically via a PR.
 
 Don't commit or push unless asked. If pushing, remember that a push to
-`react` deploys the live site.
+`main` (or a merge into it) deploys the live site.
 
 ## Keeping this file current
 

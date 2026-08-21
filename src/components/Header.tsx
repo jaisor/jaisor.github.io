@@ -22,21 +22,18 @@ export function Header() {
         </h1>
         <div className="mt-3 max-w-xl space-y-4 text-neutral-400 lg:mt-5 lg:max-w-2xl lg:text-lg">
           <p className="text-balance">
-            I am a technology executive with decades of experience building large-scale backend systems, hybrid cloud 
-            infrastructure, remote fleet management, web and mobile applications. I love elegant simplicity, proof 
+            I am a technology executive with decades of experience building large-scale backend systems, hybrid cloud
+            infrastructure, remote fleet management, web and mobile applications. I love elegant simplicity, proof
             through data, scaling smart, and moving fast.
           </p>
-          <p className="text-balance">
-            Currently, I am an Engineering Director at PayPal, responsible for the Promotions Platform powering incentive 
-            campaigns and rewards across PayPal and Venmo. Previously, I led core technology teams at Honey, 
-            Atom Tickets, and Amazon.
-          </p>
-          <p className="text-balance">
-            Personally, I continue to build and explore the latest tech. tools. I am fascinatged by the intersection of 
-            software and hardware, and I enjoy tinkering with IoT devices, robotics, and embedded systems. The current AI 
-            revolution is particularly exciting, with its potential to accelerate and transform innovation.
-          </p>
         </div>
+
+        <a
+          href="/about/"
+          className="mt-4 inline-block text-sm font-medium text-amber-500 transition hover:text-amber-400"
+        >
+          About Me →
+        </a>
       </div>
 
       <nav

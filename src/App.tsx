@@ -1,6 +1,5 @@
 import { Header } from "./components/Header";
 import { Interests } from "./components/Interests";
-import { Patents } from "./components/Patents";
 import { Posts } from "./components/Posts";
 import { Footer } from "./components/Footer";
 import { SectionNav } from "./components/SectionNav";
@@ -15,7 +14,6 @@ function App() {
 
       <Header />
       <Interests />
-      <Patents />
       <Posts />
       <Footer />
     </div>

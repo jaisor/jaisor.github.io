@@ -30,6 +30,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: abs('./index.html'),
+        about: abs('./about/index.html'),
         ...postEntries(),
       },
     },

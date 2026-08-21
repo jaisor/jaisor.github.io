@@ -25,7 +25,7 @@ export const buckets: Bucket[] = [
     label: "Software Engineering",
     icon: Code2,
     description:
-      "A way to stay current and keep my hands on real code. Most of the projects are paired with some kind of hardware component or ways to visualize data to satisdy my need for eye-candy dashboards. ",
+      "A way to stay current and keep my hands on actual code. Most of the projects are paired with some kind of hardware component or ways to visualize data to satisfy my need for eye-candy dashboards. ",
     link: "https://github.com/jaisor?tab=repositories",
     linkLabel: "GitHub repos →",
   },

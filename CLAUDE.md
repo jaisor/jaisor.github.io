@@ -13,8 +13,8 @@ publish as a fully static site on GitHub Pages**.
 
 Design intent: dark, cinematic, one page you scroll through. Fixed
 background photo behind translucent panels, amber accents on near-black
-neutrals, full-screen scroll-snap sections, and a scroll-revealed section
-navigator on the right.
+neutrals, full-screen scroll-snap sections, and a section navigator bar
+that fades in across the top once you scroll past the hero.
 
 ## Stack
 
@@ -82,7 +82,7 @@ src/components/
   PostImage.tsx       # post photo, or a gradient+icon placeholder if absent
   TagChips.tsx        # non-interactive tag labels (spans — cards are anchors)
   ScrollCue.tsx       # clickable bouncing chevron under a section's content
-  SectionNav.tsx      # right-side dot nav, IntersectionObserver-driven
+  SectionNav.tsx      # fixed top nav bar, IntersectionObserver-driven
   Footer.tsx          # copyright
 src/data/
   social.ts           # header social links
@@ -164,9 +164,11 @@ in `src/data/*.ts`.
   Reuse it verbatim for new cards so the sections stay visually
   consistent. `[corner-shape:bevel]` is the site's signature — it
   degrades gracefully to plain rounded corners where unsupported.
-- **Sections** are `min-h-screen snap-start px-6 py-24 lg:pr-32
-  xl:pr-40`. The extra right padding keeps content clear of the fixed
-  `SectionNav`; don't drop it on a new section.
+- **Sections** are `min-h-screen snap-start px-6 py-12 lg:py-24`. The
+  tighter vertical padding below `lg` is deliberate — phones need the
+  space for content. On `lg` the 96px top padding is also what keeps a
+  section's heading clear of the fixed top `SectionNav` bar (~53px
+  tall), so don't reduce it there.
 - **A new section must be wired in three places:** rendered in
   [`App.tsx`](src/App.tsx), given a matching `id`, and added to the
   `sections` array in
@@ -187,7 +189,9 @@ in `src/data/*.ts`.
 - **Anchors don't nest.** `PostCard` wraps the whole tile in an `<a>`,
   so tag chips inside it are `<span>`/`<li>`, never links or buttons.
 - **Responsive:** mobile-first base styles, `sm:`/`lg:`/`xl:` to scale
-  up. `SectionNav` is `hidden lg:flex` by design.
+  up. `SectionNav` is `hidden lg:flex` by design — a fixed bar would
+  cost vertical space phones can't spare, and `ScrollCue` already
+  covers section-to-section movement there.
 - **Accessibility:** sections carry `aria-label`; decorative layers and
   icons carry `aria-hidden`; icon-only links carry an `sr-only` label.
   Keep that up.

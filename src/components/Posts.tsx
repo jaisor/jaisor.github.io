@@ -20,7 +20,7 @@ export function Posts() {
     <section
       id="posts"
       aria-label="Blog & Posts"
-      className="min-h-screen snap-start px-6 py-24 lg:pr-32 xl:pr-40"
+      className="min-h-screen snap-start px-6 py-12 lg:py-24"
     >
       <div className="mx-auto max-w-4xl lg:max-w-6xl">
         <h2 className="text-center text-2xl font-bold tracking-tight text-white sm:text-3xl lg:text-4xl">

@@ -40,37 +40,41 @@ export function SectionNav() {
   return (
     <nav
       aria-label="Section navigation"
-      className={`fixed top-1/2 right-10 z-10 hidden -translate-y-1/2 flex-col gap-4 transition-opacity duration-300 lg:flex ${
+      className={`fixed inset-x-0 top-0 z-20 hidden justify-center border-b border-neutral-800/60 bg-neutral-950/80 backdrop-blur transition-opacity duration-300 lg:flex ${
         pastHero ? "opacity-100" : "pointer-events-none opacity-0"
       }`}
     >
-      {sections.map(({ id, label }) => (
-        <button
-          key={id}
-          type="button"
-          onClick={() =>
-            document.getElementById(id)?.scrollIntoView({ behavior: "smooth" })
-          }
-          className="group flex items-center gap-3"
-        >
-          <span
-            className={`h-2.5 w-2.5 shrink-0 rounded-full border transition ${
-              active === id
-                ? "border-amber-400 bg-amber-400"
-                : "border-neutral-600 bg-transparent group-hover:border-neutral-400"
-            }`}
-          />
-          <span
-            className={`text-sm font-medium transition ${
-              active === id
-                ? "text-white"
-                : "text-neutral-500 group-hover:text-neutral-300"
-            }`}
+      <div className="flex items-center gap-8 px-6 py-4">
+        {sections.map(({ id, label }) => (
+          <button
+            key={id}
+            type="button"
+            onClick={() =>
+              document
+                .getElementById(id)
+                ?.scrollIntoView({ behavior: "smooth" })
+            }
+            className="group flex items-center gap-2"
           >
-            {label}
-          </span>
-        </button>
-      ))}
+            <span
+              className={`h-2.5 w-2.5 shrink-0 rounded-full border transition ${
+                active === id
+                  ? "border-amber-400 bg-amber-400"
+                  : "border-neutral-600 bg-transparent group-hover:border-neutral-400"
+              }`}
+            />
+            <span
+              className={`text-sm font-medium transition ${
+                active === id
+                  ? "text-white"
+                  : "text-neutral-500 group-hover:text-neutral-300"
+              }`}
+            >
+              {label}
+            </span>
+          </button>
+        ))}
+      </div>
     </nav>
   );
 }

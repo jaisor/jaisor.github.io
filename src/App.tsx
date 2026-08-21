@@ -2,6 +2,7 @@ import { Header } from "./components/Header";
 import { Interests } from "./components/Interests";
 import { Projects } from "./components/Projects";
 import { Footer } from "./components/Footer";
+import { SectionNav } from "./components/SectionNav";
 
 function App() {
   return (
@@ -14,6 +15,8 @@ function App() {
         aria-hidden
         className="pointer-events-none fixed top-1/2 -left-40 h-80 w-80 rounded-full bg-orange-600/10 blur-3xl"
       />
+
+      <SectionNav />
 
       <Header />
       <Interests />

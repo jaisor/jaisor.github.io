@@ -11,6 +11,11 @@ export interface SocialLink {
 export const socialLinks: SocialLink[] = [
   { label: "GitHub", url: "https://github.com/jaisor", icon: SiGithub },
   {
+    label: "Makerworld",
+    url: "https://makerworld.com/en/@jaisor",
+    icon: SiBambulab,
+  },
+  {
     label: "YouTube",
     url: "https://www.youtube.com/channel/UCVHbnEiLt9DymbX9XdnYadQ",
     icon: SiYoutube,
@@ -21,9 +26,4 @@ export const socialLinks: SocialLink[] = [
     icon: SiInstagram,
   },
   { label: "LinkedIn", url: "https://www.linkedin.com/in/jaisor", icon: FaLinkedin },
-  {
-    label: "Makerworld",
-    url: "https://makerworld.com/en/@jaisor",
-    icon: SiBambulab,
-  },
 ];

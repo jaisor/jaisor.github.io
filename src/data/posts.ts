@@ -80,10 +80,6 @@ export interface Post {
 }
 
 /**
- * Every entry below is placeholder content, one per tag, so the section
- * and the per-post pages have something to render. Replace the copy;
- * keep the shape.
- *
  * Adding a post takes two steps:
  *   1. append here with a unique `slug`
  *   2. create `posts/<slug>/index.html` (copy an existing one, update
@@ -226,67 +222,6 @@ export const posts: Post[] = [
           "Config files carry secrets. A node's YAML export includes its LoRa private key and any WiFi PSK in plaintext. Treat exported configs the way you would treat an SSH key, not a settings file.",
         ],
       },
-    ],
-  },
-  {
-    slug: "esp32-climate-sensor",
-    title: "A WiFi climate sensor that actually stays online",
-    date: "2026-07-14",
-    excerpt:
-      "Placeholder post. What it took to get a battery-powered ESP32 reporting temperature and humidity for months at a time instead of days.",
-    tags: ["electronics", "software-engineering"],
-    body: [
-      "This is placeholder copy for an example post. Replace it with the real write-up.",
-      "Body paragraphs are plain strings in src/data/posts.ts. Each string becomes its own paragraph, so there is no markup to escape and no HTML to sanitize.",
-      "Add as many paragraphs as the post needs; the page layout handles the rest.",
-    ],
-  },
-  {
-    slug: "bambu-h2d-first-month",
-    title: "First month with the Bambu H2D",
-    date: "2026-06-02",
-    excerpt:
-      "Placeholder post. Moving from a heavily modded Ender 3 to a machine that mostly just works, and what I stopped having to think about.",
-    tags: ["3d-printing"],
-    body: [
-      "This is placeholder copy for an example post. Replace it with the real write-up.",
-      "Body paragraphs are plain strings in src/data/posts.ts. Each string becomes its own paragraph, so there is no markup to escape and no HTML to sanitize.",
-    ],
-  },
-  {
-    slug: "fpv-build-log-shrieka-130",
-    title: "Build log: Shrieka 130",
-    date: "2026-04-28",
-    excerpt:
-      "Placeholder post. Frame, stack and motor choices for a small quad, and the bench numbers behind each of them.",
-    tags: ["fpv-drones", "3d-printing"],
-    body: [
-      "This is placeholder copy for an example post. Replace it with the real write-up.",
-      "Body paragraphs are plain strings in src/data/posts.ts. Each string becomes its own paragraph, so there is no markup to escape and no HTML to sanitize.",
-    ],
-  },
-  {
-    slug: "parametric-cad-for-enclosures",
-    title: "Parametric CAD is worth the learning curve",
-    date: "2026-03-11",
-    excerpt:
-      "Placeholder post. Why I stopped modeling enclosures in Blender and moved the whole workflow to Autodesk Fusion.",
-    tags: ["software-engineering", "3d-printing"],
-    body: [
-      "This is placeholder copy for an example post. Replace it with the real write-up.",
-      "Body paragraphs are plain strings in src/data/posts.ts. Each string becomes its own paragraph, so there is no markup to escape and no HTML to sanitize.",
-    ],
-  },
-  {
-    slug: "first-season-on-two-wheels",
-    title: "First season on two wheels",
-    date: "2026-02-19",
-    excerpt:
-      "Placeholder post. Notes from a beginner rider — the gear that mattered, the habits that stuck, and the maintenance I learned to do myself.",
-    tags: ["motorcycles"],
-    body: [
-      "This is placeholder copy for an example post. Replace it with the real write-up.",
-      "Body paragraphs are plain strings in src/data/posts.ts. Each string becomes its own paragraph, so there is no markup to escape and no HTML to sanitize.",
     ],
   },
   {
@@ -463,18 +398,6 @@ export const posts: Post[] = [
       },
       "The yard maiden went well. She felt fast, and a bit twitchy on Betaflight 2.5.3. Tuning and proper test flights next.",
       "Cross-posted to the [IntoFPV forum](https://intofpv.com/t-building-an-x-racer).",
-    ],
-  },
-  {
-    slug: "practicing-with-a-metronome",
-    title: "The metronome is not optional",
-    date: "2026-01-23",
-    excerpt:
-      "Placeholder post. A few months of deliberate practice, and what finally made timing click.",
-    tags: ["guitars"],
-    body: [
-      "This is placeholder copy for an example post. Replace it with the real write-up.",
-      "Body paragraphs are plain strings in src/data/posts.ts. Each string becomes its own paragraph, so there is no markup to escape and no HTML to sanitize.",
     ],
   },
 ];

@@ -108,15 +108,15 @@ export const posts: Post[] = [
     title: "AI-managed Meshtastic Node Fleet",
     date: "2026-08-20",
     excerpt:
-      "Running a multi-node Meshtastic mesh from one USB-connected admin radio and a Claude Code session that speaks meshtastic-python — discovery, remote admin, and fleet reporting from plain-language prompts.",
+      "A single USB-connected admin node and an LLM session using meshtastic-python provide discovery, remote administration, and fleet status reporting for a multi-node Meshtastic mesh, driven by natural-language prompts.",
     tags: ["software-engineering"],
     image: meshHero,
     body: [
-      { kind: "heading", text: "Problem statement" },
-      "Remote administration solves reachability, not operation. Every change is a separate invocation carrying the port, the destination node ID, and its flags — and the failure modes are silent: a missing `--dest` reconfigures the local admin node, a mistyped node ID burns the 300-second default timeout, and an ACK confirms a relayed packet, not an applied change. Nothing aggregates, either: firmware, battery, and uptime are per-node queries, collated by hand.",
+      { kind: "heading", text: "Problem" },
+      "Remote administration provides reachability but not operational aggregation. Each administrative action requires a separate command specifying the port, destination node ID, and relevant flags. Failure modes are not surfaced explicitly: an omitted `--dest` flag reconfigures the local admin node instead of the target; an incorrect node ID causes the command to wait the full 300-second default timeout; an acknowledgment (ACK) confirms only that a packet was relayed, not that the change was applied. Firmware version, battery level, and uptime are queried per node and require manual aggregation across the fleet.",
       {
         kind: "code",
-        label: "Shell · meshtastic CLI",
+        label: "Shell \u00b7 meshtastic CLI",
         code: [
           "meshtastic --port /dev/ttyACM0 --dest '!a1b2c3d4' --device-metadata",
           "",
@@ -127,42 +127,42 @@ export const posts: Post[] = [
       },
 
       { kind: "heading", text: "Approach" },
-      "LLM to the rescue! One node is dedicated as the fleet administrator: `CLIENT_MUTE`, attached over USB to the workstation, and listed in every other node's `security.admin_key`. Claude Code drives it, expanding prompts into `meshtastic-python` calls or CLI invocations — node IDs and flags filled in from a project context file rather than typed — and collating what comes back into a report.",
+      "One node is designated as the fleet administrator, configured in `CLIENT_MUTE` role and connected over USB to a workstation. This node's public key is added to every other node's `security.admin_key` list. Claude Code translates natural-language prompts into `meshtastic-python` API calls or CLI invocations, using node IDs and flags stored in a project context file rather than entered manually, and aggregates the results into a report.",
       {
         kind: "image",
         src: meshArchitecture,
         alt: "Diagram: plain-language prompts go to Claude Code on a workstation, which expands them into meshtastic-python or CLI commands; the workstation is wired over USB to an admin node, which reaches three field nodes over LoRa. A dashed return path carries telemetry, ACKs and metadata back for a collated fleet report.",
         caption:
-          "Prompts in, checked commands out; telemetry and ACKs come back the same way.",
+          "Natural-language prompts are translated into commands; telemetry and acknowledgments return over the same path.",
       },
 
       { kind: "heading", text: "Prerequisites" },
-      "A dedicated admin node, a workstation with Python 3.11+ and `meshtastic-python`, and a Claude Code session. The admin node must be listed in every fleet member's `security.admin_key` list, or it will not answer any of the remote-admin calls.",
+      "A dedicated admin node, a workstation with Python 3.11+ and `meshtastic-python`, and a Claude Code session. The admin node must be listed in every fleet member's `security.admin_key` list, or remote-admin requests from the admin node will not succeed.",
 
       { kind: "heading", text: "Building the console" },
-      "Five one-time steps turn a spare node and a terminal into a fleet console. The first three happen once per fleet; the last two are what you ask Claude to do the first time it meets the mesh.",
+      "Five steps establish the fleet console. The first three are one-time setup steps performed once per fleet. The last two are performed by Claude Code during initial fleet discovery.",
       {
         kind: "steps",
         items: [
           {
             title: "Provision the admin node",
-            text: "Pick one node to be the management station and plug it into the machine that will run Claude Code — USB stays attached for the life of the setup. A quiet role fits well: `CLIENT_MUTE` keeps it off the airwaves except when it is actually administering something, so it doesn't add chatter to the channel it is meant to be managing.",
+            text: "Designate one node as the management station and connect it via USB to the workstation running Claude Code. The USB connection remains attached for the duration of the setup. `CLIENT_MUTE` role is recommended: the node transmits only when performing an administrative action, avoiding additional traffic on the channel it manages.",
           },
           {
             title: "Stand up the Python environment",
-            text: "A local virtualenv with the official client library is the whole dependency list.",
+            text: "The only dependency is a local virtual environment with the official `meshtastic` client library installed.",
           },
           {
             title: "Authorize the admin node on every fleet member",
-            text: "This is the one step that can't be delegated to a prompt, because it is the trust root everything else relies on. On each fleet node, add the admin node's public key under Security → Admin Key. Nodes on firmware older than 2.5 fall back to a shared admin channel instead of per-key trust — workable, but worth migrating away from, since anyone on that channel gets admin rights.",
+            text: "This step establishes the trust root for all subsequent operations and cannot be delegated to Claude Code. On each fleet node, add the admin node's public key under Security \u2192 Admin Key. Firmware versions older than 2.5 use a shared admin channel instead of per-key trust; this is functional but grants admin rights to any node on that channel, and migration to per-key trust is recommended.",
           },
           {
-            title: "Let Claude map the trust graph",
-            text: "With the environment in place, the first real prompt is a discovery one: enumerate the fleet and probe which nodes actually honor the admin key you just configured.",
+            title: "Map the trust graph",
+            text: "With the environment configured, the first prompt to Claude Code performs discovery: enumerate the fleet and determine which nodes accept the configured admin key.",
           },
           {
-            title: "Give the session something to resume from",
-            text: "A mesh fleet outlives any single chat. Have Claude keep a short context file in the project — which node is the admin station, which members currently trust it, what background processes hold the serial port, and a reminder that private keys and PSKs in any config file are secrets. Each new session reads that first instead of rediscovering the fleet from scratch.",
+            title: "Record fleet state for session continuity",
+            text: "A fleet's state persists beyond any single session. Claude Code maintains a context file recording the admin node identity, which members currently trust it, any background processes holding the serial port, and a note that private keys and PSKs in exported configs are sensitive. Subsequent sessions read this file first rather than rediscovering fleet state.",
           },
         ],
       },
@@ -179,14 +179,14 @@ export const posts: Post[] = [
       },
 
       { kind: "heading", text: "Checking for new devices" },
-      "If a background listener is already watching the channel and logging what it hears, the fast answer lives in its log — no need to touch the serial port at all. Without one, Claude opens the interface directly and diffs `interface.nodes` (keyed by node ID, each entry carrying `user`, `lastHeard`, and `isFavorite`) against what the context file last recorded.",
-      "Favoriting is the cheap way to mark a node known-good: `node.setFavorite(node_id)` needs no admin trust at all — it is a local bookkeeping flag on the admin node's own database, not a change pushed to the remote node.",
+      "If a background listener process is already monitoring the channel and logging received messages, the required information is available directly from its log, without accessing the serial port. Otherwise, Claude Code opens the interface directly and compares `interface.nodes` (keyed by node ID, each entry containing `user`, `lastHeard`, and `isFavorite`) against the state previously recorded in the context file.",
+      "Favoriting a node marks it as known-good. `node.setFavorite(node_id)` requires no admin trust: it sets a local flag in the admin node's own database and does not modify the remote node.",
 
       { kind: "heading", text: "Verifying remote-admin trust" },
-      "The cleanest yes/no signal is a device-metadata request. It requires an admin session to succeed but changes nothing on the far end.",
+      "A device-metadata request provides an unambiguous trust signal. It requires an authorized admin session to succeed and does not modify state on the target node.",
       {
         kind: "code",
-        label: "Python · meshtastic-python",
+        label: "Python \u00b7 meshtastic-python",
         code: [
           "iface = meshtastic.serial_interface.SerialInterface(PORT, timeout=30)",
           "iface._timeout.expireTimeout = 20      # don't wait the 300s default per node",
@@ -195,32 +195,32 @@ export const posts: Post[] = [
           "node.getMetadata()                     # firmware_version, hw_model, hasPKC...",
         ].join("\n"),
       },
-      "A response means the node's `admin_key` list includes this station, and you are looking at real firmware info. Silence — a raised `MeshInterfaceError` once the timeout elapses — or an explicit `PKI_SEND_FAIL_PUBLIC_KEY` both mean the same thing in practice: no admin trust yet, from this station.",
+      "A successful response confirms that the target node's `admin_key` list includes this station and returns valid firmware metadata. A timeout (a `MeshInterfaceError` raised after the configured timeout elapses) or an explicit `PKI_SEND_FAIL_PUBLIC_KEY` response both indicate the same condition: this station is not yet trusted by the target node.",
       {
         kind: "note",
-        label: "Worth knowing",
-        text: "A timeout today isn't a permanent verdict. LoRa admin handshakes are route-dependent, so a node that stays silent this round can answer cleanly the next time conditions or hop paths line up. Treat one failed probe as not-confirmed, not denied.",
+        label: "Reliability note",
+        text: "A timeout is not a permanent result. LoRa admin handshakes depend on the current routing path; a node that fails to respond in one probe may respond successfully in a subsequent attempt under different routing conditions. A single failed probe should be interpreted as unconfirmed, not as a negative result.",
       },
 
       { kind: "heading", text: "Pulling a fleet status report" },
-      "Battery and uptime come for free — they ride in on regular `TELEMETRY_APP` broadcasts and sit cached in `deviceMetrics` for every node the admin station has ever heard, no admin session required. Firmware version is the one field that needs the metadata probe above, run once per node.",
+      "Battery level and uptime require no additional query: they are received via periodic `TELEMETRY_APP` broadcasts and cached in `deviceMetrics` for every node the admin station has received a broadcast from. No admin session is required for these fields. Firmware version requires the metadata probe described above, executed once per node.",
       {
         kind: "table",
         head: ["Node", "Name", "Firmware", "Voltage", "Batt.", "Uptime"],
         rows: [
-          ["!<redacted>", "MyMesh – Home", "2.7.26.54e0d8d", "4.18V", "99%", "1d 3h 44m"],
-          ["!<redacted>", "MyMesh – Muzi", "2.7.26.54e0d8d", "4.06V", "100%", "1h 36m"],
-          ["!<redacted>", "MyMesh – Parents", "2.7.26.54e0d8d", "3.53V", "30%", "1m"],
-          ["!<redacted>", "MyMesh – T114", "2.7.26.54e0d8d", "3.98V", "79%", "1d 2h 23m"],
+          ["!<redacted>", "MyMesh \u2013 Home", "2.7.26.54e0d8d", "4.18V", "99%", "1d 3h 44m"],
+          ["!<redacted>", "MyMesh \u2013 Muzi", "2.7.26.54e0d8d", "4.06V", "100%", "1h 36m"],
+          ["!<redacted>", "MyMesh \u2013 Parents", "2.7.26.54e0d8d", "3.53V", "30%", "1m"],
+          ["!<redacted>", "MyMesh \u2013 T114", "2.7.26.54e0d8d", "3.98V", "79%", "1d 2h 23m"],
         ],
         caption:
-          "Read it like a spec sheet, not a snapshot: a node at one minute of uptime just rebooted, and a battery figure hovering at 100% is normal telemetry rounding on a topped-off cell.",
+          "A node with one minute of uptime has recently rebooted. A battery reading at or near 100% reflects normal telemetry rounding for a fully charged cell, not a measurement error.",
       },
 
       { kind: "heading", text: "Renaming a node remotely" },
       {
         kind: "code",
-        label: "Python · meshtastic-python",
+        label: "Python \u00b7 meshtastic-python",
         code: [
           "node = iface.getNode(target_id, False)",
           'node.setOwner(long_name="MyMesh - Jordan", short_name="mmjo")',
@@ -230,12 +230,12 @@ export const posts: Post[] = [
       {
         kind: "warn",
         label: "Caveat",
-        text: "An implicit ACK only means a hop relayed the packet, not that the target applied it. The local node database won't show the new name until the remote node's next NodeInfo broadcast, which runs on its own schedule — confirm a rename by re-querying a few minutes later, not by trusting the send.",
+        text: "An acknowledgment (ACK) confirms that a hop relayed the packet; it does not confirm that the target node applied the change. The local node database will not reflect the new name until the remote node's next NodeInfo broadcast, which occurs on its own schedule. Confirm a rename by re-querying after a delay rather than relying on the ACK.",
       },
-      "The same shape — `getNode(id, False)`, one admin call, then `waitForAckNak()` — covers the rest of the admin surface: `reboot()`, `setFixedPosition()`, `factoryReset()`. Anything destructive deserves an explicit confirmation before Claude sends it. A rename is low-stakes enough to run on request; a factory reset is not.",
+      "The same pattern (`getNode(id, False)`, an admin call, then `waitForAckNak()`) applies to the remaining admin operations: `reboot()`, `setFixedPosition()`, `factoryReset()`. Destructive operations require explicit confirmation before execution. A rename can be executed directly on request; a factory reset requires confirmation.",
 
       { kind: "heading", text: "Coexisting with a background listener" },
-      "A listener that watches a channel and reacts — auto-favoriting whoever posts on the primary channel is a common one — holds the serial connection open indefinitely, which means it holds the exclusive lock indefinitely too. Any admin probe has to ask it to stand down first.",
+      "A listener process that monitors a channel and reacts to messages (for example, automatically favoriting nodes that post on the primary channel) holds the serial connection open indefinitely, and with it the exclusive lock on the port. An admin probe requires the listener to release the port first.",
       {
         kind: "code",
         label: "Shell",
@@ -249,17 +249,17 @@ export const posts: Post[] = [
           "disown                           # back to watching the channel",
         ].join("\n"),
       },
-      "Framed as a prompt this is just asking it to pause the listener if it needs to — but it is worth being deliberate about, since stopping a running service is exactly the kind of action to confirm rather than assume the first time it comes up.",
+      "This sequence can be expressed as a single prompt instructing Claude Code to pause the listener if necessary. Stopping a running service is a destructive-adjacent action and should require explicit confirmation rather than being executed automatically.",
 
       { kind: "heading", text: "Field notes" },
-      "Small, specific things that will otherwise look like bugs.",
+      "Observations that otherwise present as defects.",
       {
         kind: "list",
         items: [
-          "Admin handshakes are flaky, not binary. The same node can time out on one probe and answer cleanly thirty seconds later. It is a routing artifact of the mesh, not a trust state that flipped.",
-          "Battery percentage can read past 100%. Firmware rounds voltage-to-percent curves loosely near a full charge; treat anything from 95–101% as topped off, not a sensor fault.",
-          "A CLI default timeout is a batch-job problem. `meshtastic --device-metadata` waits up to 300 seconds per node by default. Fine for one node, painful across a fleet — drop `SerialInterface(timeout=…)` before looping.",
-          "Config files carry secrets. A node's YAML export includes its LoRa private key and any WiFi PSK in plaintext. Treat exported configs the way you would treat an SSH key, not a settings file.",
+          "Admin handshake success is probabilistic, not binary. The same node can time out on one probe and respond successfully thirty seconds later. This is a routing artifact of the mesh, not a change in trust state.",
+          "Reported battery percentage can exceed 100%. Firmware applies an approximate voltage-to-percentage curve near full charge; values from 95\u2013101% indicate a fully charged cell, not a measurement fault.",
+          "The CLI default timeout does not scale to batch operations. `meshtastic --device-metadata` waits up to 300 seconds per node by default. This is acceptable for a single node but impractical across a fleet; set `SerialInterface(timeout=...)` before iterating over multiple nodes.",
+          "Exported configuration files contain secrets. A node's YAML export includes its LoRa private key and any WiFi PSK in plaintext. Exported configs require the same handling as private key material, not as ordinary settings files.",
         ],
       },
     ],

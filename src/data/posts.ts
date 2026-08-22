@@ -274,7 +274,7 @@ export const posts: Post[] = [
     body: [
       { kind: "heading", text: "Problem" },
       "Many IoT devices publish metrics over MQTT. A typical device wakes on a timer, publishes a JSON payload, and returns to sleep. Extracting the data is straightforward. Visualizing it effectively is not.",
-      "The requirement is a self-hosted visualization system with no recurring cost and no external service dependency. Prometheus and Grafana satisfy this requirement. Both are open source, run on modest hardware, and support alerting in addition to graphing: a threshold breach can trigger a notification rather than requiring manual inspection of a chart.",
+      "My goal is a self-hosted visualization system with no recurring cost and no external service dependency. Prometheus and Grafana satisfy this. Both are open source, run on modest hardware, and support alerting in addition to graphing: a threshold breach can trigger a notification rather than requiring manual inspection of a chart.",
       "Prometheus uses a pull model: it scrapes an HTTP endpoint at a fixed interval. MQTT uses a push model: devices publish to a broker, which exposes no HTTP endpoint. A bridge component is required to subscribe to MQTT topics, retain the last value of each field, and expose the result at `/metrics`.",
       { kind: "heading", text: "Approach" },
       "The system consists of four containers running on a single Linux host on the local network. Each container runs with `--restart unless-stopped` and persists state to a mounted volume. This configuration restores the full stack after a host reboot without manual intervention.",
@@ -295,6 +295,7 @@ export const posts: Post[] = [
         text: "This configuration targets a local network deployment: a desktop, a Raspberry Pi, or a home server. No TLS or authentication is configured. Any component exposed to the public internet requires additional security configuration not covered here.",
       },
       { kind: "heading", text: "Broker" },
+      "Eclipse Mosquitto is a lightweight, open-source MQTT broker. It implements the full MQTT protocol with a minimal resource footprint, making it suitable for both embedded devices and server deployments.",
       {
         kind: "code",
         label: "mosquitto",

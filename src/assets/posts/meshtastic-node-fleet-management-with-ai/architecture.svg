@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="390" viewBox="0 0 1000 390">
+  <defs>
+    <marker id="head" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#737373" />
+    </marker>
+    <marker id="headAmber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#f59e0b" fill-opacity="0.75" />
+    </marker>
+    <style>
+      .sans { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
+      .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+      .kicker { font-size: 11px; fill: #737373; letter-spacing: 1.2px; }
+      .body { font-size: 11px; fill: #a3a3a3; }
+      .code { font-size: 12px; fill: #d4d4d4; }
+      .accent { font-size: 12px; fill: #f59e0b; }
+      .title { font-size: 16px; font-weight: 600; fill: #ffffff; }
+      .box { fill: #171717; stroke: #262626; }
+      .wire { stroke: #737373; stroke-width: 1.5; fill: none; }
+      .lora { stroke: #f59e0b; stroke-opacity: 0.55; stroke-width: 1.5; fill: none; }
+    </style>
+  </defs>
+
+  <rect width="1000" height="390" fill="#0a0a0a" />
+
+  <!-- Operator -->
+  <path class="box" d="M30,95 H230 L240,105 V225 L230,235 H30 L20,225 V105 Z" />
+  <text class="mono kicker" x="36" y="124">OPERATOR</text>
+  <text class="mono accent" x="36" y="155">“rename !a1b2c3d4”</text>
+  <text class="mono accent" x="36" y="178">“status of all nodes”</text>
+  <text class="sans body" x="36" y="207">plain language, no flags</text>
+
+  <!-- Claude Code -->
+  <path class="box" stroke="#f59e0b" stroke-opacity="0.4" d="M310,65 H560 L570,75 V255 L560,265 H310 L300,255 V75 Z" />
+  <text class="sans title" x="435" y="97" text-anchor="middle">Claude Code</text>
+  <text class="sans kicker" x="435" y="116" text-anchor="middle">workstation</text>
+  <path fill="#0a0a0a" stroke="#262626" d="M326,132 H544 L550,138 V186 L544,192 H326 L320,186 V138 Z" />
+  <text class="mono code" x="435" y="156" text-anchor="middle">meshtastic-python</text>
+  <text class="mono code" x="435" y="176" text-anchor="middle">meshtastic CLI</text>
+  <text class="sans body" x="435" y="220" text-anchor="middle">expands prompts into</text>
+  <text class="sans body" x="435" y="236" text-anchor="middle">explicit, checked commands</text>
+
+  <!-- Admin node -->
+  <path class="box" d="M630,95 H770 L780,105 V225 L770,235 H630 L620,225 V105 Z" />
+  <text class="mono kicker" x="700" y="124" text-anchor="middle">ADMIN NODE</text>
+  <text class="mono code" x="700" y="152" text-anchor="middle">CLIENT_MUTE</text>
+  <text class="sans body" x="700" y="181" text-anchor="middle">its public key sits in</text>
+  <text class="sans body" x="700" y="197" text-anchor="middle">every node's admin_key</text>
+
+  <!-- Fleet -->
+  <text class="mono kicker" x="925" y="19" text-anchor="middle">FLEET · OVER LORA</text>
+  <path class="box" d="M868,30 H982 L990,38 V90 L982,98 H868 L860,90 V38 Z" />
+  <text class="mono code" x="925" y="59" text-anchor="middle">Node · home</text>
+  <text class="mono kicker" x="925" y="79" text-anchor="middle">!a1b2c3d4</text>
+  <path class="box" d="M868,131 H982 L990,139 V191 L982,199 H868 L860,191 V139 Z" />
+  <text class="mono code" x="925" y="160" text-anchor="middle">Node · parents</text>
+  <text class="mono kicker" x="925" y="180" text-anchor="middle">!b2c3d4e5</text>
+  <path class="box" d="M868,232 H982 L990,240 V292 L982,300 H868 L860,292 V240 Z" />
+  <text class="mono code" x="925" y="261" text-anchor="middle">Node · mobile</text>
+  <text class="mono kicker" x="925" y="281" text-anchor="middle">!c3d4e5f6</text>
+
+  <!-- Links -->
+  <path class="wire" d="M244,165 H290" marker-end="url(#head)" />
+  <text class="sans kicker" x="267" y="152" text-anchor="middle">prompt</text>
+  <path class="wire" d="M574,165 H610" marker-end="url(#head)" />
+  <text class="sans kicker" x="592" y="152" text-anchor="middle">USB</text>
+  <path class="lora" d="M784,150 C815,148 826,80 850,66" marker-end="url(#headAmber)" />
+  <path class="lora" d="M784,165 H850" marker-end="url(#headAmber)" />
+  <path class="lora" d="M784,180 C815,182 826,252 850,264" marker-end="url(#headAmber)" />
+
+  <!-- Return path: what comes back -->
+  <path class="wire" stroke-dasharray="4 4" d="M925,304 V335 Q925,345 915,345 H445 Q435,345 435,335 V275" marker-end="url(#head)" />
+  <text class="sans kicker" x="680" y="366" text-anchor="middle">telemetry · ACKs · metadata → collated fleet report</text>
+</svg>

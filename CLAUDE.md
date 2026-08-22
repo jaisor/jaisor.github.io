@@ -91,7 +91,10 @@ src/components/
 src/data/
   social.ts           # header social links
   tags.ts             # Tag[] — the shared taxonomy, typed by TagId
-  posts.ts            # Post[] + postsByDate/postBySlug/postHref helpers
+  posts/              # one Post per file, auto-discovered — see "Add a post"
+    index.ts          #   Block/Post types + postsByDate/postBySlug/postHref
+                      #   helpers; globs every sibling *.ts file
+    <slug>.ts         #   one file per post; default-exports a Post
   patents.ts          # Patent[] — rendered compactly in About's
                       #   Braggables list
 src/assets/           # background.jpg, profile.jpg (imported so Vite fingerprints them)
@@ -136,8 +139,10 @@ components.** Components are presentation only.
   call-to-action. Label link rows with the real target title (check it,
   don't guess) so the text matches where it lands.
 - **Add a post → two steps, and both are required:**
-  1. append a `Post` to `posts` in `data/posts.ts` with a unique `slug`
-     and `tags` drawn from `TagId`;
+  1. create `data/posts/<slug>.ts`, default-exporting a `Post` with a
+     unique `slug` and `tags` drawn from `TagId` (copy an existing file
+     for the shape — its own image imports live at the top, relative to
+     `data/posts/`);
   2. create `posts/<slug>/index.html` — copy an existing one and update
      *every* per-post value in the head: `<title>`, `description`,
      `canonical`, `og:url`, `og:title`, `og:description`, `og:image`,
@@ -149,14 +154,22 @@ components.** Components are presentation only.
   4. add the URL to `public/sitemap.xml`.
 
   Steps 2–4 duplicate title/excerpt/date/tags that already live in
-  `data/posts.ts`, so they drift silently — nothing fails the build if
-  they disagree. Re-read the existing post shells and copy the shape
-  exactly. If this starts costing time, the honest fix is to generate
-  the shells and the sitemap from `posts.ts` at build time rather than
-  hand-maintaining them.
+  the post's own file under `data/posts/`, so they drift silently —
+  nothing fails the build if they disagree. Re-read the existing post
+  shells and copy the shape exactly. If this starts costing time, the
+  honest fix is to generate the shells and the sitemap from
+  `data/posts/` at build time rather than hand-maintaining them.
   Vite picks the directory up as a build entry on its own. Skipping
   step 2 leaves a card linking to a 404; skipping step 1 builds a page
   that renders `PostNotFound`.
+  `data/posts/index.ts` discovers every sibling file itself via
+  `import.meta.glob("./*.ts", { eager: true })`, filters out its own
+  path, and sorts the result by date — a new post file needs no
+  registration anywhere. `eager: true` matters: it makes Vite emit
+  static imports resolved at build time rather than lazy dynamic ones,
+  so the whole list is available synchronously, which every consumer
+  here (the card grid, the tag filter) needs anyway on a fully static
+  site with no code-splitting to gain from laziness.
   `body` is a `Block[]`: a bare string is a paragraph, and the tagged
   variants (`heading`, `code`, `list`, `note`/`warn`, `steps`, `table`,
   `image`) cover longer technical posts. `PostBody.tsx` renders them. Inside any
@@ -177,7 +190,7 @@ components.** Components are presentation only.
   (`hero.jpg`, not `warlock-hero.jpg`). Repeated basenames across
   folders are fine: Vite fingerprints by content, so two `hero.jpg`
   files emit as two distinct hashed assets. `import` them at the top of
-  `data/posts.ts`, and
+  the post's own file in `data/posts/`, and
   hand the binding to `Post.image` or an `image` block — a string path
   would skip Vite's fingerprinting and 404 in `dist/`. Resize before
   committing (long edge ~1400px landscape / ~950px portrait, JPEG q80,
@@ -232,6 +245,41 @@ opening paragraph in the hero) and
 [`About.tsx`](src/components/About.tsx) (the rest, plus the HAM-license
 line) — these are the two places copy sits in a component rather than
 in `src/data/*.ts`.
+
+## Writing style
+
+**The tags decide the register.** A post's `tags` are not only a filter
+— they say how it should read.
+
+**Technical register — `software-engineering`, `electronics`.** Highly
+crisp, succinct and technical. Keep artistic and creative writing to a
+minimum: no scene-setting, no jokes carrying a paragraph, no metaphor
+where a measurement will do. Structure every such post on one of two
+patterns and let the headings show it:
+
+- **Problem → Approach → Solution** — what was broken or missing, what
+  was tried and why, what now works.
+- **Hypothesis → Experiments → Conclusion** — what you expected, what
+  you measured, what it turned out to be.
+
+Pick one and commit; do not blend them. These posts are where the
+`code`, `table`, `steps` and `note`/`warn` blocks earn their place —
+prefer a table of numbers over a sentence describing numbers.
+
+**Relaxed register — `guitars`, `fpv-drones`, `3d-printing`.** Story
+first. These can be personal, warm and a little artistic: how the
+project started, what went wrong, what it felt like to finish. Plain
+paragraphs carrying a narrative, `image` blocks with captions doing real
+work, and a chronological spine rather than a formal one. Specs still
+have to be correct — relaxed is not vague — but they serve the story
+instead of leading it. `motorcycles` is unspecified; being a hobby tag,
+it belongs here.
+
+**Posts that span both** take the structure of the technical register
+and the opening of the relaxed one. *An over-engineered headphone
+stand* (`3d-printing` + `electronics`) is the live example: it opens
+with why the thing exists, then hardens into headed sections, a parts
+table and a feature list once it reaches the electronics.
 
 ## Conventions
 

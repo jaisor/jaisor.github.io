@@ -1,4 +1,6 @@
 import type { TagId } from "./tags";
+import meshHero from "../assets/posts/meshtastic-node-fleet-management-with-ai/hero.svg";
+import meshArchitecture from "../assets/posts/meshtastic-node-fleet-management-with-ai/architecture.svg";
 import warlockHero from "../assets/posts/3d-printed-warlock-death-tribute/hero.jpg";
 import warlockDryfit from "../assets/posts/3d-printed-warlock-death-tribute/dryfit.jpg";
 import warlockParts from "../assets/posts/3d-printed-warlock-death-tribute/parts.jpg";
@@ -103,15 +105,39 @@ export interface Post {
 export const posts: Post[] = [
   {
     slug: "meshtastic-node-fleet-management-with-ai",
-    title: "Meshtastic Node Fleet Management with AI",
+    title: "AI-managed Meshtastic Node Fleet",
     date: "2026-08-20",
     excerpt:
       "Running a multi-node Meshtastic mesh from one USB-connected admin radio and a Claude Code session that speaks meshtastic-python — discovery, remote admin, and fleet reporting from plain-language prompts.",
     tags: ["software-engineering"],
+    image: meshHero,
     body: [
-      "One physical node does double duty as the fleet's administrator: it stays plugged into the machine running Claude Code over USB, and every other node has been told, once, to trust its public key. From then on, managing the fleet is a conversation — Claude turns plain requests into `meshtastic-python` calls, waits out the radio, and reports back.",
-      "This isn't a GUI, and it isn't a bespoke script per task. It's a general-purpose radio operator that happens to read Python and remember what happened last session. Ask it to check for new nodes, confirm which ones actually grant it admin, pull a battery-and-firmware report, or rename a node, and it reaches for the same small set of primitives every time — `getNode().getMetadata()`, `setOwner()`, the cached `deviceMetrics` in the node database — instead of a new one-off tool per question.",
-      "Two things shape every workflow below. First, trust is per-node and explicit: a node only accepts admin commands from a station whose public key is in its `security.admin_key` list, so the admin node's authority has to be granted, not assumed. Second, the serial port is exclusive: `meshtastic-python` locks the USB device for the duration of a session, so anything else already talking to the radio — commonly a background listener script — has to step aside first.",
+      { kind: "heading", text: "Problem statement" },
+      "Remote administration solves reachability, not operation. Every change is a separate invocation carrying the port, the destination node ID, and its flags — and the failure modes are silent: a missing `--dest` reconfigures the local admin node, a mistyped node ID burns the 300-second default timeout, and an ACK confirms a relayed packet, not an applied change. Nothing aggregates, either: firmware, battery, and uptime are per-node queries, collated by hand.",
+      {
+        kind: "code",
+        label: "Shell · meshtastic CLI",
+        code: [
+          "meshtastic --port /dev/ttyACM0 --dest '!a1b2c3d4' --device-metadata",
+          "",
+          "meshtastic --port /dev/ttyACM0 --dest '!a1b2c3d4' \\",
+          '  --set-owner "MyMesh - Parents" --set-owner-short mmpa \\',
+          "  --set lora.hop_limit 5 --set device.rebroadcast_mode LOCAL_ONLY",
+        ].join("\n"),
+      },
+
+      { kind: "heading", text: "Approach" },
+      "LLM to the rescue! One node is dedicated as the fleet administrator: `CLIENT_MUTE`, attached over USB to the workstation, and listed in every other node's `security.admin_key`. Claude Code drives it, expanding prompts into `meshtastic-python` calls or CLI invocations — node IDs and flags filled in from a project context file rather than typed — and collating what comes back into a report.",
+      {
+        kind: "image",
+        src: meshArchitecture,
+        alt: "Diagram: plain-language prompts go to Claude Code on a workstation, which expands them into meshtastic-python or CLI commands; the workstation is wired over USB to an admin node, which reaches three field nodes over LoRa. A dashed return path carries telemetry, ACKs and metadata back for a collated fleet report.",
+        caption:
+          "Prompts in, checked commands out; telemetry and ACKs come back the same way.",
+      },
+
+      { kind: "heading", text: "Prerequisites" },
+      "A dedicated admin node, a workstation with Python 3.11+ and `meshtastic-python`, and a Claude Code session. The admin node must be listed in every fleet member's `security.admin_key` list, or it will not answer any of the remote-admin calls.",
 
       { kind: "heading", text: "Building the console" },
       "Five one-time steps turn a spare node and a terminal into a fleet console. The first three happen once per fleet; the last two are what you ask Claude to do the first time it meets the mesh.",

@@ -203,6 +203,17 @@ components.** Components are presentation only.
   `Post.image` is *not* clickable — `PostImage` is shared with
   `PostCard`, which already wraps the whole tile in an `<a>`, and
   anchors can't nest.
+- **Diagrams are hand-authored SVG files**, imported like a photo and
+  used as an `image` block — see
+  `src/assets/posts/meshtastic-node-fleet-management-with-ai/architecture.svg`.
+  Rendered through `<img>`, so the page's CSS and Google Font don't
+  reach inside: carry an opaque `#0a0a0a` background rect (the panel
+  behind is translucent), style with a `<style>` block in `<defs>` using
+  the site palette, and set generic `ui-sans-serif` / `ui-monospace`
+  stacks. Set `width`/`height` *and* `viewBox` — without intrinsic
+  dimensions an `<img>`-rendered SVG falls back to 300×150. Emulate
+  `[corner-shape:bevel]` with cut-corner paths
+  (`M x+b,y H x+w-b L x+w,y+b …`) to match the site's cards.
 - **A non-post standalone page would need a manual Vite entry.** Only
   `posts/*/` is auto-globbed (via `postEntries()`); anything else must
   be added to `build.rollupOptions.input` by hand. `npm run dev`

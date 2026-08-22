@@ -43,6 +43,7 @@ import standMagnets from "../assets/posts/over-engineered-headphone-stand/magnet
 import standMagnetsFull from "../assets/posts/over-engineered-headphone-stand/magnets-hires.jpg";
 import standFinished from "../assets/posts/over-engineered-headphone-stand/finished.jpg";
 import standFinishedFull from "../assets/posts/over-engineered-headphone-stand/finished-hires.jpg";
+import mqttHero from "../assets/posts/mqtt-to-grafana-dashboards/hero.jpg";
 import mqttDashboards from "../assets/posts/mqtt-to-grafana-dashboards/dashboards.jpg";
 import mqttDashboardsFull from "../assets/posts/mqtt-to-grafana-dashboards/dashboards-hires.jpg";
 
@@ -269,10 +270,11 @@ export const posts: Post[] = [
   {
     slug: "mqtt-to-grafana-dashboards",
     title: "From MQTT messages to Grafana dashboards",
-    date: "2026-08-22",
+    date: "2026-02-18",
     excerpt:
       "A four-container Docker stack that stores and visualizes MQTT metrics using Prometheus and Grafana, including alerting, at no licensing cost.",
     tags: ["software-engineering"],
+    image: mqttHero,
     body: [
       { kind: "heading", text: "Problem" },
       "Many IoT devices publish metrics over MQTT. A typical device wakes on a timer, publishes a JSON payload, and returns to sleep. Extracting the data is straightforward. Visualizing it effectively is not.",
@@ -448,6 +450,7 @@ tm_telemetry_rssi{device="...", telemetry_sender="device_01"} -45`,
         caption:
           "The same pattern applied to different data: HVAC control, climate sensors, solar and battery, and mesh-radio telemetry.",
       },
+      "Two final points to highlight:",
       {
         kind: "steps",
         items: [
@@ -460,8 +463,7 @@ tm_telemetry_rssi{device="...", telemetry_sender="device_01"} -45`,
             text: "Renaming a field in device firmware creates a new metric series rather than continuing the existing one.",
           },
         ],
-      },
-      "The complete configuration reference is available in the [exporter repository](https://github.com/jaisor/mqtt-json-prometheus-exporter).",
+      }
     ],
   },
   {

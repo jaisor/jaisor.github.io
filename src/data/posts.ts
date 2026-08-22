@@ -28,15 +28,19 @@ import xracerLowFull from "../assets/posts/building-an-x-racer/low-hires.jpg";
 import xracerHand from "../assets/posts/building-an-x-racer/hand.jpg";
 import xracerHandFull from "../assets/posts/building-an-x-racer/hand-hires.jpg";
 import standHero from "../assets/posts/over-engineered-headphone-stand/hero.jpg";
-import standRender from "../assets/posts/over-engineered-headphone-stand/render.jpg";
-import standRenderFull from "../assets/posts/over-engineered-headphone-stand/render-hires.jpg";
 import standInUse from "../assets/posts/over-engineered-headphone-stand/in-use.jpg";
 import standInUseFull from "../assets/posts/over-engineered-headphone-stand/in-use-hires.jpg";
-import standNeon from "../assets/posts/over-engineered-headphone-stand/neon.jpg";
-import standNeonFull from "../assets/posts/over-engineered-headphone-stand/neon-hires.jpg";
-import standCollage from "../assets/posts/over-engineered-headphone-stand/collage.jpg";
-import standCollageFull from "../assets/posts/over-engineered-headphone-stand/collage-hires.jpg";
 import standWebUi from "../assets/posts/over-engineered-headphone-stand/webui.png";
+import standElectronics from "../assets/posts/over-engineered-headphone-stand/electronics.jpg";
+import standElectronicsFull from "../assets/posts/over-engineered-headphone-stand/electronics-hires.jpg";
+import standFirstLight from "../assets/posts/over-engineered-headphone-stand/first-light.jpg";
+import standFirstLightFull from "../assets/posts/over-engineered-headphone-stand/first-light-hires.jpg";
+import standAssembled from "../assets/posts/over-engineered-headphone-stand/assembled.jpg";
+import standAssembledFull from "../assets/posts/over-engineered-headphone-stand/assembled-hires.jpg";
+import standMagnets from "../assets/posts/over-engineered-headphone-stand/magnets.jpg";
+import standMagnetsFull from "../assets/posts/over-engineered-headphone-stand/magnets-hires.jpg";
+import standFinished from "../assets/posts/over-engineered-headphone-stand/finished.jpg";
+import standFinishedFull from "../assets/posts/over-engineered-headphone-stand/finished-hires.jpg";
 
 /**
  * A body block. A bare string is a paragraph — the common case — so
@@ -327,13 +331,6 @@ export const posts: Post[] = [
     body: [
       "I have a weakness for neon lighting, and an ongoing habit of putting addressable LEDs on things that did not ask for them. I also genuinely needed two boring objects: somewhere to hang my headphones, and a wireless charger with more power than the one I had.",
       "Rather than buy two things, I designed one. The name is not ironic \u2014 it really is over-engineered, and that was the point.",
-      {
-        kind: "image",
-        src: standRender,
-        full: standRenderFull,
-        alt: "CAD render of the headphone stand: an octagonal base with glowing panels and a circular charging pad, a vertical arm with a neon light bar, and an angled top arm.",
-        caption: "The design, before any of it existed.",
-      },
       { kind: "heading", text: "What it ended up doing" },
       {
         kind: "list",
@@ -361,10 +358,18 @@ export const posts: Post[] = [
       },
       {
         kind: "image",
-        src: standInUse,
-        full: standInUseFull,
-        alt: "The finished stand on a workbench, lit pink and orange, with headphones hanging on the top arm and a phone charging flat on the base.",
-        caption: "Doing both of its jobs at once.",
+        src: standElectronics,
+        full: standElectronicsFull,
+        alt: "The open printed base on a workbench with the flat Qi charging coil seated in its recess and the ESP32-C3 board wired in below it.",
+        caption:
+          "The Qi coil drops into its own recess; the ESP32-C3 sits under it.",
+      },
+      {
+        kind: "image",
+        src: standFirstLight,
+        full: standFirstLightFull,
+        alt: "The LED ring lit warm white and pink inside the octagonal base, next to the ESP32-C3 board with its small OLED showing text, still tethered by a USB cable.",
+        caption: "First light, still on the bench and still tethered by USB.",
       },
       { kind: "heading", text: "The OLED became a clock" },
       "The ESP32-C3 board came with a small OLED, which I added to show the device's IP address once it joins WiFi. It still does that \u2014 for about ten seconds after connecting.",
@@ -389,19 +394,36 @@ export const posts: Post[] = [
       },
       { kind: "heading", text: "Charging mode" },
       "The one piece of real integration between the two halves: a GPIO senses when the charger is active and fires a callback that hands the strip to a dedicated animation. It runs a red-to-yellow gradient blending toward green over a twenty-second cycle, with a green pixel bouncing along a section of the arm \u2014 an ambient charging indicator you can read from across the room, with no numbers anywhere.",
+      "Getting MagSafe alignment right needed its own small piece of tooling: a printed jig that holds the ring of magnets in place while the glue sets, so they end up concentric with the coil rather than approximately near it.",
       {
         kind: "image",
-        src: standNeon,
-        full: standNeonFull,
-        alt: "Close-up of the stand lit in magenta and warm white, showing the glowing arm and the illuminated panels around the octagonal base.",
-        caption: "The neon look I was actually after.",
+        src: standMagnets,
+        full: standMagnetsFull,
+        alt: "A printed circular jig on a cutting mat holding a ring of small rectangular magnets in place, with a bottle of Starbond cyanoacrylate glue behind it.",
+        caption: "A jig whose entire job is to hold magnets still for a minute.",
+      },
+      { kind: "heading", text: "Putting it together" },
+      "The printed parts are glued rather than screwed wherever the seam is not meant to come apart again, which means a lot of the assembly is really just clamping things and waiting.",
+      {
+        kind: "image",
+        src: standAssembled,
+        full: standAssembledFull,
+        alt: "The base with its LED ring and charging coil installed, the vertical arm mounted and held in place by a spring clamp while the glue sets, on a workbench with a solder spool nearby.",
+        caption: "Most of assembly is clamping something and walking away.",
       },
       {
         kind: "image",
-        src: standCollage,
-        full: standCollageFull,
-        alt: "A collage of the finished headphone stand shown in several lighting modes and colors.",
-        caption: "A few of the modes.",
+        src: standInUse,
+        full: standInUseFull,
+        alt: "The finished stand on a workbench, lit pink and orange, with headphones hanging on the top arm and a phone charging flat on the base.",
+        caption: "Doing both of its jobs at once.",
+      },
+      {
+        kind: "image",
+        src: standFinished,
+        full: standFinishedFull,
+        alt: "The finished stand with headphones hanging on it, the arm glowing warm white and pink and the base lit purple around the charging pad.",
+        caption: "Where it lives now.",
       },
       "The model is on [MakerWorld](https://makerworld.com/en/models/2347791-over-engineered-headphone-stand-and-phone-charger), and the firmware lives on the [led_headphone_stand branch](https://github.com/jaisor/ESP_LED_Controller/tree/led_headphone_stand) of my ESP LED Controller repo \u2014 the same codebase I keep reusing for every LED project I start.",
     ],

@@ -13,8 +13,8 @@ publish as a fully static site on GitHub Pages**.
 
 Design intent: dark, cinematic, one page you scroll through. Fixed
 background photo behind translucent panels, amber accents on near-black
-neutrals, full-screen scroll-snap sections, and a scroll-revealed section
-navigator on the right.
+neutrals, full-screen scroll-snap sections, and a section navigator bar
+that fades in across the top once you scroll past the hero.
 
 ## Stack
 
@@ -70,26 +70,40 @@ src/post.tsx          # React root for every post page; reads data-slug
 src/index.css         # Tailwind import + @theme font token + base body styles
 src/App.tsx           # scroll container + section order
 src/components/
-  Backdrop.tsx        # fixed background layers, shared by App and PostPage
-  Header.tsx          # #home — photo, bio paragraphs, social links
+  Backdrop.tsx        # fixed background layers, shared by every page
+  Header.tsx          # #home — photo, first bio paragraph, social links
+  About.tsx           # #about — remaining bio paragraphs + the Braggables
+                      #   list (patents, HAM license)
   Interests.tsx       # #hobbies — cards rendered from data/tags
-  Patents.tsx         # #patents — cards from data/patents
   Posts.tsx           # #posts — tag-filterable card grid + FilterPill
   PostCard.tsx        # one post teaser: photo, date, excerpt, tags, link
   PostPage.tsx        # the /posts/<slug>/ page + PostNotFound
   PostBody.tsx        # renders Block[] — paragraphs, code, tables, callouts
+  Inline.tsx          # shared inline markup: `code` and [label](href)
   PostImage.tsx       # post photo, or a gradient+icon placeholder if absent
+  Lightbox.tsx        # full-screen viewer for a clicked post photo
   TagChips.tsx        # non-interactive tag labels (spans — cards are anchors)
-  SectionNav.tsx      # right-side dot nav, IntersectionObserver-driven
+  ScrollCue.tsx       # clickable bouncing chevron under a section's content,
+                      #   hidden when that section overflows the viewport
+  SectionNav.tsx      # IntersectionObserver-driven section nav: a fixed top
+                      #   bar on lg+, a hamburger dropdown below it
   Footer.tsx          # copyright
 src/data/
   social.ts           # header social links
   tags.ts             # Tag[] — the shared taxonomy, typed by TagId
   posts.ts            # Post[] + postsByDate/postBySlug/postHref helpers
-  patents.ts          # Patent[]
+  patents.ts          # Patent[] — rendered compactly in About's
+                      #   Braggables list
 src/assets/           # background.jpg, profile.jpg (imported so Vite fingerprints them)
+  posts/<slug>/       # one folder per post, named for its slug; photos are
+                      #   imported, never linked by path
 public/favicon.jpg    # copied verbatim to dist/
 ```
+
+Patents are not their own section. They live inside `#about` under a
+"Braggables" heading, as compact linked rows (number + title only — the
+`description` field is intentionally not rendered there), alongside the
+HAM-license note.
 
 ## Content is data, not markup
 
@@ -99,11 +113,23 @@ components.** Components are presentation only.
 - **Tags are one shared vocabulary.** `data/tags.ts` drives both the
   Hobbies cards (each `Tag` carries the hobby-card copy) and the Posts
   filter pills / chips. Add a `Tag`, add its `id` to the `TagId` union,
-  and it shows up in both places.
-- Link repos from a hobby card → a `Tag` can carry `repos`
+  and it shows up in both places. A `Tag`'s `description` runs through
+  the same `Inline` renderer as post bodies, so it takes `code` and
+  `[label](href)` too — prefer an inline link inside a sentence over a
+  trailing one when the link belongs to a phrase.
+- **Renaming a hobby card is not the same as renaming a tag.** `label`
+  and `icon` are the taxonomy: they render the Posts filter pill and the
+  chips on every post carrying that tag. To retitle just the card, set
+  `cardLabel` / `cardIcon` and leave `label` / `icon` alone. The
+  `motorcycles` tag is the live example — its card is the catch-all
+  "More to come..." (Sparkles), while the tag still labels the
+  *First season on two wheels* post.
+- Add supporting links to a hobby card → a `Tag` can carry `links`
   (`{ label, href }[]`), rendered as a list of amber links under the
-  description. Use it when a card names several projects; `link` /
-  `linkLabel` remain the single trailing call-to-action.
+  description. Use it when a card points at several things — repos,
+  videos; `link` / `linkLabel` remain the single trailing
+  call-to-action. Label link rows with the real target title (check it,
+  don't guess) so the text matches where it lands.
 - **Add a post → two steps, and both are required:**
   1. append a `Post` to `posts` in `data/posts.ts` with a unique `slug`
      and `tags` drawn from `TagId`;
@@ -113,21 +139,69 @@ components.** Components are presentation only.
   step 2 leaves a card linking to a 404; skipping step 1 builds a page
   that renders `PostNotFound`.
   `body` is a `Block[]`: a bare string is a paragraph, and the tagged
-  variants (`heading`, `code`, `list`, `note`/`warn`, `steps`, `table`)
-  cover longer technical posts. `PostBody.tsx` renders them. Inside any
-  text field, backtick-delimited spans become inline code — that is the
-  *only* markup, and it is still plain text React escapes, so the
-  no-unescaped-HTML rule holds.
+  variants (`heading`, `code`, `list`, `note`/`warn`, `steps`, `table`,
+  `image`) cover longer technical posts. `PostBody.tsx` renders them. Inside any
+  text field, backtick-delimited spans become inline code and
+  `[label](href)` becomes a link — that is the *only* markup. Both are
+  tokenised into React elements by
+  [`Inline.tsx`](src/components/Inline.tsx), never parsed as HTML, so
+  the no-unescaped-HTML rule holds. `Inline` fails closed on any href
+  that isn't `http(s):`, `mailto:`, `/`, or `#` (rendering the label as
+  plain text), and gives external ones `target="_blank" rel="noreferrer"`
+  automatically — so don't hand-write those attributes in copy.
   `image` is optional; without it, cards and pages draw a gradient
   placeholder carrying the first tag's icon, so no stock photo or
   remote image is ever needed.
+- **Post photos are imported assets, never paths.** Put them in
+  `src/assets/posts/<slug>/` — one folder per post, named for its slug,
+  so a post's photos stay together and its filenames need no prefix
+  (`hero.jpg`, not `warlock-hero.jpg`). Repeated basenames across
+  folders are fine: Vite fingerprints by content, so two `hero.jpg`
+  files emit as two distinct hashed assets. `import` them at the top of
+  `data/posts.ts`, and
+  hand the binding to `Post.image` or an `image` block — a string path
+  would skip Vite's fingerprinting and 404 in `dist/`. Resize before
+  committing (long edge ~1400px landscape / ~950px portrait, JPEG q80,
+  which lands around 200–280KB each); the originals off a phone are
+  3–6MB apiece and this repo ships to Pages. `.NET` imaging via
+  PowerShell does the job without adding a dependency. Every `image`
+  block needs real `alt` text describing the photo.
+  `Post.image` is cropped to a landscape band (`h-40` on cards, `h-64`
+  /`lg:h-80` on the page), so give it a landscape crop — a portrait
+  photo there gets sliced through the middle. Body `image` blocks keep
+  their aspect ratio inside a `max-h-[36rem]` box, so portrait is fine
+  there.
+- **Two tiers per photo.** The inline one (above) plus an optional
+  `full` import — a `*-hires.jpg` at ~2560px long edge, q85, roughly
+  700–900KB — which makes the image open in
+  [`Lightbox`](src/components/Lightbox.tsx) when clicked. Deliberately
+  not the camera original: 3–6MB × a photo-heavy post is real weight on
+  a Pages site, and 2560px already exceeds any display. The trigger is a
+  real `<a href={full}>` whose handler calls `preventDefault()`, so the
+  hi-res file still opens if the JS never runs; it also `focus()`es
+  itself on click, because `Lightbox` restores focus to whatever was
+  active when it mounted and browsers don't focus a clicked anchor.
+  `Post.image` is *not* clickable — `PostImage` is shared with
+  `PostCard`, which already wraps the whole tile in an `<a>`, and
+  anchors can't nest.
+- **A non-post standalone page would need a manual Vite entry.** Only
+  `posts/*/` is auto-globbed (via `postEntries()`); anything else must
+  be added to `build.rollupOptions.input` by hand. `npm run dev`
+  ignores that map entirely — Vite's dev server resolves any file on
+  disk — so a missing entry only surfaces at `vite build` time. Prefer
+  a section on the main page unless a page genuinely needs its own
+  URL and `<title>`.
 - Add a patent → append to `patents` in `data/patents.ts`. Each entry
   carries a plain-language `description` — keep that voice: explain what
-  the invention actually does, no patentese.
+  the invention actually does, no patentese. `About.tsx` currently
+  renders only the number and title.
 - Add a social link → append to `socialLinks` in `data/social.ts`.
 
-Bio prose lives inline in [`Header.tsx`](src/components/Header.tsx) — it
-is the one place copy sits in a component.
+Bio prose lives inline in [`Header.tsx`](src/components/Header.tsx) (the
+opening paragraph in the hero) and
+[`About.tsx`](src/components/About.tsx) (the rest, plus the HAM-license
+line) — these are the two places copy sits in a component rather than
+in `src/data/*.ts`.
 
 ## Conventions
 
@@ -137,21 +211,41 @@ is the one place copy sits in a component.
   layer to add to.
 - **Palette:** `neutral-950/900/800` surfaces, `neutral-300/400/500`
   text, `amber-400/500` accents. Stay inside it.
-- **Card pattern** (Hobbies, Patents, Posts share it):
+- **Card pattern** (Hobbies, Posts, and the Braggables rows in
+  `#about` share it):
   `rounded-xl border border-neutral-800 bg-neutral-900/50 shadow-sm
   shadow-black/20 transition [corner-shape:bevel]
   hover:border-amber-500/40 hover:shadow-md hover:shadow-black/30`.
   Reuse it verbatim for new cards so the sections stay visually
   consistent. `[corner-shape:bevel]` is the site's signature — it
   degrades gracefully to plain rounded corners where unsupported.
-- **Sections** are `min-h-screen snap-start px-6 py-24 lg:pr-32
-  xl:pr-40`. The extra right padding keeps content clear of the fixed
-  `SectionNav`; don't drop it on a new section.
+- **Sections** are `min-h-screen snap-start px-6 py-12 lg:py-24`. The
+  tighter vertical padding below `lg` is deliberate — phones need the
+  space for content. On `lg` the 96px top padding is also what keeps a
+  section's heading clear of the fixed top `SectionNav` bar (~53px
+  tall), so don't reduce it there.
 - **A new section must be wired in three places:** rendered in
   [`App.tsx`](src/App.tsx), given a matching `id`, and added to the
   `sections` array in
   [`SectionNav.tsx`](src/components/SectionNav.tsx) — the observer looks
   up elements by those ids, so a mismatch silently breaks the nav dot.
+  Also re-point the [`ScrollCue`](src/components/ScrollCue.tsx) of the
+  section it now follows.
+- **Every section except the last ends with a `<ScrollCue>`** pointing
+  at the next one's id — the site's scroll affordance. It sits in
+  normal flow *under* the content, not pinned to the viewport, and
+  **shows itself only when its section fits the viewport**: it measures
+  the section against the scroll container (`section.parentElement`, not
+  `window.innerHeight`, which disagrees with `100vh` on mobile) via a
+  `ResizeObserver`. Once content overflows, the overflow *is* the
+  affordance and the cue would be below the fold anyway. It hides with
+  `invisible` (`visibility: hidden`) rather than unmounting, so the
+  space stays reserved — dropping it out of flow would shrink the
+  section back under the viewport and the measurement would oscillate.
+  Consequence: a section that overflows only slightly shows no cue and
+  keeps a small dead gap; that's the stable trade, don't "fix" it by
+  removing the element. The chevron bounces inside a stationary button
+  so the hit target doesn't move; keep it that way.
 - **Internal links are plain `<a href="/posts/…/">`** — a real
   navigation to a real page. Do *not* give them `target="_blank"`; that
   rule is for external links only. Post pages link back with
@@ -159,10 +253,22 @@ is the one place copy sits in a component.
 - **Anchors don't nest.** `PostCard` wraps the whole tile in an `<a>`,
   so tag chips inside it are `<span>`/`<li>`, never links or buttons.
 - **Responsive:** mobile-first base styles, `sm:`/`lg:`/`xl:` to scale
-  up. `SectionNav` is `hidden lg:flex` by design.
+  up. `SectionNav` renders **two** controls off one shared observer: a
+  full-width bar (`hidden lg:flex`) and, below `lg`, a hamburger button
+  with a dropdown (`lg:hidden`). A fixed bar on a phone would cost
+  vertical space, so the button sits in the 0&ndash;48px band above the
+  section heading (`top-2 right-2`, 38px tall) &mdash; sections are
+  `py-12` there, which puts every `h2` at exactly 48px, so nothing
+  overlaps. Keep that arithmetic in mind before changing either number.
+  Both controls share the `pastHero` fade, so neither shows over the
+  hero.
 - **Accessibility:** sections carry `aria-label`; decorative layers and
   icons carry `aria-hidden`; icon-only links carry an `sr-only` label.
   Keep that up.
+- **American English everywhere** — prose, `alt` text, captions, code
+  comments and slugs alike: *color*, *gray*, *modeling*, *sanitize*,
+  *practicing*. Easy to reintroduce by habit; grep for `colour|grey|
+  sanitis|modelling|practis|behaviour|centre` before committing copy.
 - **Imports:** double-quoted, components from `./components/...`, types
   imported with `import type` (the tsconfig sets `verbatimModuleSyntax`).
 - `noUnusedLocals` and `noUnusedParameters` are on — dead variables fail
@@ -219,15 +325,15 @@ propose the static alternative rather than quietly adding the surface.
 
 ## Deployment
 
-Pushes to the **`react`** branch trigger
-[`.github/workflows/deploy.yml`](.github/workflows/deploy.yml), which
-builds and publishes `dist/` to GitHub Pages. `main` still holds the old
-Jekyll site. Making `react` the permanent source means merging into
-`main` and repointing both the workflow trigger and Settings → Pages →
-Source.
+`main` is now the permanent source — the React rewrite has been merged
+in (via PRs from `react`) and the old Jekyll site is gone. Pushes to
+**`main`** trigger [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml),
+which builds and publishes `dist/` to GitHub Pages. The `react` branch
+is where day-to-day work happens; it only goes live once merged into
+`main`, typically via a PR.
 
 Don't commit or push unless asked. If pushing, remember that a push to
-`react` deploys the live site.
+`main` (or a merge into it) deploys the live site.
 
 ## Keeping this file current
 

@@ -1,12 +1,60 @@
 import type { TagId } from "./tags";
+import warlockHero from "../assets/posts/3d-printed-warlock-death-tribute/hero.jpg";
+import warlockDryfit from "../assets/posts/3d-printed-warlock-death-tribute/dryfit.jpg";
+import warlockParts from "../assets/posts/3d-printed-warlock-death-tribute/parts.jpg";
+import warlockFrets from "../assets/posts/3d-printed-warlock-death-tribute/frets.jpg";
+import warlockPrimer from "../assets/posts/3d-printed-warlock-death-tribute/primer.jpg";
+import warlockDetail from "../assets/posts/3d-printed-warlock-death-tribute/detail.jpg";
+import warlockBack from "../assets/posts/3d-printed-warlock-death-tribute/back.jpg";
+import warlockFinished from "../assets/posts/3d-printed-warlock-death-tribute/finished.jpg";
+import warlockDryfitFull from "../assets/posts/3d-printed-warlock-death-tribute/dryfit-hires.jpg";
+import warlockPartsFull from "../assets/posts/3d-printed-warlock-death-tribute/parts-hires.jpg";
+import warlockFretsFull from "../assets/posts/3d-printed-warlock-death-tribute/frets-hires.jpg";
+import warlockPrimerFull from "../assets/posts/3d-printed-warlock-death-tribute/primer-hires.jpg";
+import warlockDetailFull from "../assets/posts/3d-printed-warlock-death-tribute/detail-hires.jpg";
+import warlockBackFull from "../assets/posts/3d-printed-warlock-death-tribute/back-hires.jpg";
+import warlockFinishedFull from "../assets/posts/3d-printed-warlock-death-tribute/finished-hires.jpg";
+import xracerHero from "../assets/posts/building-an-x-racer/hero.jpg";
+import xracerArms from "../assets/posts/building-an-x-racer/arms.jpg";
+import xracerArmsFull from "../assets/posts/building-an-x-racer/arms-hires.jpg";
+import xracerCage from "../assets/posts/building-an-x-racer/cage.jpg";
+import xracerCageFull from "../assets/posts/building-an-x-racer/cage-hires.jpg";
+import xracerStack from "../assets/posts/building-an-x-racer/stack.jpg";
+import xracerStackFull from "../assets/posts/building-an-x-racer/stack-hires.jpg";
+import xracerFinished from "../assets/posts/building-an-x-racer/finished.jpg";
+import xracerFinishedFull from "../assets/posts/building-an-x-racer/finished-hires.jpg";
+import xracerLow from "../assets/posts/building-an-x-racer/low.jpg";
+import xracerLowFull from "../assets/posts/building-an-x-racer/low-hires.jpg";
+import xracerHand from "../assets/posts/building-an-x-racer/hand.jpg";
+import xracerHandFull from "../assets/posts/building-an-x-racer/hand-hires.jpg";
+import standHero from "../assets/posts/over-engineered-headphone-stand/hero.jpg";
+import standInUse from "../assets/posts/over-engineered-headphone-stand/in-use.jpg";
+import standInUseFull from "../assets/posts/over-engineered-headphone-stand/in-use-hires.jpg";
+import standWebUi from "../assets/posts/over-engineered-headphone-stand/webui.png";
+import standElectronics from "../assets/posts/over-engineered-headphone-stand/electronics.jpg";
+import standElectronicsFull from "../assets/posts/over-engineered-headphone-stand/electronics-hires.jpg";
+import standFirstLight from "../assets/posts/over-engineered-headphone-stand/first-light.jpg";
+import standFirstLightFull from "../assets/posts/over-engineered-headphone-stand/first-light-hires.jpg";
+import standAssembled from "../assets/posts/over-engineered-headphone-stand/assembled.jpg";
+import standAssembledFull from "../assets/posts/over-engineered-headphone-stand/assembled-hires.jpg";
+import standMagnets from "../assets/posts/over-engineered-headphone-stand/magnets.jpg";
+import standMagnetsFull from "../assets/posts/over-engineered-headphone-stand/magnets-hires.jpg";
+import standFinished from "../assets/posts/over-engineered-headphone-stand/finished.jpg";
+import standFinishedFull from "../assets/posts/over-engineered-headphone-stand/finished-hires.jpg";
 
 /**
  * A body block. A bare string is a paragraph — the common case — so
  * simple posts stay readable as a plain list of strings.
  *
- * Inline `backticks` inside any text field render as inline code. That
- * is the only markup: everything is plain text that React escapes, so
- * there is still no unescaped-HTML surface anywhere on the site.
+ * Inline `backticks` render as inline code and [label](href) as a link
+ * inside any text field. That is the only markup: everything else is
+ * plain text that React escapes, so there is still no unescaped-HTML
+ * surface anywhere on the site.
+ *
+ * An `image` block's `src` is an imported asset, same as `Post.image`,
+ * so Vite fingerprints it. `alt` is required — write what the photo
+ * shows; `caption` is the visible line under it. Add `full` (a second,
+ * larger import) to make the photo open full-screen when clicked.
  */
 export type Block =
   | string
@@ -15,6 +63,14 @@ export type Block =
   | { kind: "list"; items: string[] }
   | { kind: "note" | "warn"; label: string; text: string }
   | { kind: "steps"; items: { title: string; text: string }[] }
+  | {
+      kind: "image";
+      src: string;
+      alt: string;
+      caption?: string;
+      /** Hi-res version; when present the image opens in a Lightbox. */
+      full?: string;
+    }
   | { kind: "table"; caption?: string; head: string[]; rows: string[][] };
 
 export interface Post {
@@ -28,7 +84,8 @@ export interface Post {
   tags: TagId[];
   /**
    * Main photo. Import the asset so Vite fingerprints it, e.g.
-   * `import hero from "../assets/posts/my-post.jpg"`. Cards and post
+   * `import hero from "../assets/posts/<slug>/hero.jpg"` — each post
+   * keeps its photos in its own folder. Cards and post
    * pages fall back to a generated placeholder when this is absent.
    */
   image?: string;
@@ -37,10 +94,6 @@ export interface Post {
 }
 
 /**
- * Every entry below is placeholder content, one per tag, so the section
- * and the per-post pages have something to render. Replace the copy;
- * keep the shape.
- *
  * Adding a post takes two steps:
  *   1. append here with a unique `slug`
  *   2. create `posts/<slug>/index.html` (copy an existing one, update
@@ -186,76 +239,288 @@ export const posts: Post[] = [
     ],
   },
   {
-    slug: "esp32-climate-sensor",
-    title: "A WiFi climate sensor that actually stays online",
-    date: "2026-07-14",
+    slug: "3d-printed-warlock-death-tribute",
+    title: "A 3D-printed Warlock, splattered in blood",
+    date: "2026-07-30",
     excerpt:
-      "Placeholder post. What it took to get a battery-powered ESP32 reporting temperature and humidity for months at a time instead of days.",
-    tags: ["electronics", "software-engineering"],
+      "A B.C. Rich Warlock body printed in sections, bonded, filled and primed, then finished in House of Kolor candy red — a Death tribute built as a gift for my son's friend.",
+    tags: ["guitars", "3d-printing"],
+    image: warlockHero,
     body: [
-      "This is placeholder copy for an example post. Replace it with the real write-up.",
-      "Body paragraphs are plain strings in src/data/posts.ts. Each string becomes its own paragraph, so there is no markup to escape and no HTML to sanitise.",
-      "Add as many paragraphs as the post needs; the page layout handles the rest.",
+      "My son has a friend who is a huge Death fan, and somewhere between \"I could probably print that\" and \"This will never work\", it turned into a full build.",
+      "The body is [this B.C. Rich Warlock model](https://makerworld.com/en/models/701362-bc-rich-warlock-a1-mini-guitar-body-single-pickup#profileId-630884) from MakerWorld - single-pickup version. It comes split into sections to be printed separately depending on the available print volume. Everything else is off-the-shelf guitar parts: a bought neck, a double-locking tremolo, and tuners.",
+      {
+        kind: "image",
+        src: warlockDryfit,
+        full: warlockDryfitFull,
+        alt: "The raw white printed guitar body on a workbench with the neck, bridge and a pickup dry-fitted in place.",
+        caption:
+          "Dry fit first. Insurance before glue and paint.",
+      },
+      { kind: "heading", text: "Printing and bonding" },
+      "Printing a body in sections means the real work starts after the printer stops. I glued the pieces with J-B Weld Plastic Bonder, which is the part of the build with no undo button — the seams have to line up, because a guitar body out of alignment at the neck pocket is firewood. This one would not even qualify for that because it is made out of plastic.",
+      "The honeycomb interior is part of the model, not a slicer setting, and it stays open by design. It keeps the body light and it looks deliberate once the paint is on.",
+      {
+        kind: "image",
+        src: warlockParts,
+        full: warlockPartsFull,
+        alt: "Printed body sections laid out on a workbench, showing the open honeycomb interior, next to a can of J-B Weld Plastic Bonder, filler primer and a sanding block.",
+        caption: "The whole supporting cast: bonder, filler primer, sanding block.",
+      },
+      { kind: "heading", text: "Making printed parts not look printed" },
+      "This is the unglamorous majority of the project. Rustoleum filler primer, sand, look at it under a light, find every layer line you missed, primer again. Repeat until the surface is as a solid object instead a stack of extrusions.",
+      {
+        kind: "note",
+        label: "What actually matters",
+        text: "Nobody will ever notice the hours of sanding. They will notice the one layer line you left under a gloss coat.",
+      },
+      {
+        kind: "image",
+        src: warlockPrimer,
+        full: warlockPrimerFull,
+        alt: "The guitar body hanging in a spray booth, coated in gray filler primer, with the neck masked off.",
+        caption: "Gray primer is the honest coat — it shows you everything you skipped.",
+      },
+      "The neck got a proper fretjob. As every fret was masked off individually, then leveled, crowned, rounded and polished. The fretboard was scrubbed with 0000 steel wool and conditioned with F-One oil.",
+      {
+        kind: "image",
+        src: warlockFrets,
+        full: warlockFretsFull,
+        alt: "A guitar fretboard with blue and yellow masking tape applied between every fret, exposing only the fret wire.",
+        caption: "Twenty-four frets, forty-eight pieces of tape, and a can of elbow grease.",
+      },
+      { kind: "heading", text: "The blood" },
+      "White base coat, then Apple Red Kandy from House of Kolor for the blood. Candy is the right choice here as it stacks on itself. Every pass over the same spot goes deeper and darker, so a single color gives you thin arterial spray and thick pooling clots without ever mixing a second red. The Apple Red also happens to land almost exactly on the color of the real thing.",
+      "There is no clever technique for the pattern. We loaded brushes and flicked and splattered the paint at the body by hand, which is enormously satisfying and completely uncontrollable. My garage woodshop looked like a murder scene by the end of it.",
+      "Check out my attempts at making a [horror flick](https://www.youtube.com/shorts/S2uFrwL09KM) before cleaning up the mess.",
+      {
+        kind: "image",
+        src: warlockDetail,
+        full: warlockDetailFull,
+        alt: "Close-up of the finished guitar body: white with heavy red splatter across the honeycomb cutouts, a white pickup and a black tremolo bridge.",
+        caption:
+          "The final result came together beautifully, paired with matching red knob, killswitch, and a Death logo sticker.",
+      },
+      { kind: "heading", text: "The pickup" },
+      "The last piece was the one that makes it a Death guitar. We splurged on a white DiMarzio X2N — the same pickup the late Chuck Schuldiner, Death's guitarist and vocalist, ran in his iconic B.C. Rich.",
+      "The result was exactly what we were aiming for. The build was fun and creative, pushing me into a new area of guitar making and dealing with a 3D printed plastic body.",
+      {
+        kind: "image",
+        src: warlockBack,
+        full: warlockBackFull,
+        alt: "The back of the finished guitar, showing splatter running the full length of the neck and the Death logo on the lower body.",
+        caption: "The splatter carries over the back and up the neck.",
+      },
+      {
+        kind: "image",
+        src: warlockFinished,
+        full: warlockFinishedFull,
+        alt: "The finished guitar standing on a stand: white blood-splattered Warlock body, skull-and-crossbones fret markers and black hardware.",
+        caption: "Delivered.",
+      },
     ],
   },
   {
-    slug: "bambu-h2d-first-month",
-    title: "First month with the Bambu H2D",
-    date: "2026-06-02",
+    slug: "over-engineered-headphone-stand",
+    title: "An over-engineered headphone stand",
+    date: "2026-02-16",
     excerpt:
-      "Placeholder post. Moving from a heavily modded Ender 3 to a machine that mostly just works, and what I stopped having to think about.",
-    tags: ["3d-printing"],
+      "I wanted a headphone stand. I also wanted a better wireless charger. And I will take any excuse to add addressable LEDs to something \u2014 so all three became one object, with an ESP32-C3 and a web UI.",
+    tags: ["3d-printing", "electronics"],
+    image: standHero,
     body: [
-      "This is placeholder copy for an example post. Replace it with the real write-up.",
-      "Body paragraphs are plain strings in src/data/posts.ts. Each string becomes its own paragraph, so there is no markup to escape and no HTML to sanitise.",
+      "I have a weakness for neon lighting, and an ongoing habit of putting addressable LEDs on things that did not ask for them. I also genuinely needed two boring objects: somewhere to hang my headphones, and a wireless charger with more power than the one I had.",
+      "Rather than buy two things, I designed one. The name is not ironic \u2014 it really is over-engineered, and that was the point.",
+      { kind: "heading", text: "What it ended up doing" },
+      {
+        kind: "list",
+        items: [
+          "holds a pair of over-ear headphones",
+          "charges a phone wirelessly, with MagSafe magnets in the pad",
+          "lights up with 103 addressable LEDs across four separate segments",
+          "runs a web UI for modes, brightness and scheduling",
+          "tells the time",
+        ],
+      },
+      { kind: "heading", text: "The electronics" },
+      "An ESP32-C3 drives everything. The LEDs are WS2812B, split into a bottom ring, a wall ring, the vertical arm and the top arm \u2014 the firmware treats them as four segments of one virtual strip, so an animation runs across the whole object instead of restarting at each piece. FastLED does the heavy lifting.",
+      {
+        kind: "table",
+        caption: "The parts that matter.",
+        head: ["Part", "What it is"],
+        rows: [
+          ["Controller", "ESP32-C3 with a small onboard OLED"],
+          ["LEDs", "WS2812B strip plus a ring, 103 total"],
+          ["Charging", "Qi wireless module with MagSafe magnets"],
+          ["Power", "5V step-down, one input for the whole thing"],
+          ["Printed", "Base, arms and a base cover, in PLA"],
+        ],
+      },
+      {
+        kind: "image",
+        src: standElectronics,
+        full: standElectronicsFull,
+        alt: "The open printed base on a workbench with the flat Qi charging coil seated in its recess and the ESP32-C3 board wired in below it.",
+        caption:
+          "The Qi coil drops into its own recess; the ESP32-C3 sits under it.",
+      },
+      {
+        kind: "image",
+        src: standFirstLight,
+        full: standFirstLightFull,
+        alt: "The LED ring lit warm white and pink inside the octagonal base, next to the ESP32-C3 board with its small OLED showing text, still tethered by a USB cable.",
+        caption: "First light, still on the bench and still tethered by USB.",
+      },
+      { kind: "heading", text: "The OLED became a clock" },
+      "The ESP32-C3 board came with a small OLED, which I added to show the device's IP address once it joins WiFi. It still does that \u2014 for about ten seconds after connecting.",
+      "After that it had nothing to display, which felt like a waste. So it now syncs over NTP and sits there as a digital watch: hours and minutes in a large font with AM/PM beside them, redrawn once a minute, falling back to a polite `Time N/A` when it cannot reach a time server. An accidental clock is my favorite part of the whole build.",
+      { kind: "heading", text: "Controlling it" },
+      "Everything is configurable over WiFi from a small web UI \u2014 LED type, mode, brightness, frame delay, strip length, and how often to cycle between modes. There are around a dozen animations, mostly FastLED palettes: party colors, rainbow, heat, ocean, forest, lava, and a plain white light for when I want a desk lamp instead of a light show.",
+      {
+        kind: "image",
+        src: standWebUi,
+        alt: "Screenshot of the dark-themed web UI showing LED strip length, LED type, mode, a brightness slider, frame delay and power-save hour settings.",
+        caption: "The whole control surface, served off the ESP32-C3.",
+      },
+      "A few conveniences that turned out to matter more than the animations:",
+      {
+        kind: "list",
+        items: [
+          "Power-save schedule \u2014 dim the LEDs between set hours, so it stops lighting the room overnight. This is what made the NTP sync and timezone handling necessary in the first place.",
+          "Soft AP setup \u2014 on first boot it advertises its own network and takes your WiFi credentials through a form. They go to EEPROM, and it falls back to the AP if it ever cannot reconnect.",
+          "OTA updates \u2014 firmware goes on over the network, so the thing never has to come apart again.",
+          "Factory reset by power-cycling it three times within two seconds \u2014 no buttons to hide in the enclosure, which keeps the outside clean.",
+        ],
+      },
+      { kind: "heading", text: "Charging mode" },
+      "The one piece of real integration between the two halves: a GPIO senses when the charger is active and fires a callback that hands the strip to a dedicated animation. It runs a red-to-yellow gradient blending toward green over a twenty-second cycle, with a green pixel bouncing along a section of the arm \u2014 an ambient charging indicator you can read from across the room, with no numbers anywhere.",
+      "The MagSafe magnets live in the top piece of the charging pad \u2014 the part the phone actually rests on. They get glued in as a ring first, sitting concentric with the coil underneath, and only once that has set does the whole piece get glued down onto the base.",
+      {
+        kind: "image",
+        src: standMagnets,
+        full: standMagnetsFull,
+        alt: "The printed top piece of the wireless charging pad on a cutting mat, its circular recess filled with a ring of small magnets bedded in glue, with a bottle of Starbond cyanoacrylate behind it.",
+        caption:
+          "Magnets going into the charger's top piece, before that piece goes onto the base.",
+      },
+      { kind: "heading", text: "Putting it together" },
+      "Almost none of it is permanent. Hex bolts hold the ESP32-C3 and the stand's arm \u2014 the two things most likely to need attention later \u2014 and everything else is only lightly glued, enough to stay put. If something inside ever needs repairing, it comes apart again without a fight.",
+      {
+        kind: "image",
+        src: standAssembled,
+        full: standAssembledFull,
+        alt: "The base with its LED ring and charging coil installed and the vertical arm mounted, a spring clamp gripping the joint, on a workbench with a solder spool and hand tools around it.",
+        caption: "Bolts where it matters, a light touch of glue everywhere else.",
+      },
+      {
+        kind: "image",
+        src: standInUse,
+        full: standInUseFull,
+        alt: "The finished stand on a workbench, lit pink and orange, with headphones hanging on the top arm and a phone charging flat on the base.",
+        caption: "Doing both of its jobs at once.",
+      },
+      {
+        kind: "image",
+        src: standFinished,
+        full: standFinishedFull,
+        alt: "The finished stand with headphones hanging on it, the arm glowing warm white and pink and the base lit purple around the charging pad.",
+        caption: "Where it lives now.",
+      },
+      "The model is on [MakerWorld](https://makerworld.com/en/models/2347791-over-engineered-headphone-stand-and-phone-charger), and the firmware lives on the [led_headphone_stand branch](https://github.com/jaisor/ESP_LED_Controller/tree/led_headphone_stand) of my ESP LED Controller repo \u2014 the same codebase I keep reusing for every LED project I start.",
     ],
   },
   {
-    slug: "fpv-build-log-shrieka-130",
-    title: "Build log: Shrieka 130",
-    date: "2026-04-28",
+    slug: "building-an-x-racer",
+    title: "Building an X racer",
+    date: "2016-03-19",
     excerpt:
-      "Placeholder post. Frame, stack and motor choices for a small quad, and the bench numbers behind each of them.",
-    tags: ["fpv-drones", "3d-printing"],
+      "Build #6, and the first proper racer — a SpaceOne Formula One 220 X with EMAX 2205s, packed into a cage with no room to spare. 411 grams, and one flight controller that had to go.",
+    tags: ["fpv-drones"],
+    image: xracerHero,
     body: [
-      "This is placeholder copy for an example post. Replace it with the real write-up.",
-      "Body paragraphs are plain strings in src/data/posts.ts. Each string becomes its own paragraph, so there is no markup to escape and no HTML to sanitise.",
-    ],
-  },
-  {
-    slug: "parametric-cad-for-enclosures",
-    title: "Parametric CAD is worth the learning curve",
-    date: "2026-03-11",
-    excerpt:
-      "Placeholder post. Why I stopped modelling enclosures in Blender and moved the whole workflow to Autodesk Fusion.",
-    tags: ["software-engineering", "3d-printing"],
-    body: [
-      "This is placeholder copy for an example post. Replace it with the real write-up.",
-      "Body paragraphs are plain strings in src/data/posts.ts. Each string becomes its own paragraph, so there is no markup to escape and no HTML to sanitise.",
-    ],
-  },
-  {
-    slug: "first-season-on-two-wheels",
-    title: "First season on two wheels",
-    date: "2026-02-19",
-    excerpt:
-      "Placeholder post. Notes from a beginner rider — the gear that mattered, the habits that stuck, and the maintenance I learned to do myself.",
-    tags: ["motorcycles"],
-    body: [
-      "This is placeholder copy for an example post. Replace it with the real write-up.",
-      "Body paragraphs are plain strings in src/data/posts.ts. Each string becomes its own paragraph, so there is no markup to escape and no HTML to sanitise.",
-    ],
-  },
-  {
-    slug: "practising-with-a-metronome",
-    title: "The metronome is not optional",
-    date: "2026-01-23",
-    excerpt:
-      "Placeholder post. A few months of deliberate practice, and what finally made timing click.",
-    tags: ["guitars"],
-    body: [
-      "This is placeholder copy for an example post. Replace it with the real write-up.",
-      "Body paragraphs are plain strings in src/data/posts.ts. Each string becomes its own paragraph, so there is no markup to escape and no HTML to sanitise.",
+      "At this point I was turning out roughly one build a month. For number six I wanted a proper racer, built on the X frames everyone had started shouting about.",
+      {
+        kind: "table",
+        caption: "The parts list.",
+        head: ["Part", "What went in"],
+        rows: [
+          ["Frame", "SpaceOne FPV Formula One 220 X Edition"],
+          ["Motors", "EMAX RS2205 2600KV"],
+          ["ESCs", "DYS XM30A — BLHeli, Oneshot125, damped light"],
+          ["FC", "SP Racing F3 Mini, Betaflight 2.5.3"],
+          ["PDB", "Birdseye Mini, no step-down"],
+          ["Radio", "FrSky X4R-SB (SBUS)"],
+          ["VTX", "Cricket 600mW"],
+          ["Camera", "Pyro Drone 1/3\" Sony Super HAD II CCD, 650 TVL, 2.1mm"],
+        ],
+      },
+      {
+        kind: "image",
+        src: xracerArms,
+        full: xracerArmsFull,
+        alt: "The half-built quad on a green cutting mat, arms fitted with black DYS BLHeli 30A ESCs and EMAX RS2205 motors, wiring loom loose, tools scattered around.",
+        caption: "Arms and ESCs on, wiring still loose.",
+      },
+      { kind: "heading", text: "Assembly" },
+      "The frame is a uni-body with a 4.5mm bottom plate, which should make it close to indestructible. The arms finish in wide motor pads with real protection, even for 22xx motors.",
+      "The cage, on the other hand, is small. The rear is slightly wider, which raises hopes it does not deliver on — there is barely enough room for the PDB, FC and radio gear, and the Cricket VTX ended up poking out the back.",
+      "There is around 70mm of usable arm space, which was just right for the rather long XM30A ESCs with their capacitors. Anything of that size or smaller will mount without a fight.",
+      {
+        kind: "image",
+        src: xracerCage,
+        full: xracerCageFull,
+        alt: "Side-on view at bench level showing the tightly packed frame cage, the flight controller stack between the plates and wiring threaded around it.",
+        caption: "\"Room to spare\" was not the phrase.",
+      },
+      "There is nothing mini about the SP Racing F3 Mini. It is the standard 36x36mm, a little longer with the LED strip at the back, and it carries:",
+      {
+        kind: "list",
+        items: [
+          "direct LiPo voltage input",
+          "a built-in 5V 1A regulator",
+          "a lap timer transponder",
+          "an SD card slot for blackbox logging",
+          "three UARTs",
+        ],
+      },
+      "I ran the FC's own 5V regulator and skipped the PDB's step-down entirely, which cut the wiring between the two down to a single cable. Space was tight enough that I soldered directly onto the flight controller — a first for me — while still keeping at least one end of every cable on a connector, so nothing was permanently married to anything else.",
+      {
+        kind: "image",
+        src: xracerStack,
+        full: xracerStackFull,
+        alt: "Another bench-level view of the frame cage from the front, showing the flight controller's USB port and LED between the carbon plates.",
+        caption: "One cable from the PDB, and everything else soldered in place.",
+      },
+      "Final weight, with props and antenna but no battery: 411 grams.",
+      {
+        kind: "note",
+        label: "Update, 3/27",
+        text: "Flight controller swap. There were gyro spikes in yaw during flight — audible, and enough to make the quad jerk slightly. After some debugging it turned out to be the Mini. I put a regular SP Racing F3 in its place, running Betaflight 2.1.6. A shame, because I was starting to like how much the Mini packed in.",
+      },
+      { kind: "heading", text: "Glamour shots" },
+      {
+        kind: "image",
+        src: xracerFinished,
+        full: xracerFinishedFull,
+        alt: "The finished quad on a wooden table, front three-quarter view, with the FPV camera visible in the carbon cage and a battery strap over the top plate.",
+        caption: "Finished, and lighter than it looks.",
+      },
+      {
+        kind: "image",
+        src: xracerLow,
+        full: xracerLowFull,
+        alt: "Low side-on view of the finished quad on a wooden table, showing the EMAX motors with red bells, the ESCs taped to the arms and the video antenna curving up over the back.",
+        caption: "The VTX antenna had to live out the back.",
+      },
+      {
+        kind: "image",
+        src: xracerHand,
+        full: xracerHandFull,
+        alt: "The quad held up in one hand outdoors in bright sun, with a blue cloverleaf video antenna, garden and trees blurred behind.",
+        caption: "Out for the maiden flight.",
+      },
+      "The yard maiden went well. She felt fast, and a bit twitchy on Betaflight 2.5.3. Tuning and proper test flights next.",
+      "Cross-posted to the [IntoFPV forum](https://intofpv.com/t-building-an-x-racer).",
     ],
   },
 ];

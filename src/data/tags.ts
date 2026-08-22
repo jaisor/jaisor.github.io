@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import { Code2, Box, CircuitBoard, Bike, Guitar } from "lucide-react";
+import { Code2, Box, CircuitBoard, Bike, Guitar, Sparkles } from "lucide-react";
 import { Drone } from "lucide-react";
 
 export type TagId =
@@ -17,13 +17,25 @@ export type TagId =
  */
 export interface Tag {
   id: TagId;
+  /** Taxonomy name — drives the Posts filter pill and the chips on a post. */
   label: string;
   icon: LucideIcon;
-  /** Hobby-card copy. Not shown on post tag chips. */
+  /**
+   * Hobby-card overrides, for when the card's framing has drifted from
+   * the tag's. `motorcycles` is the case: the card is a catch-all for
+   * everything not worth its own tag, but the tag still labels a post.
+   */
+  cardLabel?: string;
+  cardIcon?: LucideIcon;
+  /**
+   * Hobby-card copy. Not shown on post tag chips. Supports the same
+   * inline markup as post bodies: `code` and [label](href).
+   */
   description: string;
   link?: string;
   linkLabel?: string;
-  repos?: { label: string; href: string }[];
+  /** Extra links under the description — repos, videos, whatever fits. */
+  links?: { label: string; href: string }[];
 }
 
 export const tags: Tag[] = [
@@ -32,7 +44,7 @@ export const tags: Tag[] = [
     label: "Software Engineering",
     icon: Code2,
     description:
-      "A way to stay current and keep my hands on actual code. Most of the projects are paired with some kind of hardware component or ways to visualize data to satisfy my need for eye-candy dashboards. ",
+      "I build to stay current and keep my hands on actual code. Most of my projects are paired with some kind of hardware, or with a way to visualize data that satisfies my need for eye-candy dashboards.",
     link: "https://github.com/jaisor?tab=repositories",
     linkLabel: "GitHub repos →",
   },
@@ -41,8 +53,8 @@ export const tags: Tag[] = [
     label: "Electronics",
     icon: CircuitBoard,
     description:
-      "I have been interested in electronics and schematics since childhood. I love the capabilities microcontrollers like Arduino and ESP provide in the areas of IoT and home automation. I have used this rich palette of tech to create projects like:",
-    repos: [
+      "I have been interested in electronics and schematics since childhood. I love the capabilities that microcontrollers like Arduino and ESP provide in IoT and home automation. I have used this rich toolkit to create projects like:",
+    links: [
       {
         label: "WiFi Climate Sensor",
         href: "https://github.com/jaisor/wifi-climate-sensor",
@@ -66,7 +78,7 @@ export const tags: Tag[] = [
     label: "3D Printing",
     icon: Box,
     description:
-      "It started as an extension of my FPV drone obsession. Over the years it has grown into multiple printers, modded and upgraded along the way, with a Bambu H2D as the main workhorse today. The modeling side grew with it: I started out in Blender and now do fully parametric CAD designs in Autodesk Fusion.",
+      "I picked this up as an extension of my FPV drone obsession. Over the years it has grown to multiple printers, modded and upgraded along the way, with a Bambu H2D as the main workhorse today. The modeling side came along with it: I started out in Blender and now do fully parametric CAD designs in Autodesk Fusion.",
     link: "https://makerworld.com/en/@jaisor/upload",
     linkLabel: "MakerWorld profile →",
   },
@@ -75,24 +87,25 @@ export const tags: Tag[] = [
     label: "FPV Drones",
     icon: Drone,
     description:
-      "A string of custom FPV quads going back to 2015 — Zax, Tangra, an X-frame racer, SiganX, KISS X210/QAV210, and Shrieka 130 — each one an excuse to try a new frame, stack, or motor combo. Along the way that meant flight-controller tuning on Cleanflight/Betaflight, bench-testing motor and ESC combos, and eventually getting FCC-licensed (Technician class, callsign KK6VYN) to legally run higher-power video gear.",
+      "I built my first FPV drone in 2015 and am addicted to flying and building ever since. The hobby is vast, allowing me to exercise my coding, electronics, mechanical design, and 3D printing skills — and enjoy a substantial adrenaline rush. I took a short stab at [FPV racing](https://www.youtube.com/watch?v=TdSUKtazEAY) but have since settled into a calmer, [cinematic](https://www.youtube.com/watch?v=u_-RXqDzlsU) style of flying.",
+  },
+  {
+    id: "guitars",
+    label: "Guitars and Guitar Building",
+    icon: Guitar,
+    description:
+      "I always regretted not knowing how to play an instrument. During the pandemic, I jokingly offered to trade some of my drones for a few guitars from a good musician and RC buddy of mine. A few years of practice later, I would never claim mastery, but I have learned a thing or two about playing and building Metal guitar and managed to write [50+ riff compositions](https://www.youtube.com/playlist?list=PLNeTetmujscX1pmeKIlLjW0Eo5L0S5yWF) and built several capable instruments.",
   },
   {
     id: "motorcycles",
     label: "Motorcycles",
     icon: Bike,
+    cardLabel: "More to come...",
+    cardIcon: Sparkles,
     description:
-      "One of my newer hobbies — still early days, learning the ropes on riding and maintenance. More to come here as the garage fills in.",
-  },
-  {
-    id: "guitars",
-    label: "Guitars",
-    icon: Guitar,
-    description:
-      "A hobby that's still taking shape — details on gear and playing coming soon.",
+      "My list of hobbies continues to grow. It also includes woodworking, RV camping, motorcycles, mountain bikes, and more. My friends call me a Renaissance man, and I take it as the highest form of compliment.",
   },
 ];
-
 
 /** Lookup for rendering a post's tag chips by id. */
 export const tagById = new Map<TagId, Tag>(tags.map((t) => [t.id, t]));

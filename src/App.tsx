@@ -1,6 +1,6 @@
 import { Header } from "./components/Header";
+import { About } from "./components/About";
 import { Interests } from "./components/Interests";
-import { Patents } from "./components/Patents";
 import { Posts } from "./components/Posts";
 import { Footer } from "./components/Footer";
 import { SectionNav } from "./components/SectionNav";
@@ -14,8 +14,8 @@ function App() {
       <SectionNav />
 
       <Header />
+      <About />
       <Interests />
-      <Patents />
       <Posts />
       <Footer />
     </div>

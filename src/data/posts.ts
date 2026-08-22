@@ -1,4 +1,5 @@
 import type { TagId } from "./tags";
+import meshHero from "../assets/posts/meshtastic-node-fleet-management-with-ai/hero.svg";
 import meshArchitecture from "../assets/posts/meshtastic-node-fleet-management-with-ai/architecture.svg";
 import warlockHero from "../assets/posts/3d-printed-warlock-death-tribute/hero.jpg";
 import warlockDryfit from "../assets/posts/3d-printed-warlock-death-tribute/dryfit.jpg";
@@ -109,6 +110,7 @@ export const posts: Post[] = [
     excerpt:
       "Running a multi-node Meshtastic mesh from one USB-connected admin radio and a Claude Code session that speaks meshtastic-python — discovery, remote admin, and fleet reporting from plain-language prompts.",
     tags: ["software-engineering"],
+    image: meshHero,
     body: [
       { kind: "heading", text: "Problem statement" },
       "Remote administration solves reachability, not operation. Every change is a separate invocation carrying the port, the destination node ID, and its flags — and the failure modes are silent: a missing `--dest` reconfigures the local admin node, a mistyped node ID burns the 300-second default timeout, and an ACK confirms a relayed packet, not an applied change. Nothing aggregates, either: firmware, battery, and uptime are per-node queries, collated by hand.",

@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <!--
+    Fleet diagram: six field nodes around one admin node wired to a
+    workstation. The central mark is the Meshtastic logo glyph from
+    github.com/meshtastic/design (logo/logo.svg), recolored to the site
+    palette; the green backing square of the original is not used.
+  -->
+  <defs>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.20" />
+      <stop offset="55%" stop-color="#f59e0b" stop-opacity="0.05" />
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0" />
+    </radialGradient>
+    <style>
+      .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+      .hex { fill: #171717; stroke: #262626; stroke-width: 2; }
+      .link { stroke: #f59e0b; stroke-opacity: 0.32; stroke-width: 2; fill: none; }
+      .ring { stroke: #f59e0b; stroke-opacity: 0.12; stroke-width: 2; fill: none; }
+      .wave { stroke: #f59e0b; fill: none; stroke-linecap: round; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="630" fill="#0a0a0a" />
+  <ellipse cx="760" cy="315" rx="470" ry="400" fill="url(#glow)" />
+
+  <!-- Mesh rings -->
+  <ellipse class="ring" cx="760" cy="315" rx="270" ry="230" stroke-dasharray="2 12" />
+  <ellipse class="ring" cx="760" cy="315" rx="205" ry="175" stroke-dasharray="6 10" />
+  <ellipse class="ring" cx="760" cy="315" rx="130" ry="111" stroke-dasharray="2 12" />
+
+  <!-- Admin-to-node links -->
+  <g class="link">
+    <path d="M760,315 L937.5,227.5" />
+    <path d="M760,315 L760,140" />
+    <path d="M760,315 L582.5,227.5" />
+    <path d="M760,315 L582.5,402.5" />
+    <path d="M760,315 L760,490" />
+    <path d="M760,315 L937.5,402.5" />
+  </g>
+
+  <!-- Workstation -->
+  <path fill="#171717" stroke="#262626" stroke-width="2" d="M118,246 H272 L280,254 V350 L272,358 H118 L110,350 V254 Z" />
+  <path fill="#0a0a0a" stroke="#262626" stroke-width="1.5" d="M126,258 H264 L268,262 V342 L264,346 H126 L122,342 V262 Z" />
+  <text class="mono" x="134" y="286" font-size="15" fill="#f59e0b">&#8250;</text>
+  <rect x="150" y="276" width="92" height="7" rx="1" fill="#525252" />
+  <rect x="134" y="297" width="70" height="7" rx="1" fill="#3f3f3f" />
+  <rect x="134" y="318" width="104" height="7" rx="1" fill="#3f3f3f" />
+  <rect x="246" y="318" width="12" height="7" rx="1" fill="#f59e0b" fill-opacity="0.7" />
+  <rect x="181" y="358" width="28" height="20" fill="#171717" stroke="#262626" stroke-width="2" />
+  <rect x="152" y="378" width="86" height="9" rx="2" fill="#171717" stroke="#262626" stroke-width="2" />
+
+  <!-- USB run to the admin node -->
+  <path d="M284,315 H672" stroke="#737373" stroke-width="2.5" fill="none" />
+  <circle cx="284" cy="315" r="4" fill="#737373" />
+  <text class="mono" x="470" y="301" font-size="15" fill="#737373" letter-spacing="3" text-anchor="middle">USB</text>
+
+  <!-- Field nodes -->
+  <g>
+    <polygon class="hex" points="975.5,227.5 956.5,260.4 918.5,260.4 899.5,227.5 918.5,194.6 956.5,194.6" />
+    <circle cx="937.5" cy="235.5" r="4" fill="#f59e0b" fill-opacity="0.75" />
+    <path class="wave" d="M926.5,229.5 A 14 14 0 0 1 948.5,229.5" stroke-width="2.5" stroke-opacity="0.55" />
+    <path class="wave" d="M919.5,223.5 A 22 22 0 0 1 955.5,223.5" stroke-width="2.5" stroke-opacity="0.28" />
+  </g>
+  <g>
+    <polygon class="hex" points="798,140 779,172.9 741,172.9 722,140 741,107.1 779,107.1" />
+    <circle cx="760" cy="148" r="4" fill="#f59e0b" fill-opacity="0.75" />
+    <path class="wave" d="M749,142 A 14 14 0 0 1 771,142" stroke-width="2.5" stroke-opacity="0.55" />
+    <path class="wave" d="M742,136 A 22 22 0 0 1 778,136" stroke-width="2.5" stroke-opacity="0.28" />
+  </g>
+  <g>
+    <polygon class="hex" points="620.5,227.5 601.5,260.4 563.5,260.4 544.5,227.5 563.5,194.6 601.5,194.6" />
+    <circle cx="582.5" cy="235.5" r="4" fill="#f59e0b" fill-opacity="0.75" />
+    <path class="wave" d="M571.5,229.5 A 14 14 0 0 1 593.5,229.5" stroke-width="2.5" stroke-opacity="0.55" />
+    <path class="wave" d="M564.5,223.5 A 22 22 0 0 1 600.5,223.5" stroke-width="2.5" stroke-opacity="0.28" />
+  </g>
+  <g>
+    <polygon class="hex" points="620.5,402.5 601.5,435.4 563.5,435.4 544.5,402.5 563.5,369.6 601.5,369.6" />
+    <circle cx="582.5" cy="410.5" r="4" fill="#f59e0b" fill-opacity="0.75" />
+    <path class="wave" d="M571.5,404.5 A 14 14 0 0 1 593.5,404.5" stroke-width="2.5" stroke-opacity="0.55" />
+    <path class="wave" d="M564.5,398.5 A 22 22 0 0 1 600.5,398.5" stroke-width="2.5" stroke-opacity="0.28" />
+  </g>
+  <g>
+    <polygon class="hex" points="798,490 779,522.9 741,522.9 722,490 741,457.1 779,457.1" />
+    <circle cx="760" cy="498" r="4" fill="#f59e0b" fill-opacity="0.75" />
+    <path class="wave" d="M749,492 A 14 14 0 0 1 771,492" stroke-width="2.5" stroke-opacity="0.55" />
+    <path class="wave" d="M742,486 A 22 22 0 0 1 778,486" stroke-width="2.5" stroke-opacity="0.28" />
+  </g>
+  <g>
+    <polygon class="hex" points="975.5,402.5 956.5,435.4 918.5,435.4 899.5,402.5 918.5,369.6 956.5,369.6" />
+    <circle cx="937.5" cy="410.5" r="4" fill="#f59e0b" fill-opacity="0.75" />
+    <path class="wave" d="M926.5,404.5 A 14 14 0 0 1 948.5,404.5" stroke-width="2.5" stroke-opacity="0.55" />
+    <path class="wave" d="M919.5,398.5 A 22 22 0 0 1 955.5,398.5" stroke-width="2.5" stroke-opacity="0.28" />
+  </g>
+
+  <!-- Admin node -->
+  <polygon points="852,315 806,394.7 714,394.7 668,315 714,235.3 806,235.3"
+           fill="#f59e0b" fill-opacity="0.06" stroke="#f59e0b" stroke-opacity="0.18" stroke-width="14" />
+  <polygon points="840,315 800,384.3 720,384.3 680,315 720,245.7 800,245.7"
+           fill="#171717" stroke="#f59e0b" stroke-opacity="0.55" stroke-width="2.5" />
+  <g transform="translate(760,298) scale(0.2515) translate(-256,-256)" fill="#f59e0b" fill-rule="evenodd">
+    <g transform="matrix(1.79 0 0 1.79 313.74 258.36)">
+      <path transform="translate(-250.97, -362.41)" d="M 250.908 330.267 L 193.126 415.005 L 180.938 406.694 L 244.802 313.037 C 246.174 311.024 248.453 309.819 250.889 309.816 C 253.326 309.814 255.606 311.015 256.982 313.026 L 320.994 406.536 L 308.821 414.869 L 250.908 330.267 Z" />
+    </g>
+    <g transform="matrix(1.81 0 0 1.81 145 256.15)">
+      <path transform="translate(-115.14, -528.06)" d="M 87.642 581.398 L 154.757 482.977 L 142.638 474.713 L 75.523 573.134 L 87.642 581.398 Z" />
+    </g>
+  </g>
+  <text class="mono" x="760" y="358" font-size="15" fill="#f59e0b" letter-spacing="4" text-anchor="middle">ADMIN</text>
+</svg>

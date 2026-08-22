@@ -17,16 +17,16 @@ const post: Post = {
       kind: "code",
       label: "Shell · meshtastic CLI",
       code: [
-        "meshtastic --port /dev/ttyACM0 --dest '!a1b2c3d4' --device-metadata",
+        "meshtastic --port /dev/ttyACM0 --dest '!abcd1234' --device-metadata",
         "",
-        "meshtastic --port /dev/ttyACM0 --dest '!a1b2c3d4' \\",
+        "meshtastic --port /dev/ttyACM0 --dest '!abcd1234' \\",
         '  --set-owner "MyMesh - Parents" --set-owner-short mmpa \\',
         "  --set lora.hop_limit 5 --set device.rebroadcast_mode LOCAL_ONLY",
       ].join("\n"),
     },
 
     { kind: "heading", text: "Approach" },
-    "One node is designated as the fleet administrator, configured in `CLIENT_MUTE` role and connected over USB to a workstation. This node's public key is added to every other node's `security.admin_key` list. Claude Code translates natural-language prompts into `meshtastic-python` API calls or CLI invocations, using node IDs and flags stored in a project context file rather than entered manually, and aggregates the results into a report.",
+    "One node is designated as the fleet administrator and connected over USB to a workstation. This node's public key is added to every other node's `security.admin_key` list. Claude Code translates natural-language prompts into `meshtastic-python` API calls or CLI invocations, using node IDs and flags stored in a project context file rather than entered manually, and aggregates the results into a report.",
     {
       kind: "image",
       src: meshArchitecture,
@@ -45,7 +45,7 @@ const post: Post = {
       items: [
         {
           title: "Provision the admin node",
-          text: "Designate one node as the management station and connect it via USB to the workstation running Claude Code. The USB connection remains attached for the duration of the setup. `CLIENT_MUTE` role is recommended: the node transmits only when performing an administrative action, avoiding additional traffic on the channel it manages.",
+          text: "Designate one node as the management station and connect it via USB to the workstation running Claude Code. The USB connection remains attached for the duration of the setup. Any `CLIENT`-class role works: admin capability comes from being listed in `security.admin_key`, not from the node's role. `CLIENT_MUTE` suits a node dedicated solely to administration, since it stays off the channel except when issuing a command; a node already doing other work — for example, bridging to an MQTT broker — can serve as the admin station under a plain `CLIENT` role with no reconfiguration needed.",
         },
         {
           title: "Stand up the Python environment",

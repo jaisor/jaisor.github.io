@@ -305,7 +305,7 @@ export const posts: Post[] = [
   eclipse-mosquitto:latest`,
       },
       { kind: "heading", text: "Bridge" },
-      "[mqtt-json-prometheus-exporter](https://github.com/jaisor/mqtt-json-prometheus-exporter) subscribes to a configured list of MQTT topic patterns, parses each payload, and exposes numeric fields as Prometheus gauges. Configuration is defined in a single mounted `config.yaml` file.",
+      "The [mqtt-json-prometheus-exporter](https://github.com/jaisor/mqtt-json-prometheus-exporter) I wrote, is lightweight yet flexible. It subscribes to a configured list of MQTT topic patterns, parses each payload, and exposes numeric fields as Prometheus gauges. Configuration is defined in a single mounted `config.yaml` file.",
       {
         kind: "code",
         label: "exporter",
@@ -333,7 +333,7 @@ patterns:
       },
       "For payload `{\"temp\": 22.5, \"battery\": 3.9}` on topic `home/pool/json`, the exporter produces metrics `mqtt_exporter_temp` and `mqtt_exporter_battery`, each labeled `device=\"pool\"`, `location=\"home\"`, and the global `app` label.",
       { kind: "heading", text: "Scalar payloads and value maps" },
-      "Not all topics carry JSON. A Last Will and Testament (LWT) topic typically carries a plain string. `format: val` treats the entire payload as a single scalar value. `value-map` converts string values to the numeric values Prometheus requires.",
+      "Not all topics carry JSON. If the payload is a scalar variable, `format: val` can be used to extract the value. If the value is not numeric, `value-map` converts string values to the numeric values Prometheus requires.",
       {
         kind: "code",
         label: "availability from an LWT topic",
@@ -436,7 +436,7 @@ tm_telemetry_rssi{device="...", telemetry_sender="device_01"} -45`,
   grafana/grafana:latest`,
       },
       "Configure Prometheus as a Grafana data source at `http://server.lan:9090`. Metrics are then queryable by name and filterable by the labels defined in the exporter configuration.",
-      { kind: "heading", text: "Solution" },
+      { kind: "heading", text: "Conclusion" },
       "The resulting stack requires no manual intervention after initial deployment and persists across host reboots. Devices publish independently; the exporter maintains current values; Prometheus accumulates historical data; Grafana provides query and visualization.",
       // TODO: dashboard screenshots go here.
       // Import them at the top of this file from
@@ -449,7 +449,19 @@ tm_telemetry_rssi{device="...", telemetry_sender="device_01"} -45`,
       //   alt: "",
       //   caption: "",
       // },
-      "Two operational notes. First, the exporter publishes Node.js process metrics (heap, CPU, event loop) under the same global prefix as MQTT-derived metrics; this is useful for monitoring the exporter itself but increases the number of series returned by metric-name queries. Second, metric names are derived from JSON field names: renaming a field in device firmware creates a new metric series rather than continuing the existing one.",
+      {
+        kind: "steps",
+        items: [
+          {
+            title: "Process metrics share the global prefix",
+            text: "The exporter publishes Node.js process metrics (heap, CPU, event loop) under the same global prefix as MQTT-derived metrics. This is useful for monitoring the exporter itself but increases the number of series returned by metric-name queries.",
+          },
+          {
+            title: "Metric names are derived from JSON field names",
+            text: "Renaming a field in device firmware creates a new metric series rather than continuing the existing one.",
+          },
+        ],
+      },
       "The complete configuration reference is available in the [exporter repository](https://github.com/jaisor/mqtt-json-prometheus-exporter).",
     ],
   },

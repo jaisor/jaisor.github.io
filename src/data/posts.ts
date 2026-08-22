@@ -394,13 +394,14 @@ export const posts: Post[] = [
       },
       { kind: "heading", text: "Charging mode" },
       "The one piece of real integration between the two halves: a GPIO senses when the charger is active and fires a callback that hands the strip to a dedicated animation. It runs a red-to-yellow gradient blending toward green over a twenty-second cycle, with a green pixel bouncing along a section of the arm \u2014 an ambient charging indicator you can read from across the room, with no numbers anywhere.",
-      "Getting MagSafe alignment right needed its own small piece of tooling: a printed jig that holds the ring of magnets in place while the glue sets, so they end up concentric with the coil rather than approximately near it.",
+      "The MagSafe magnets live in the top piece of the charging pad \u2014 the part the phone actually rests on. They get glued in as a ring first, sitting concentric with the coil underneath, and only once that has set does the whole piece get glued down onto the base.",
       {
         kind: "image",
         src: standMagnets,
         full: standMagnetsFull,
-        alt: "A printed circular jig on a cutting mat holding a ring of small rectangular magnets in place, with a bottle of Starbond cyanoacrylate glue behind it.",
-        caption: "A jig whose entire job is to hold magnets still for a minute.",
+        alt: "The printed top piece of the wireless charging pad on a cutting mat, its circular recess filled with a ring of small magnets bedded in glue, with a bottle of Starbond cyanoacrylate behind it.",
+        caption:
+          "Magnets going into the charger's top piece, before that piece goes onto the base.",
       },
       { kind: "heading", text: "Putting it together" },
       "The printed parts are glued rather than screwed wherever the seam is not meant to come apart again, which means a lot of the assembly is really just clamping things and waiting.",

@@ -22,7 +22,7 @@ export function About() {
             technology teams at Honey, Atom Tickets, and Amazon.
           </p>
           <p>
-            Personally, I continue to pursue and build with the latest tech.
+            Personally, I continue to pursue and experiment with the latest tech.
             tools. I am fascinated by the intersection of software and
             hardware, and I enjoy tinkering with IoT devices, robotics, and
             embedded systems. The recent AI revolution is particularly

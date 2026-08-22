@@ -233,6 +233,41 @@ opening paragraph in the hero) and
 line) — these are the two places copy sits in a component rather than
 in `src/data/*.ts`.
 
+## Writing style
+
+**The tags decide the register.** A post's `tags` are not only a filter
+— they say how it should read.
+
+**Technical register — `software-engineering`, `electronics`.** Highly
+crisp, succinct and technical. Keep artistic and creative writing to a
+minimum: no scene-setting, no jokes carrying a paragraph, no metaphor
+where a measurement will do. Structure every such post on one of two
+patterns and let the headings show it:
+
+- **Problem → Approach → Solution** — what was broken or missing, what
+  was tried and why, what now works.
+- **Hypothesis → Experiments → Conclusion** — what you expected, what
+  you measured, what it turned out to be.
+
+Pick one and commit; do not blend them. These posts are where the
+`code`, `table`, `steps` and `note`/`warn` blocks earn their place —
+prefer a table of numbers over a sentence describing numbers.
+
+**Relaxed register — `guitars`, `fpv-drones`, `3d-printing`.** Story
+first. These can be personal, warm and a little artistic: how the
+project started, what went wrong, what it felt like to finish. Plain
+paragraphs carrying a narrative, `image` blocks with captions doing real
+work, and a chronological spine rather than a formal one. Specs still
+have to be correct — relaxed is not vague — but they serve the story
+instead of leading it. `motorcycles` is unspecified; being a hobby tag,
+it belongs here.
+
+**Posts that span both** take the structure of the technical register
+and the opening of the relaxed one. *An over-engineered headphone
+stand* (`3d-printing` + `electronics`) is the live example: it opens
+with why the thing exists, then hardens into headed sections, a parts
+table and a feature list once it reaches the electronics.
+
 ## Conventions
 
 - **Tailwind v4, CSS-first.** No `tailwind.config.js`; theme tokens go

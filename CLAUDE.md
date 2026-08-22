@@ -91,7 +91,10 @@ src/components/
 src/data/
   social.ts           # header social links
   tags.ts             # Tag[] — the shared taxonomy, typed by TagId
-  posts.ts            # Post[] + postsByDate/postBySlug/postHref helpers
+  posts/              # one Post per file, auto-discovered — see "Add a post"
+    index.ts          #   Block/Post types + postsByDate/postBySlug/postHref
+                      #   helpers; globs every sibling *.ts file
+    <slug>.ts         #   one file per post; default-exports a Post
   patents.ts          # Patent[] — rendered compactly in About's
                       #   Braggables list
 src/assets/           # background.jpg, profile.jpg (imported so Vite fingerprints them)
@@ -136,8 +139,10 @@ components.** Components are presentation only.
   call-to-action. Label link rows with the real target title (check it,
   don't guess) so the text matches where it lands.
 - **Add a post → two steps, and both are required:**
-  1. append a `Post` to `posts` in `data/posts.ts` with a unique `slug`
-     and `tags` drawn from `TagId`;
+  1. create `data/posts/<slug>.ts`, default-exporting a `Post` with a
+     unique `slug` and `tags` drawn from `TagId` (copy an existing file
+     for the shape — its own image imports live at the top, relative to
+     `data/posts/`);
   2. create `posts/<slug>/index.html` — copy an existing one and update
      *every* per-post value in the head: `<title>`, `description`,
      `canonical`, `og:url`, `og:title`, `og:description`, `og:image`,
@@ -149,14 +154,22 @@ components.** Components are presentation only.
   4. add the URL to `public/sitemap.xml`.
 
   Steps 2–4 duplicate title/excerpt/date/tags that already live in
-  `data/posts.ts`, so they drift silently — nothing fails the build if
-  they disagree. Re-read the existing post shells and copy the shape
-  exactly. If this starts costing time, the honest fix is to generate
-  the shells and the sitemap from `posts.ts` at build time rather than
-  hand-maintaining them.
+  the post's own file under `data/posts/`, so they drift silently —
+  nothing fails the build if they disagree. Re-read the existing post
+  shells and copy the shape exactly. If this starts costing time, the
+  honest fix is to generate the shells and the sitemap from
+  `data/posts/` at build time rather than hand-maintaining them.
   Vite picks the directory up as a build entry on its own. Skipping
   step 2 leaves a card linking to a 404; skipping step 1 builds a page
   that renders `PostNotFound`.
+  `data/posts/index.ts` discovers every sibling file itself via
+  `import.meta.glob("./*.ts", { eager: true })`, filters out its own
+  path, and sorts the result by date — a new post file needs no
+  registration anywhere. `eager: true` matters: it makes Vite emit
+  static imports resolved at build time rather than lazy dynamic ones,
+  so the whole list is available synchronously, which every consumer
+  here (the card grid, the tag filter) needs anyway on a fully static
+  site with no code-splitting to gain from laziness.
   `body` is a `Block[]`: a bare string is a paragraph, and the tagged
   variants (`heading`, `code`, `list`, `note`/`warn`, `steps`, `table`,
   `image`) cover longer technical posts. `PostBody.tsx` renders them. Inside any
@@ -177,7 +190,7 @@ components.** Components are presentation only.
   (`hero.jpg`, not `warlock-hero.jpg`). Repeated basenames across
   folders are fine: Vite fingerprints by content, so two `hero.jpg`
   files emit as two distinct hashed assets. `import` them at the top of
-  `data/posts.ts`, and
+  the post's own file in `data/posts/`, and
   hand the binding to `Post.image` or an `image` block — a string path
   would skip Vite's fingerprinting and 404 in `dist/`. Resize before
   committing (long edge ~1400px landscape / ~950px portrait, JPEG q80,

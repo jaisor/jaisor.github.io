@@ -404,13 +404,13 @@ export const posts: Post[] = [
           "Magnets going into the charger's top piece, before that piece goes onto the base.",
       },
       { kind: "heading", text: "Putting it together" },
-      "The printed parts are glued rather than screwed wherever the seam is not meant to come apart again, which means a lot of the assembly is really just clamping things and waiting.",
+      "Almost none of it is permanent. Hex bolts hold the ESP32-C3 and the stand's arm \u2014 the two things most likely to need attention later \u2014 and everything else is only lightly glued, enough to stay put. If something inside ever needs repairing, it comes apart again without a fight.",
       {
         kind: "image",
         src: standAssembled,
         full: standAssembledFull,
-        alt: "The base with its LED ring and charging coil installed, the vertical arm mounted and held in place by a spring clamp while the glue sets, on a workbench with a solder spool nearby.",
-        caption: "Most of assembly is clamping something and walking away.",
+        alt: "The base with its LED ring and charging coil installed and the vertical arm mounted, a spring clamp gripping the joint, on a workbench with a solder spool and hand tools around it.",
+        caption: "Bolts where it matters, a light touch of glue everywhere else.",
       },
       {
         kind: "image",

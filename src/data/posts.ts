@@ -43,6 +43,8 @@ import standMagnets from "../assets/posts/over-engineered-headphone-stand/magnet
 import standMagnetsFull from "../assets/posts/over-engineered-headphone-stand/magnets-hires.jpg";
 import standFinished from "../assets/posts/over-engineered-headphone-stand/finished.jpg";
 import standFinishedFull from "../assets/posts/over-engineered-headphone-stand/finished-hires.jpg";
+import mqttDashboards from "../assets/posts/mqtt-to-grafana-dashboards/dashboards.jpg";
+import mqttDashboardsFull from "../assets/posts/mqtt-to-grafana-dashboards/dashboards-hires.jpg";
 
 /**
  * A body block. A bare string is a paragraph — the common case — so
@@ -438,17 +440,14 @@ tm_telemetry_rssi{device="...", telemetry_sender="device_01"} -45`,
       "Configure Prometheus as a Grafana data source at `http://server.lan:9090`. Metrics are then queryable by name and filterable by the labels defined in the exporter configuration.",
       { kind: "heading", text: "Conclusion" },
       "The resulting stack requires no manual intervention after initial deployment and persists across host reboots. Devices publish independently; the exporter maintains current values; Prometheus accumulates historical data; Grafana provides query and visualization.",
-      // TODO: dashboard screenshots go here.
-      // Import them at the top of this file from
-      // ../assets/posts/mqtt-to-grafana-dashboards/<name>.jpg (plus a
-      // -hires.jpg for the Lightbox), then drop in image blocks:
-      // {
-      //   kind: "image",
-      //   src: mqttDashOverview,
-      //   full: mqttDashOverviewFull,
-      //   alt: "",
-      //   caption: "",
-      // },
+      {
+        kind: "image",
+        src: mqttDashboards,
+        full: mqttDashboardsFull,
+        alt: "Four Grafana dashboards: per-room HVAC control with gauges and time series, indoor and outdoor temperature and humidity, solar charging and battery status, and Meshtastic node telemetry.",
+        caption:
+          "The same pattern applied to different data: HVAC control, climate sensors, solar and battery, and mesh-radio telemetry.",
+      },
       {
         kind: "steps",
         items: [

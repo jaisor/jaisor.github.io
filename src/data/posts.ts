@@ -27,6 +27,16 @@ import xracerLow from "../assets/posts/building-an-x-racer/low.jpg";
 import xracerLowFull from "../assets/posts/building-an-x-racer/low-hires.jpg";
 import xracerHand from "../assets/posts/building-an-x-racer/hand.jpg";
 import xracerHandFull from "../assets/posts/building-an-x-racer/hand-hires.jpg";
+import standHero from "../assets/posts/over-engineered-headphone-stand/hero.jpg";
+import standRender from "../assets/posts/over-engineered-headphone-stand/render.jpg";
+import standRenderFull from "../assets/posts/over-engineered-headphone-stand/render-hires.jpg";
+import standInUse from "../assets/posts/over-engineered-headphone-stand/in-use.jpg";
+import standInUseFull from "../assets/posts/over-engineered-headphone-stand/in-use-hires.jpg";
+import standNeon from "../assets/posts/over-engineered-headphone-stand/neon.jpg";
+import standNeonFull from "../assets/posts/over-engineered-headphone-stand/neon-hires.jpg";
+import standCollage from "../assets/posts/over-engineered-headphone-stand/collage.jpg";
+import standCollageFull from "../assets/posts/over-engineered-headphone-stand/collage-hires.jpg";
+import standWebUi from "../assets/posts/over-engineered-headphone-stand/webui.png";
 
 /**
  * A body block. A bare string is a paragraph — the common case — so
@@ -304,6 +314,96 @@ export const posts: Post[] = [
         alt: "The finished guitar standing on a stand: white blood-splattered Warlock body, skull-and-crossbones fret markers and black hardware.",
         caption: "Delivered.",
       },
+    ],
+  },
+  {
+    slug: "over-engineered-headphone-stand",
+    title: "An over-engineered headphone stand",
+    date: "2026-02-16",
+    excerpt:
+      "I wanted a headphone stand. I also wanted a better wireless charger. And I will take any excuse to add addressable LEDs to something \u2014 so all three became one object, with an ESP32-C3 and a web UI.",
+    tags: ["3d-printing", "electronics"],
+    image: standHero,
+    body: [
+      "I have a weakness for neon lighting, and an ongoing habit of putting addressable LEDs on things that did not ask for them. I also genuinely needed two boring objects: somewhere to hang my headphones, and a wireless charger with more power than the one I had.",
+      "Rather than buy two things, I designed one. The name is not ironic \u2014 it really is over-engineered, and that was the point.",
+      {
+        kind: "image",
+        src: standRender,
+        full: standRenderFull,
+        alt: "CAD render of the headphone stand: an octagonal base with glowing panels and a circular charging pad, a vertical arm with a neon light bar, and an angled top arm.",
+        caption: "The design, before any of it existed.",
+      },
+      { kind: "heading", text: "What it ended up doing" },
+      {
+        kind: "list",
+        items: [
+          "holds a pair of over-ear headphones",
+          "charges a phone wirelessly, with MagSafe magnets in the pad",
+          "lights up with 103 addressable LEDs across four separate segments",
+          "runs a web UI for modes, brightness and scheduling",
+          "tells the time",
+        ],
+      },
+      { kind: "heading", text: "The electronics" },
+      "An ESP32-C3 drives everything. The LEDs are WS2812B, split into a bottom ring, a wall ring, the vertical arm and the top arm \u2014 the firmware treats them as four segments of one virtual strip, so an animation runs across the whole object instead of restarting at each piece. FastLED does the heavy lifting.",
+      {
+        kind: "table",
+        caption: "The parts that matter.",
+        head: ["Part", "What it is"],
+        rows: [
+          ["Controller", "ESP32-C3 with a small onboard OLED"],
+          ["LEDs", "WS2812B strip plus a ring, 103 total"],
+          ["Charging", "Qi wireless module with MagSafe magnets"],
+          ["Power", "5V step-down, one input for the whole thing"],
+          ["Printed", "Base, arms and a base cover, in PLA"],
+        ],
+      },
+      {
+        kind: "image",
+        src: standInUse,
+        full: standInUseFull,
+        alt: "The finished stand on a workbench, lit pink and orange, with headphones hanging on the top arm and a phone charging flat on the base.",
+        caption: "Doing both of its jobs at once.",
+      },
+      { kind: "heading", text: "The OLED became a clock" },
+      "The ESP32-C3 board came with a small OLED, which I added to show the device's IP address once it joins WiFi. It still does that \u2014 for about ten seconds after connecting.",
+      "After that it had nothing to display, which felt like a waste. So it now syncs over NTP and sits there as a digital watch: hours and minutes in a large font with AM/PM beside them, redrawn once a minute, falling back to a polite `Time N/A` when it cannot reach a time server. An accidental clock is my favorite part of the whole build.",
+      { kind: "heading", text: "Controlling it" },
+      "Everything is configurable over WiFi from a small web UI \u2014 LED type, mode, brightness, frame delay, strip length, and how often to cycle between modes. There are around a dozen animations, mostly FastLED palettes: party colors, rainbow, heat, ocean, forest, lava, and a plain white light for when I want a desk lamp instead of a light show.",
+      {
+        kind: "image",
+        src: standWebUi,
+        alt: "Screenshot of the dark-themed web UI showing LED strip length, LED type, mode, a brightness slider, frame delay and power-save hour settings.",
+        caption: "The whole control surface, served off the ESP32-C3.",
+      },
+      "A few conveniences that turned out to matter more than the animations:",
+      {
+        kind: "list",
+        items: [
+          "Power-save schedule \u2014 dim the LEDs between set hours, so it stops lighting the room overnight. This is what made the NTP sync and timezone handling necessary in the first place.",
+          "Soft AP setup \u2014 on first boot it advertises its own network and takes your WiFi credentials through a form. They go to EEPROM, and it falls back to the AP if it ever cannot reconnect.",
+          "OTA updates \u2014 firmware goes on over the network, so the thing never has to come apart again.",
+          "Factory reset by power-cycling it three times within two seconds \u2014 no buttons to hide in the enclosure, which keeps the outside clean.",
+        ],
+      },
+      { kind: "heading", text: "Charging mode" },
+      "The one piece of real integration between the two halves: a GPIO senses when the charger is active and fires a callback that hands the strip to a dedicated animation. It runs a red-to-yellow gradient blending toward green over a twenty-second cycle, with a green pixel bouncing along a section of the arm \u2014 an ambient charging indicator you can read from across the room, with no numbers anywhere.",
+      {
+        kind: "image",
+        src: standNeon,
+        full: standNeonFull,
+        alt: "Close-up of the stand lit in magenta and warm white, showing the glowing arm and the illuminated panels around the octagonal base.",
+        caption: "The neon look I was actually after.",
+      },
+      {
+        kind: "image",
+        src: standCollage,
+        full: standCollageFull,
+        alt: "A collage of the finished headphone stand shown in several lighting modes and colors.",
+        caption: "A few of the modes.",
+      },
+      "The model is on [MakerWorld](https://makerworld.com/en/models/2347791-over-engineered-headphone-stand-and-phone-charger), and the firmware lives on the [led_headphone_stand branch](https://github.com/jaisor/ESP_LED_Controller/tree/led_headphone_stand) of my ESP LED Controller repo \u2014 the same codebase I keep reusing for every LED project I start.",
     ],
   },
   {

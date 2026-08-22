@@ -265,6 +265,194 @@ export const posts: Post[] = [
     ],
   },
   {
+    slug: "mqtt-to-grafana-dashboards",
+    title: "From MQTT messages to Grafana dashboards",
+    date: "2026-08-22",
+    excerpt:
+      "MQTT is a bus, not a database. Four Docker containers on a local Linux server turn transient sensor messages into history you can actually plot.",
+    tags: ["software-engineering"],
+    body: [
+      { kind: "heading", text: "Problem" },
+      "My [pool thermometer](https://github.com/jaisor/SmartPoolThermometer) wakes on a timer, reads a DS18B20, publishes a small JSON payload over MQTT, and goes back to deep sleep. Battery voltage and WiFi signal ride along in the same message.",
+      "That gets the reading off the device and nowhere else. MQTT is a message bus: a subscriber that is not connected at publish time never sees the message, and a retained message only ever holds the most recent value. There is no yesterday. Answering \"is the pool warming up week over week\" or \"is the battery actually recovering on cloudy days\" needs stored history.",
+      "Prometheus is the obvious store, but it pulls \u2014 it scrapes an HTTP endpoint on an interval. A sleeping ESP8266 that pushes to a broker cannot be scraped. Nothing in the chain speaks the other half's protocol, so the whole problem reduces to one missing piece: something that holds a subscription open, keeps the latest value of every field, and serves it at `/metrics`.",
+      { kind: "heading", text: "Approach" },
+      "Four containers on one Linux box on the LAN. Each runs detached with `--restart unless-stopped` and keeps its state on a mounted volume, so a reboot brings the whole stack back without intervention.",
+      {
+        kind: "table",
+        caption: "The stack. Published ports are arbitrary \u2014 these are the ones I use.",
+        head: ["Service", "Image", "Port", "Role"],
+        rows: [
+          ["Broker", "eclipse-mosquitto", "1883", "receives what the sensors publish"],
+          ["Exporter", "jaisor/mqtt-json-prometheus-exporter", "9324", "subscribes, parses JSON, serves /metrics"],
+          ["Prometheus", "prom/prometheus", "9090", "scrapes the exporter, stores series"],
+          ["Grafana", "grafana/grafana", "3000", "queries Prometheus, draws dashboards"],
+        ],
+      },
+      {
+        kind: "note",
+        label: "Scope",
+        text: "This is a LAN setup \u2014 a desktop, a Raspberry Pi, or a home server. Nothing below configures TLS or authentication anywhere. If any hop crosses the public internet, that changes completely.",
+      },
+      { kind: "heading", text: "The broker" },
+      {
+        kind: "code",
+        label: "mosquitto",
+        code: `docker run -dit --name mosquitto --restart unless-stopped \\
+  -p 1883:1883 \\
+  -v "$VAR_PATH/mosquitto:/mosquitto" \\
+  eclipse-mosquitto:latest`,
+      },
+      { kind: "heading", text: "The bridge" },
+      "This is the piece that does the real work. [mqtt-json-prometheus-exporter](https://github.com/jaisor/mqtt-json-prometheus-exporter) subscribes to a list of topic patterns, parses each payload, and exposes every numeric field as a Prometheus gauge. It is configured entirely by one mounted `config.yaml`.",
+      {
+        kind: "code",
+        label: "exporter",
+        code: `docker run -dit --name mqtt-json-prometheus-exporter --restart unless-stopped \\
+  -v "$VAR_PATH/mqtt_json:/config" -p 9324:8080 \\
+  jaisor/mqtt-json-prometheus-exporter:latest`,
+      },
+      "The container listens on 8080 internally; publish it wherever suits. `CONFIG_PATH`, `LOG_LEVEL` and `PORT` are available as environment overrides.",
+      { kind: "heading", text: "Mapping messages to metrics" },
+      "Every pattern is a topic subscription plus rules for what to do with what arrives. A `+` in the pattern is a single-level wildcard, and naming it turns the matched segment into a label \u2014 `+device` puts the device name on every metric from that topic.",
+      {
+        kind: "code",
+        label: "config.yaml \u2014 the basics",
+        code: `mqtt:
+  url: mqtt://server.lan:1883
+global:
+  prefix: mqtt_exporter_    # prepended to every metric
+  labels:                   # attached to every metric
+    app: mqtt-json-prometheus-exporter
+patterns:
+  - pattern: home/+device/json
+    format: json            # the default; 'val' for a bare scalar
+    labels:
+      location: home`,
+      },
+      "A payload of `{\"temp\": 22.5, \"battery\": 3.9}` on `home/pool/json` then produces `mqtt_exporter_temp` and `mqtt_exporter_battery`, each carrying `device=\"pool\"`, `location=\"home\"` and the global `app` label.",
+      { kind: "heading", text: "Scalar payloads and value maps" },
+      "Not everything publishes JSON. A last-will topic typically carries a bare string, which is useless to Prometheus until it is a number. `format: val` reads the whole payload as one value, and `value-map` translates it.",
+      {
+        kind: "code",
+        label: "availability from an LWT topic",
+        code: `  - pattern: tele/+device/LWT
+    prefix: tms_
+    format: val
+    value-default: 0        # anything not in the map
+    value-map:
+      Online: 1`,
+      },
+      "`value-default` is what an unmapped value becomes, so `Offline` \u2014 or any unexpected string \u2014 lands on 0 rather than dropping the sample. The same mapping works on string *fields* inside a JSON payload:",
+      {
+        kind: "code",
+        label: "mapping a string field",
+        code: `  - pattern: home/+device/status
+    format: json
+    value-map:
+      active: 1
+      inactive: 0`,
+      },
+      { kind: "heading", text: "Nested payloads" },
+      "Tasmota and friends publish objects inside objects. `recursive: Yes` walks into them, flattening the path into the metric name:",
+      {
+        kind: "code",
+        label: "recursive parsing",
+        code: `  - pattern: tele/+device/SENSOR
+    prefix: tm_
+    recursive: Yes`,
+      },
+      { kind: "heading", text: "Fields that should be labels, not metrics" },
+      "Some payload fields identify the source rather than measure anything. A sensor ID exported as a gauge is noise; as a label it becomes the thing you group by. `label-fields` promotes them.",
+      {
+        kind: "code",
+        label: "flat label-fields",
+        code: `  - pattern: home/+device/json
+    label-fields: [sensor_id, room]`,
+      },
+      "Given `{\"temp\": 22.5, \"humidity\": 60, \"sensor_id\": \"abc\", \"room\": \"kitchen\"}`, both remaining fields become metrics carrying both labels:",
+      {
+        kind: "code",
+        code: `mqtt_exporter_temp{device="...", sensor_id="abc", room="kitchen"} 22.5
+mqtt_exporter_humidity{device="...", sensor_id="abc", room="kitchen"} 60`,
+      },
+      "Nested fields use an arrow to describe the path, and the label is named for the full path joined with underscores:",
+      {
+        kind: "code",
+        label: "nested label-fields",
+        code: `  - pattern: tele/+device/SENSOR
+    recursive: Yes
+    label-fields:
+      - telemetry\u2192sender`,
+      },
+      {
+        kind: "code",
+        code: `tm_temp{device="...", telemetry_sender="device_01"} 22.5
+tm_telemetry_rssi{device="...", telemetry_sender="device_01"} -45`,
+      },
+      "The two forms behave differently on purpose, which is worth knowing before debugging a missing label:",
+      {
+        kind: "list",
+        items: [
+          "a flat entry propagates into nested objects when `recursive: Yes` is set, so the label lands on metrics at every level;",
+          "an arrow path extracts only from that path and leaves sibling fields alone.",
+        ],
+      },
+      "A configured `value-map` also applies to label values, which is the tidy way to normalize a label that arrives as free text \u2014 with `label-fields: [mode]` and a map of `active: 1`, a payload of `{\"mode\": \"active\"}` yields `mode=\"1\"`.",
+      { kind: "heading", text: "Prometheus" },
+      {
+        kind: "code",
+        label: "config.yml",
+        code: `scrape_configs:
+  - job_name: 'prometheus'
+    scrape_interval: 30s
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'mqtt_json'
+    scrape_interval: 30s
+    static_configs:
+      - targets: ['server.lan:9324']`,
+      },
+      {
+        kind: "code",
+        code: `docker run -dit --name prometheus --restart unless-stopped -p 9090:9090 \\
+  -v "$VAR_PATH/prometheus:/data" \\
+  prom/prometheus:latest \\
+  --config.file="/data/config.yml" \\
+  --storage.tsdb.path="/data/prometheus"`,
+      },
+      {
+        kind: "warn",
+        label: "Scrape interval is not sample interval",
+        text: "The exporter holds the last value it saw and serves that to every scrape. A sensor publishing every 15 minutes against a 30-second scrape writes the same number ~30 times. Harmless for gauges and graphs, but do not read those repeats as fresh readings, and do not compute rates over them.",
+      },
+      { kind: "heading", text: "Grafana" },
+      {
+        kind: "code",
+        code: `docker run -dit --name grafana --restart unless-stopped -p 3000:3000 \\
+  -v "$VAR_PATH/grafana:/var/lib/grafana" \\
+  grafana/grafana:latest`,
+      },
+      "Add Prometheus as a data source pointing at `http://server.lan:9090` and the metrics are immediately queryable by name, filtered by whichever labels the patterns above attached.",
+      { kind: "heading", text: "Solution" },
+      "The result is a stack that survives reboots and needs no attention: sensors publish and sleep, the exporter keeps the latest picture, Prometheus accumulates the history, and Grafana asks the questions.",
+      // TODO: dashboard screenshots go here.
+      // Import them at the top of this file from
+      // ../assets/posts/mqtt-to-grafana-dashboards/<name>.jpg (plus a
+      // -hires.jpg for the Lightbox), then drop in image blocks:
+      // {
+      //   kind: "image",
+      //   src: mqttDashOverview,
+      //   full: mqttDashOverviewFull,
+      //   alt: "",
+      //   caption: "",
+      // },
+      "Two things worth knowing once it is running. The exporter also publishes standard Node.js process metrics — heap, CPU, event loop — under the same global prefix, which is useful for watching the bridge itself but will clutter a metric browser if you are not expecting it. And every metric name is ultimately derived from a JSON field name, so renaming a field in device firmware silently starts a new series rather than continuing the old one.",
+      "The full stack, with the sensor hardware that feeds it, is in the [SmartPoolThermometer](https://github.com/jaisor/SmartPoolThermometer#data-visualization) repo; the exporter is [its own project](https://github.com/jaisor/mqtt-json-prometheus-exporter).",
+    ],
+  },
+  {
     slug: "3d-printed-warlock-death-tribute",
     title: "A 3D-printed Warlock, splattered in blood",
     date: "2026-07-30",

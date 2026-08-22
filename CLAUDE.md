@@ -97,7 +97,12 @@ src/data/
 src/assets/           # background.jpg, profile.jpg (imported so Vite fingerprints them)
   posts/<slug>/       # one folder per post, named for its slug; photos are
                       #   imported, never linked by path
-public/favicon.jpg    # copied verbatim to dist/
+public/               # copied verbatim to dist/, so these are stable URLs
+  favicon.jpg         #   256×256, square-cropped from src/assets/profile.jpg
+  apple-touch-icon.jpg
+  robots.txt          #   points at the sitemap
+  sitemap.xml         #   home + every post
+  og/<slug>.jpg       #   1200×630 social cards; og/home.jpg is the default
 ```
 
 Patents are not their own section. They live inside `#about` under a
@@ -133,8 +138,22 @@ components.** Components are presentation only.
 - **Add a post → two steps, and both are required:**
   1. append a `Post` to `posts` in `data/posts.ts` with a unique `slug`
      and `tags` drawn from `TagId`;
-  2. create `posts/<slug>/index.html` — copy an existing one and change
-     the `<title>`, the meta `description`, and `data-slug`.
+  2. create `posts/<slug>/index.html` — copy an existing one and update
+     *every* per-post value in the head: `<title>`, `description`,
+     `canonical`, `og:url`, `og:title`, `og:description`, `og:image`,
+     `og:image:alt`, the `twitter:*` pair, `article:published_time`,
+     one `article:tag` per tag, and the whole `BlogPosting` JSON-LD
+     block — plus `data-slug` in the body.
+  3. add a 1200×630 card at `public/og/<slug>.jpg` (crop the post's hero;
+     a post with no `image` can point at `/og/home.jpg` instead).
+  4. add the URL to `public/sitemap.xml`.
+
+  Steps 2–4 duplicate title/excerpt/date/tags that already live in
+  `data/posts.ts`, so they drift silently — nothing fails the build if
+  they disagree. Re-read the existing post shells and copy the shape
+  exactly. If this starts costing time, the honest fix is to generate
+  the shells and the sitemap from `posts.ts` at build time rather than
+  hand-maintaining them.
   Vite picks the directory up as a build entry on its own. Skipping
   step 2 leaves a card linking to a 404; skipping step 1 builds a page
   that renders `PostNotFound`.
@@ -274,6 +293,28 @@ in `src/data/*.ts`.
 - `noUnusedLocals` and `noUnusedParameters` are on — dead variables fail
   the build, not just lint.
 
+## SEO
+
+The canonical origin is `https://jaisor.github.io` — there is no `CNAME`,
+so Pages serves the repo name at the root. Every absolute URL in the
+head (canonical, `og:url`, `og:image`, JSON-LD) is built on that origin;
+if a custom domain is ever added, all of them change together, plus
+`robots.txt` and `sitemap.xml`.
+
+- **Each page carries** a canonical link, a description, Open Graph and
+  Twitter card tags, and one JSON-LD block — `Person` on the home page,
+  `BlogPosting` on each post.
+- **`og:image` must be an absolute URL to an unhashed file.** Vite
+  fingerprints anything under `src/assets/`, so social cards live in
+  `public/og/` where the path stays predictable. 1200×630 is the size
+  crawlers expect; the tags declare those dimensions explicitly.
+- **Post `description` comes from the post's `excerpt`.** Some run past
+  the ~160 characters Google will show, which costs nothing but means
+  the tail is cut in a search snippet — worth keeping the first sentence
+  self-contained.
+- The favicon is a square crop of `src/assets/profile.jpg`. Regenerate
+  both it and `apple-touch-icon.jpg` whenever that photo changes.
+
 ## Security (this is a public static site)
 
 The site ships as static HTML/CSS/JS to GitHub Pages. There is no
@@ -295,6 +336,11 @@ Rules to hold to:
   (this implies `noopener`, blocking reverse-tabnabbing). Existing links
   follow this; new ones must too. Same-origin links (post cards, the
   back link) are ordinary navigations and take neither attribute.
+- **The only `<script>` tags that are not Vite's module entry** are the
+  `application/ld+json` SEO blocks in the page shells. That type is
+  never executed — it is inert first-party data — so it does not weaken
+  the model. Keep it hand-authored JSON in the HTML; never build it from
+  a string at runtime.
 - **No third-party runtime scripts, analytics, trackers, embeds, or
   CDN-loaded libraries.** The only external request the page makes is
   the Google Fonts stylesheet, in `index.html` and in each

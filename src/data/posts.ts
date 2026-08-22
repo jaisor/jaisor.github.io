@@ -269,13 +269,13 @@ export const posts: Post[] = [
     title: "From MQTT messages to Grafana dashboards",
     date: "2026-08-22",
     excerpt:
-      "MQTT is a bus, not a database. Four Docker containers on a local Linux server turn transient sensor messages into history you can actually plot.",
+      "Plenty of IoT devices already publish metrics over MQTT. Four Docker containers on a local Linux server turn them into rich Grafana dashboards, with alerting, for free.",
     tags: ["software-engineering"],
     body: [
       { kind: "heading", text: "Problem" },
-      "My [pool thermometer](https://github.com/jaisor/SmartPoolThermometer) wakes on a timer, reads a DS18B20, publishes a small JSON payload over MQTT, and goes back to deep sleep. Battery voltage and WiFi signal ride along in the same message.",
-      "That gets the reading off the device and nowhere else. MQTT is a message bus: a subscriber that is not connected at publish time never sees the message, and a retained message only ever holds the most recent value. There is no yesterday. Answering \"is the pool warming up week over week\" or \"is the battery actually recovering on cloudy days\" needs stored history.",
-      "Prometheus is the obvious store, but it pulls \u2014 it scrapes an HTTP endpoint on an interval. A sleeping ESP8266 that pushes to a broker cannot be scraped. Nothing in the chain speaks the other half's protocol, so the whole problem reduces to one missing piece: something that holds a subscription open, keeps the latest value of every field, and serves it at `/metrics`.",
+      "A lot of hardware already emits metrics over MQTT \u2014 IoT devices especially, where a small board wakes on a timer, publishes a JSON payload and goes back to sleep. Getting the numbers out is the easy part. Seeing them well is not.",
+      "What I wanted was rich, genuinely readable dashboards at no running cost: self-hosted, DIY-friendly, nothing metered by the month. Prometheus and Grafana fit exactly. Both are free and open source, both run happily on modest hardware, and between them they cover alerting as well as graphing \u2014 so a threshold crossing can raise an alarm instead of waiting to be noticed on a chart.",
+      "One gap sits in the middle. Prometheus pulls: it scrapes an HTTP endpoint on a schedule, and an MQTT publisher offers nothing to scrape. Bridging that is the only piece that has to be built \u2014 something that holds a subscription open, keeps the latest value of every field, and serves it at `/metrics`.",
       { kind: "heading", text: "Approach" },
       "Four containers on one Linux box on the LAN. Each runs detached with `--restart unless-stopped` and keeps its state on a mounted volume, so a reboot brings the whole stack back without intervention.",
       {
@@ -449,7 +449,7 @@ tm_telemetry_rssi{device="...", telemetry_sender="device_01"} -45`,
       //   caption: "",
       // },
       "Two things worth knowing once it is running. The exporter also publishes standard Node.js process metrics — heap, CPU, event loop — under the same global prefix, which is useful for watching the bridge itself but will clutter a metric browser if you are not expecting it. And every metric name is ultimately derived from a JSON field name, so renaming a field in device firmware silently starts a new series rather than continuing the old one.",
-      "The full stack, with the sensor hardware that feeds it, is in the [SmartPoolThermometer](https://github.com/jaisor/SmartPoolThermometer#data-visualization) repo; the exporter is [its own project](https://github.com/jaisor/mqtt-json-prometheus-exporter).",
+      "The exporter's full configuration reference lives in [its repo](https://github.com/jaisor/mqtt-json-prometheus-exporter).",
     ],
   },
   {

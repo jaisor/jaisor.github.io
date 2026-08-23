@@ -140,6 +140,20 @@ tm_telemetry_rssi{device="...", telemetry_sender="device_01"} -45`,
       ],
     },
     "`value-map` also applies to label values. With `label-fields: [mode]` and a value map containing `active: 1`, payload `{\"mode\": \"active\"}` produces label `mode=\"1\"`.",
+    "Two final points to highlight:",
+    {
+      kind: "steps",
+      items: [
+        {
+          title: "Process metrics share the global prefix",
+          text: "The exporter publishes Node.js process metrics (heap, CPU, event loop) under the same global prefix as MQTT-derived metrics. This is useful for monitoring the exporter itself but increases the number of series returned by metric-name queries.",
+        },
+        {
+          title: "Metric names are derived from JSON field names",
+          text: "Renaming a field in device firmware creates a new metric series rather than continuing the existing one.",
+        },
+      ],
+    },
     { kind: "heading", text: "Prometheus" },
     {
       kind: "code",
@@ -175,9 +189,37 @@ tm_telemetry_rssi{device="...", telemetry_sender="device_01"} -45`,
   -v "$VAR_PATH/grafana:/var/lib/grafana" \\
   grafana/grafana:latest`,
     },
-    "Configure Prometheus as a Grafana data source at `http://server.lan:9090`. Metrics are then queryable by name and filterable by the labels defined in the exporter configuration.",
+    "Grafana serves its UI on the published port — `http://server.lan:3000` in this deployment. The first login uses the default credentials `admin` / `admin`, and Grafana forces a password change immediately after. `GF_SECURITY_ADMIN_PASSWORD` can be set as a container environment variable to preseed a different initial password for a scripted deployment, avoiding the interactive prompt.",
+    "Add Prometheus as a data source under `Connections → Data sources → Add data source`, pointing at `http://server.lan:9090`. Once saved, metrics are queryable by name and filterable by the labels defined in the exporter configuration.",
+    {
+      kind: "steps",
+      items: [
+        {
+          title: "Find the metric",
+          text: "Open `Explore` in the left nav (or a panel's query editor) and select the Prometheus data source. Its metrics browser autocompletes on the exporter's prefix — typing `mqtt_exporter_` or `tm_` lists every series currently exposed, which is faster than re-reading `config.yaml` to recall a name.",
+        },
+        {
+          title: "Filter by label",
+          text: "Add a label matcher, e.g. `mqtt_exporter_temp{device=\"pool\"}`, to isolate one device's series from others sharing the same metric name.",
+        },
+        {
+          title: "Add a panel",
+          text: "From a dashboard, `Add → Visualization`, choose the Prometheus data source, and paste the query. `Stat` or `Gauge` suits a current value; `Time series` suits history — both read the same PromQL.",
+        },
+        {
+          title: "Save",
+          text: "Name the panel and the dashboard, then save. Grafana stores it in its own database under the mounted `/var/lib/grafana` volume, not as a file on disk.",
+        },
+      ],
+    },
+    {
+      kind: "note",
+      label: "Dashboards are portable",
+      text: "A dashboard exports to a single JSON document (dashboard settings → JSON Model, or the export icon) and imports the same way into another Grafana instance, so it travels independently of the stack that produced it. Grafana's own library at [grafana.com/grafana/dashboards](https://grafana.com/grafana/dashboards/) hosts thousands of community-published dashboards along the same lines — worth browsing to adapt, extend, or just read as worked examples of laying out panels for a given kind of data.",
+    },
     { kind: "heading", text: "Conclusion" },
     "The resulting stack requires no manual intervention after initial deployment and persists across host reboots. Devices publish independently; the exporter maintains current values; Prometheus accumulates historical data; Grafana provides query and visualization.",
+    "Grafana has a real learning curve — PromQL, data-source configuration, and panel options are not obvious on first use. Its documentation at [grafana.com/docs/grafana/latest](https://grafana.com/docs/grafana/latest/) is thorough, and both the Enterprise and open-source sides of the project have wide adoption, which translates into a large body of community how-tos and forum answers to draw on beyond the official docs — this post being one more of them.",
     {
       kind: "image",
       src: mqttDashboards,
@@ -185,20 +227,6 @@ tm_telemetry_rssi{device="...", telemetry_sender="device_01"} -45`,
       alt: "Four Grafana dashboards: per-room HVAC control with gauges and time series, indoor and outdoor temperature and humidity, solar charging and battery status, and Meshtastic node telemetry.",
       caption:
         "The same pattern applied to different data: HVAC control, climate sensors, solar and battery, and mesh-radio telemetry.",
-    },
-    "Two final points to highlight:",
-    {
-      kind: "steps",
-      items: [
-        {
-          title: "Process metrics share the global prefix",
-          text: "The exporter publishes Node.js process metrics (heap, CPU, event loop) under the same global prefix as MQTT-derived metrics. This is useful for monitoring the exporter itself but increases the number of series returned by metric-name queries.",
-        },
-        {
-          title: "Metric names are derived from JSON field names",
-          text: "Renaming a field in device firmware creates a new metric series rather than continuing the existing one.",
-        },
-      ],
     },
   ],
 };

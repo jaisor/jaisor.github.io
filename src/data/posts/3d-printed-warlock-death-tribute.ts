@@ -20,11 +20,11 @@ const post: Post = {
   title: "A 3D-printed Warlock, splattered in blood",
   date: "2026-07-30",
   excerpt:
-    "A B.C. Rich Warlock body printed in sections, bonded, filled and primed, then finished in House of Kolor candy red — a Death tribute built as a gift for my son's friend.",
+    "A B.C. Rich Warlock body printed in sections, bonded, filled and primed, then finished in House of Kolor candy red — a Death tribute built as a gift for a family friend's son, an honorary nephew of mine.",
   tags: ["guitars", "3d-printing"],
   image: warlockHero,
   body: [
-    "My son has a friend who is a huge Death fan, and somewhere between \"I could probably print that\" and \"This will never work\", it turned into a full build.",
+    "The kid (teenager actually) is a huge Death fan, and somewhere between \"I could probably print that\" and \"This will never work\", it turned into a full build.",
     "The body is [this B.C. Rich Warlock model](https://makerworld.com/en/models/701362-bc-rich-warlock-a1-mini-guitar-body-single-pickup#profileId-630884) from MakerWorld — single-pickup version. It comes split into sections to be printed separately depending on the available print volume. Everything else is off-the-shelf guitar parts: a bought neck, a double-locking tremolo, and tuners.",
     {
       kind: "image",

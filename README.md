@@ -44,6 +44,21 @@ GitHub Pages. To make this the site's permanent source, merge into
 `main` and point the workflow's trigger branch (and the repo's Pages
 settings, under Settings → Pages → Source → GitHub Actions) at `main`.
 
+## Deploy to a remote server
+
+[`scripts/deploy.ps1`](scripts/deploy.ps1) builds the site and rsyncs
+`dist/`'s contents into `~/dist` on a remote host, for pushing a copy
+somewhere other than GitHub Pages (e.g. your own server). Requires
+WSL (for `rsync`) and an SSH private key already authorized on that
+host.
+
+```powershell
+./scripts/deploy.ps1 -Username <user> -HostName <host> -PrivateKeyPath ~\.ssh\<key>
+```
+
+Only changed files are transferred, and remote files no longer present
+locally are deleted to keep the two in sync.
+
 ## Content
 
 Site content lives in `src/data/` — the components are presentation

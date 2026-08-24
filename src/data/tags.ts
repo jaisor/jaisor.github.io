@@ -100,10 +100,10 @@ export const tags: Tag[] = [
     id: "motorcycles",
     label: "Motorcycles",
     icon: Bike,
-    cardLabel: "More to come...",
+    cardLabel: "The list goes on and keeps growing...",
     cardIcon: Sparkles,
     description:
-      "My list of hobbies continues to grow. It also includes woodworking, RV camping, motorcycles, mountain bikes, and more. My friends call me a Renaissance man, and I take it as the highest form of compliment.",
+      "My list of hobbies continues to grow. It also includes woodworking, RV camping, motorcycles, mountain bikes, cookng, firearms, and more. My friends call me a Renaissance man, and I take it as the highest form of compliment.",
   },
 ];
 

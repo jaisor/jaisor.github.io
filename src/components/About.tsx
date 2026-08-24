@@ -23,7 +23,7 @@ export function About() {
           </p>
           <p>
             Personally, I continue to pursue and experiment with the latest tech.
-            tools. I am fascinated by the intersection of software and
+            I am fascinated by the intersection of software and
             hardware, and I enjoy tinkering with IoT devices, robotics, and
             embedded systems. The recent AI revolution is particularly
             exciting, with its potential to accelerate and transform

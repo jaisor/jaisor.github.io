@@ -3,10 +3,30 @@
     Builds the site and syncs dist/ to a remote server via rsync.
 
 .DESCRIPTION
-    Runs `npm run build`, then rsyncs dist/'s contents into ~/dist in the
-    given user's home directory on the given host, deleting any remote
-    files that no longer exist locally. Only changed files are
+    Runs `npm run build`, rewrites every absolute `https://jaisor.github.io`
+    reference baked into dist/'s HTML/XML/TXT output (canonical links,
+    og:url/og:image, twitter:image, the JSON-LD blocks, sitemap.xml,
+    robots.txt) to `https://<HostName>`, then rsyncs dist/'s contents into
+    ~/dist in the given user's home directory on the given host, deleting
+    any remote files that no longer exist locally. Only changed files are
     transferred, so repeat deploys after a small content edit are fast.
+
+    Because ~/dist is served live (there's no build/release staging on
+    the remote end), wsl-rsync-deploy.sh does this as two passes rather
+    than one: every non-HTML file first with no deletion, then
+    everything (HTML included) with deletion. That ordering matters —
+    see wsl-rsync-deploy.sh for why a single `rsync --delete` pass onto a
+    live docroot can serve visitors an index.html pointing at a
+    content-hashed JS/CSS bundle that hasn't finished uploading (or was
+    just deleted), which surfaces in the browser as "Expected a
+    JavaScript-or-Wasm module script but the server responded with a
+    MIME type of text/html".
+
+    The rewrite matters because those URLs are hand-authored per the
+    canonical GitHub Pages origin (see CLAUDE.md's SEO section) and are
+    not templated at build time; without it, a build deployed to a
+    different host would still self-report as jaisor.github.io in its
+    meta tags, sitemap, and structured data.
 
     rsync itself isn't native to Windows, so this shells out to WSL (which
     ships rsync) and runs the whole rsync-over-ssh step there, via
@@ -35,7 +55,10 @@
     The SSH username to authenticate as on the remote host.
 
 .PARAMETER HostName
-    The remote host to deploy to.
+    The remote host to deploy to. Also becomes the site's absolute origin
+    (as `https://<HostName>`), replacing every hardcoded
+    `https://jaisor.github.io` reference in the built output before it is
+    synced.
 
 .PARAMETER PrivateKeyPath
     Path to the private key file to authenticate with (e.g.
@@ -68,6 +91,33 @@ function ConvertTo-WslPath {
     return "/mnt/$DriveLetter$PathRemainder"
 }
 
+# Rewrite the site's canonical origin, baked into dist/'s output as plain
+# text (canonical/og/twitter meta tags, JSON-LD, sitemap.xml, robots.txt),
+# to match wherever this build is actually being deployed.
+function Set-SiteOrigin {
+    param(
+        [Parameter(Mandatory = $true)][string]$DistPath,
+        [Parameter(Mandatory = $true)][string]$HostName
+    )
+    $OldOrigin = "https://jaisor.github.io"
+    $NewOrigin = "https://$HostName"
+    if ($NewOrigin -eq $OldOrigin) {
+        return
+    }
+
+    # Write back without a BOM: Vite's own output has none, and a BOM
+    # ahead of `<!doctype html>` or `<?xml ... ?>` is invalid there.
+    $Utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+    $Files = Get-ChildItem -Path $DistPath -Recurse -Include "*.html", "*.xml", "*.txt"
+    foreach ($File in $Files) {
+        $Content = [System.IO.File]::ReadAllText($File.FullName)
+        if ($Content.Contains($OldOrigin)) {
+            $Updated = $Content.Replace($OldOrigin, $NewOrigin)
+            [System.IO.File]::WriteAllText($File.FullName, $Updated, $Utf8NoBom)
+        }
+    }
+}
+
 $RemoteTarget = "${Username}@${HostName}"
 $RepoRoot = Split-Path -Parent $PSScriptRoot
 $DistPath = Join-Path $RepoRoot "dist"
@@ -97,6 +147,10 @@ try {
     }
 
     $ResolvedDistPath = (Resolve-Path $DistPath).Path
+
+    Write-Host "Rewriting site origin to https://$HostName in dist/..."
+    Set-SiteOrigin -DistPath $ResolvedDistPath -HostName $HostName
+
     # Trailing slash on the source: sync dist/'s *contents* into ~/dist,
     # rather than nesting a dist/ folder inside it.
     $WslDistSource = "$(ConvertTo-WslPath $ResolvedDistPath)/"

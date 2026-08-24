@@ -34,6 +34,28 @@ identity_path="$tmphome/.ssh/$(basename "$private_key_source")"
 # once (or already trusted) doesn't need re-confirming on every deploy.
 # IdentitiesOnly restricts auth to exactly the key we specified, rather
 # than also offering whatever default-named keys happen to be present.
+ssh_opts=(-i "$identity_path" -o IdentitiesOnly=yes -o "UserKnownHostsFile=$ssh_source_dir/known_hosts")
+
+# This target is served live straight out of the synced directory (no
+# build/release staging on the remote end), so a single rsync pass is not
+# safe: rsync gives no ordering guarantee between overwriting an HTML
+# entry file and finishing the upload of the content-hashed JS/CSS assets
+# it references, nor between deleting an orphaned old asset and finishing
+# the new HTML that stops referencing it. A visitor hitting the site
+# mid-sync can land on a brand-new index.html whose bundle hasn't
+# arrived yet (or was just deleted), get Apache's text/html 404 for it,
+# and the browser rejects it with "Expected a JavaScript-or-Wasm module
+# script but the server responded with a MIME type of text/html".
+#
+# Fix: push every non-HTML file first, with no deletion -- so every
+# asset a new HTML page could reference is already in place -- then push
+# everything (HTML included) with --delete last, so no HTML file goes
+# live before its assets exist, and stale assets are only removed once
+# nothing new needs them.
+HOME="$tmphome" rsync -avz --exclude='*.html' \
+    -e "ssh ${ssh_opts[*]}" \
+    "$dist_source" "$remote_target"
+
 HOME="$tmphome" rsync -avz --delete \
-    -e "ssh -i $identity_path -o IdentitiesOnly=yes -o UserKnownHostsFile=$ssh_source_dir/known_hosts" \
+    -e "ssh ${ssh_opts[*]}" \
     "$dist_source" "$remote_target"

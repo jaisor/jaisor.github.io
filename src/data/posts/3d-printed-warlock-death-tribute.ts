@@ -10,6 +10,12 @@ import warlockPrimer from "../../assets/posts/3d-printed-warlock-death-tribute/p
 import warlockPrimerFull from "../../assets/posts/3d-printed-warlock-death-tribute/primer-hires.jpg";
 import warlockDetail from "../../assets/posts/3d-printed-warlock-death-tribute/detail.jpg";
 import warlockDetailFull from "../../assets/posts/3d-printed-warlock-death-tribute/detail-hires.jpg";
+import warlockBuffing from "../../assets/posts/3d-printed-warlock-death-tribute/buffing.jpg";
+import warlockBuffingFull from "../../assets/posts/3d-printed-warlock-death-tribute/buffing-hires.jpg";
+import warlockHeadstock from "../../assets/posts/3d-printed-warlock-death-tribute/headstock.jpg";
+import warlockHeadstockFull from "../../assets/posts/3d-printed-warlock-death-tribute/headstock-hires.jpg";
+import warlockGloss from "../../assets/posts/3d-printed-warlock-death-tribute/gloss.jpg";
+import warlockGlossFull from "../../assets/posts/3d-printed-warlock-death-tribute/gloss-hires.jpg";
 import warlockBack from "../../assets/posts/3d-printed-warlock-death-tribute/back.jpg";
 import warlockBackFull from "../../assets/posts/3d-printed-warlock-death-tribute/back-hires.jpg";
 import warlockFinished from "../../assets/posts/3d-printed-warlock-death-tribute/finished.jpg";
@@ -70,6 +76,36 @@ const post: Post = {
     "White base coat, then Apple Red Kandy from House of Kolor for the blood. Candy is the right choice here as it stacks on itself. Every pass over the same spot goes deeper and darker, so a single color gives you thin arterial spray and thick pooling clots without ever mixing a second red. The Apple Red also happens to land almost exactly on the color of the real thing.",
     "There is no clever technique for the pattern. We loaded brushes and flicked and splattered the paint at the body by hand, which is enormously satisfying and completely uncontrollable. My garage woodshop looked like a murder scene by the end of it.",
     "Check out my attempts at making a [horror flick](https://www.youtube.com/shorts/S2uFrwL09KM) before cleaning up the mess.",
+    { kind: "heading", text: "Clear coat and buffing" },
+    "Ten layers of CrystaLac Brite Tone went over the splatter as the clear coat. I love working with it: it is non-toxic, cleans up with water while it is still wet, and it self-levels well between layers.",
+    "Once the layers cured, the real time sink started. Level sanding through the grits, then buffing the whole surface up to a mirror finish, on both the body and the neck. There is no shortcut through this step — it is the difference between a paint job and a finish.",
+    {
+      kind: "image",
+      src: warlockBuffing,
+      full: warlockBuffingFull,
+      alt: "The splattered guitar body and neck held up next to a bottle of swirl-remover buffing compound and shop towels on a workbench.",
+      caption: "Level sanding, then compound, then more compound.",
+    },
+    {
+      kind: "image",
+      src: warlockHeadstock,
+      full: warlockHeadstockFull,
+      alt: "Close-up of the buffed headstock, showing a mirror-glossy clear coat over the white paint and red splatter.",
+      caption: "The clear coat buffed out to a mirror — no orange peel, no haze.",
+    },
+    {
+      kind: "image",
+      src: warlockGloss,
+      full: warlockGlossFull,
+      alt: "The full guitar body and neck under shop lighting, the glossy clear coat throwing sharp reflections across the honeycomb interior and splatter pattern.",
+      caption: "Body and neck both hit the same mirror finish before final assembly.",
+    },
+    { kind: "heading", text: "The pickup" },
+    "The last piece was the one that makes it a Death guitar. We splurged on a white DiMarzio X2N — the same pickup the late Chuck Schuldiner, Death's guitarist and vocalist, ran in his iconic B.C. Rich.",
+    "It is one of the highest-output passive humbuckers DiMarzio makes, built to shove a tube amp into full overdrive. The character leans aggressive and midrange-heavy rather than bassy or harsh, with enough treble bite to cut through a dense mix — exactly the kind of relentless tone a Death tribute needed.",
+    { kind: "heading", text: "Conclusion" },
+    "The result was exactly what we were aiming for. The build was fun and creative, pushing me into a new area of guitar making and dealing with a 3D-printed plastic body for the first time.",
+    "The gift was extremely well received — the young guitarist was thrilled, and vowed to write many future metal hits on that guitar.",
     {
       kind: "image",
       src: warlockDetail,
@@ -78,9 +114,6 @@ const post: Post = {
       caption:
         "The final result came together beautifully, paired with a matching red knob and killswitch, and a Death logo sticker.",
     },
-    { kind: "heading", text: "The pickup" },
-    "The last piece was the one that makes it a Death guitar. We splurged on a white DiMarzio X2N — the same pickup the late Chuck Schuldiner, Death's guitarist and vocalist, ran in his iconic B.C. Rich.",
-    "The result was exactly what we were aiming for. The build was fun and creative, pushing me into a new area of guitar making and dealing with a 3D-printed plastic body for the first time.",
     {
       kind: "image",
       src: warlockBack,

@@ -23,9 +23,23 @@ function postEntries() {
   )
 }
 
+// Vite always adds `crossorigin` to the module script/preload/stylesheet
+// tags it emits (no build option turns it off), which forces those
+// requests to fetch with credentials omitted, even though everything
+// here is same-origin static hosting with no CDN and no SRI in play, so
+// there's nothing that attribute is protecting. Strip it post-render.
+function stripCrossorigin() {
+  return {
+    name: 'strip-crossorigin',
+    transformIndexHtml(html: string) {
+      return html.replace(/\s+crossorigin\b/g, '')
+    },
+  }
+}
+
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [react(), tailwindcss(), stripCrossorigin()],
   build: {
     rollupOptions: {
       input: {

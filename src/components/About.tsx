@@ -1,4 +1,5 @@
 import { Radio, ScrollText } from "lucide-react";
+import jaisorLogo from "../assets/jaisor-logo.svg";
 import { patents } from "../data/patents";
 import { ScrollCue } from "./ScrollCue";
 
@@ -59,6 +60,24 @@ export function About() {
             FCC Amateur Radio (HAM) License holder &mdash; callsign KK6VYN
           </li>
         </ul>
+
+        <p className="mt-8 flex flex-wrap items-start gap-4 text-neutral-400 lg:mt-10 lg:text-lg">
+          <img
+            src={jaisorLogo}
+            alt="The Jaisor logo: a stylized letter J inside a hexagon flanked by chevrons"
+            className="h-12 w-auto shrink-0 sm:h-14"
+          />
+          <span>
+            I picked the handle "Jaisor" back in the 90s, in the days of
+            ICQ, BBS and dial-up modems. As the internet grew, it
+            turned out to be available on almost every "cool" new e-place
+            that came along, so I kept registering it wherever I went.
+            These days, if you spot "Jaisor" somewhere online, chances are
+            it's connected to me. I even designed a logo for it &mdash;
+            originally for my guitar builds &mdash; but it came out
+            stylized and techie enough to use across all my hobbies.
+          </span>
+        </p>
 
         <ScrollCue
           targetId="hobbies"

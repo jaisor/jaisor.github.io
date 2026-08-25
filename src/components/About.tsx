@@ -61,23 +61,26 @@ export function About() {
           </li>
         </ul>
 
-        <p className="mt-8 flex flex-wrap items-start gap-4 text-neutral-400 lg:mt-10 lg:text-lg">
-          <img
-            src={jaisorLogo}
-            alt="The Jaisor logo: a stylized letter J inside a hexagon flanked by chevrons"
-            className="h-12 w-auto shrink-0 sm:h-14"
-          />
-          <span>
-            I picked the handle "Jaisor" back in the 90s, in the days of
-            ICQ, BBS and dial-up modems. As the internet grew, it
-            turned out to be available on almost every "cool" new e-place
-            that came along, so I kept registering it wherever I went.
-            These days, if you spot "Jaisor" somewhere online, chances are
-            it's connected to me. I even designed a logo for it &mdash;
-            originally for my guitar builds &mdash; but it came out
-            stylized and techie enough to use across all my hobbies.
-          </span>
+        <h3 className="mt-12 text-lg font-semibold text-white lg:mt-16 lg:text-xl">
+          Who is Jaisor?
+        </h3>
+
+        <p className="mt-4 text-neutral-400 lg:mt-6 lg:text-lg">
+          I picked the handle "Jaisor" back in the 90s, in the days of
+          ICQ, BBS and dial-up modems. As the internet grew, it
+          turned out to be available on almost every "cool" new e-place
+          that came along, so I kept registering it wherever I went.
+          These days, if you spot "Jaisor" somewhere online, chances are
+          it's connected to me. I even designed a logo for it &mdash;
+          originally for my guitar builds &mdash; but it came out
+          stylized and techie enough to use across all my hobbies.
         </p>
+
+        <img
+          src={jaisorLogo}
+          alt="The Jaisor logo: a hexagon icon flanked by chevrons around a stylized letter J, next to the JAISOR wordmark"
+          className="mx-auto mt-4 h-auto w-1/2 lg:mt-6"
+        />
 
         <ScrollCue
           targetId="hobbies"

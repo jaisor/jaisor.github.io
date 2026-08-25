@@ -33,7 +33,7 @@ import oceanDeliveredFull from "../../assets/posts/ocean-burst-les-paul/delivere
 
 const post: Post = {
   slug: "ocean-burst-les-paul",
-  title: "A Les Paul that looks like the ocean",
+  title: "An LP that looks like the ocean",
   date: "2023-09-04",
   excerpt:
     "My third guitar kit build, made as a gift for a friend who wanted something that \"looks like the ocean.\" A botched dye job pushed me into learning to airbrush for the first time — the finish came out better than anything I'd built before it.",
@@ -138,7 +138,7 @@ const post: Post = {
       src: oceanHeadstock,
       full: oceanHeadstockFull,
       alt: "Close-up of the headstock, showing the blue-to-green burst finish and the JAISOR logo in black against a jade plant background.",
-      caption: "The JAISOR logo — every build gets one.",
+      caption: "The JAISOR logo — a must-have for all my custom builds.",
     },
     { kind: "heading", text: "Conclusion" },
     "My friend picked it up a few days later, and from what I could tell, entirely approved. If I'm honest, I credit a fair amount of this build to luck rather than skill — a bad dye job, an airbrush I'd never held before, a clear coat that fought me the whole way. But I'd rather be lucky than good, and this one came out better than anything I'd built before it.",
@@ -161,15 +161,15 @@ const post: Post = {
       kind: "image",
       src: oceanStudio,
       full: oceanStudioFull,
-      alt: "The finished guitar laid diagonally across a wrinkled fabric backdrop, headstock at the top left and body at the bottom right.",
-      caption: "Off the stand, for once.",
+      alt: "The finished guitar laid diagonally across a muslin backdrop, headstock at the top left and body at the bottom right.",
+      caption: "Yet another glam photo.",
     },
     {
       kind: "image",
       src: oceanIndoors,
       full: oceanIndoorsFull,
       alt: "The finished guitar leaning against a wooden dresser in a room lit with purple light, an amp behind it.",
-      caption: "Back home, waiting to be picked up.",
+      caption: "Waiting to be picked up.",
     },
     {
       kind: "image",

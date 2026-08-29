@@ -44,7 +44,7 @@ export const tags: Tag[] = [
     label: "Software Engineering",
     icon: Code2,
     description:
-      "I build to stay current and keep my hands on actual code. Most of my projects are paired with some kind of hardware, or with a way to visualize data that satisfies my need for eye-candy dashboards.",
+      "I build to stay tech-urrent and keep my hands on actual code. Most of my projects are paired with some kind of hardware, or with a way to visualize data that satisfies my need for eye-candy dashboards.",
     link: "https://github.com/jaisor?tab=repositories",
     linkLabel: "GitHub repos →",
   },
@@ -94,7 +94,7 @@ export const tags: Tag[] = [
     label: "Guitars and Guitar Building",
     icon: Guitar,
     description:
-      "I always regretted not knowing how to play an instrument. During the pandemic, I jokingly offered to trade some of my drones for a few guitars from a good musician and RC buddy of mine. A few years of practice later, I would never claim mastery, but I have learned a thing or two about playing and building Metal guitar and managed to write [50+ riff compositions](https://www.youtube.com/playlist?list=PLNeTetmujscX1pmeKIlLjW0Eo5L0S5yWF) and built several capable instruments.",
+      "I always regretted not knowing how to play an instrument. During the pandemic, I jokingly offered to trade some of my drones for a few guitars from a good musician and RC buddy of mine. A few years of practice later, I would never claim mastery, but I have learned a thing or two about playing and building Metal guitars and managed to write [50+ riff compositions](https://www.youtube.com/playlist?list=PLNeTetmujscX1pmeKIlLjW0Eo5L0S5yWF) and built several capable instruments.",
   },
   {
     id: "motorcycles",

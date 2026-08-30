@@ -13,7 +13,7 @@ const post: Post = {
   image: mqttHero,
   body: [
     { kind: "heading", text: "Problem" },
-    "Many IoT devices publish metrics over MQTT using JSON message payloads. Visualizing the data and monitoring it effectively can be challenging. There are solutions like Home Assistant. This is an alternative dashboard-first approach.",
+    "Many IoT devices publish metrics over MQTT using JSON message payloads. Visualizing the data and monitoring it effectively can be challenging. There are solutions like Home Assistant but this is an alternative dashboard-first approach.",
     "My goal is a self-hosted visualization system with no recurring cost and no external service dependency. Prometheus and Grafana satisfy this. Both are open source, run on modest hardware, and support alerting in addition to graphing: a threshold breach can trigger a notification rather than requiring manual inspection of a chart.",
     "Prometheus uses a pull model: it scrapes an HTTP endpoint at a fixed interval. MQTT uses a push model: devices publish to a broker, which exposes no HTTP endpoint. A bridge component is required to subscribe to MQTT topics, retain the last value of each field, and expose the result at `/metrics`.",
     { kind: "heading", text: "Approach" },

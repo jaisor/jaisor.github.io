@@ -25,8 +25,17 @@ const post: Post = {
       ].join("\n"),
     },
 
-    { kind: "heading", text: "Approach" },
-    "One node is designated as the fleet administrator and connected over USB to a workstation. This node's public key is added to every other node's `security.admin_key` list. Claude Code translates natural-language prompts into `meshtastic-python` API calls or CLI invocations, using node IDs and flags stored in a project context file rather than entered manually, and aggregates the results into a report.",
+    { kind: "heading", text: "Solution" },
+    {
+      kind: "list",
+      items: [
+        "Designate one node as a fleet manager and grant remote administrator rights for that node to the rest of the fleet.",
+        "Connect the fleet manager node to a Claude-capable workstation via USB.",
+        "Create a Claude project folder and basic access to the `meshtastic-python` API and `meshtastic` CLI, which might include granting running-user permissions to the `/dev/ttyACM0` device.",
+        "Define a `CLAUDE.md` file with a basic overview of your fleet and the administrative tasks you want to perform.",
+        "Let Claude know how to check for new nodes, verify trust, and pull a fleet status report. In my case, I used a private Meshtastic channel, which I asked Claude to monitor.",
+      ],
+    },
     {
       kind: "image",
       src: meshArchitecture,

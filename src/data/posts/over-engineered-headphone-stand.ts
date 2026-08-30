@@ -120,7 +120,7 @@ const post: Post = {
       alt: "The finished stand with headphones hanging on it, the arm glowing warm white and pink and the base lit purple around the charging pad.",
       caption: "Where it lives now.",
     },
-    "The model is on [MakerWorld](https://makerworld.com/en/models/2347791-over-engineered-headphone-stand-and-phone-charger), and the firmware lives on the [led_headphone_stand branch](https://github.com/jaisor/ESP_LED_Controller/tree/led_headphone_stand) of my ESP LED Controller repo — the same codebase I keep reusing for every LED project I start.",
+    "I posted the 3D model on [MakerWorld](https://makerworld.com/en/models/2347791-over-engineered-headphone-stand-and-phone-charger), and the firmware lives on the [led_headphone_stand branch](https://github.com/jaisor/ESP_LED_Controller/tree/led_headphone_stand) of my ESP LED Controller repo — the same codebase I keep reusing for every LED project I start.",
   ],
 };
 

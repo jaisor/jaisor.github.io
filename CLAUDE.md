@@ -173,14 +173,19 @@ components.** Components are presentation only.
   `body` is a `Block[]`: a bare string is a paragraph, and the tagged
   variants (`heading`, `code`, `list`, `note`/`warn`, `steps`, `table`,
   `image`) cover longer technical posts. `PostBody.tsx` renders them. Inside any
-  text field, backtick-delimited spans become inline code and
-  `[label](href)` becomes a link — that is the *only* markup. Both are
-  tokenised into React elements by
+  text field, backtick-delimited spans become inline code,
+  `[label](href)` becomes a link, `*text*` becomes bold, and `_text_`
+  becomes italic — that is the *only* markup. All four are tokenised
+  into React elements by
   [`Inline.tsx`](src/components/Inline.tsx), never parsed as HTML, so
   the no-unescaped-HTML rule holds. `Inline` fails closed on any href
   that isn't `http(s):`, `mailto:`, `/`, or `#` (rendering the label as
   plain text), and gives external ones `target="_blank" rel="noreferrer"`
-  automatically — so don't hand-write those attributes in copy.
+  automatically — so don't hand-write those attributes in copy. Bold
+  and italic delimiters require non-space on the inner edge and
+  non-word characters on the outer edge, so a stray `*`
+  (multiplication) or `_` (a snake_case identifier) in prose isn't
+  swallowed as markup.
   `image` is optional; without it, cards and pages draw a gradient
   placeholder carrying the first tag's icon, so no stock photo or
   remote image is ever needed.

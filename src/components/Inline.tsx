@@ -5,11 +5,17 @@ import { Fragment } from "react";
  *
  *   `backticks`        -> inline code
  *   [label](href)      -> a link
+ *   *bold*              -> bold
+ *   _italic_            -> italic
  *
- * Both are tokenised into React elements — no HTML is ever parsed out
- * of a string — so the no-unescaped-markup rule still holds.
+ * All are tokenised into React elements — no HTML is ever parsed out
+ * of a string — so the no-unescaped-markup rule still holds. Bold and
+ * italic delimiters require non-space on the inner edge and non-word
+ * characters on the outer edge, so a stray `*` (multiplication) or `_`
+ * (snake_case identifier) in prose doesn't get swallowed as markup.
  */
-const TOKEN = /`([^`]+)`|\[([^\]]+)\]\(([^)\s]+)\)/g;
+const TOKEN =
+  /`([^`]+)`|\[([^\]]+)\]\(([^)\s]+)\)|(?<!\w)\*(?!\s)([^*]+?)(?<!\s)\*(?!\w)|(?<!\w)_(?!\s)([^_]+?)(?<!\s)_(?!\w)/g;
 
 /** Fail closed: anything but http(s), mailto, or same-site is not a link. */
 function isSafeHref(href: string) {
@@ -21,7 +27,7 @@ export function Inline({ text }: { text: string }) {
   let last = 0;
 
   for (const match of text.matchAll(TOKEN)) {
-    const [raw, code, label, href] = match;
+    const [raw, code, label, href, bold, italic] = match;
     const at = match.index;
 
     if (at > last) {
@@ -38,6 +44,16 @@ export function Inline({ text }: { text: string }) {
           {code}
         </code>,
       );
+      continue;
+    }
+
+    if (bold !== undefined) {
+      out.push(<strong key={at}>{bold}</strong>);
+      continue;
+    }
+
+    if (italic !== undefined) {
+      out.push(<em key={at}>{italic}</em>);
       continue;
     }
 

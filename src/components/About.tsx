@@ -68,8 +68,8 @@ export function About() {
         <p className="mt-4 text-neutral-400 lg:mt-6 lg:text-lg">
           I picked the handle "Jaisor" back in the 90s, in the days of
           ICQ, BBS and dial-up modems. As the internet grew, it
-          turned out to be available on almost every "cool" new e-place
-          that came along, so I kept registering it wherever I went.
+          turned out to be available on almost every new e-place
+          that popped-up, so I kept picking it until it became my online identity.
           These days, if you spot "Jaisor" somewhere online, chances are
           it's connected to me. I even designed a logo for it &mdash;
           originally for my guitar builds &mdash; but it came out

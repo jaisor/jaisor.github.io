@@ -7,8 +7,8 @@ import { TagChips } from "./TagChips";
 
 /**
  * A post's dedicated page. Rendered standalone at /posts/<slug>/ by
- * src/post.tsx — deliberately not inside the main page's scroll-snap
- * container, so it scrolls normally.
+ * src/post.tsx — deliberately not inside the main page's scroll
+ * container.
  */
 export function PostPage({ post }: { post: Post }) {
   const { title, date, excerpt, tags, image, body } = post;

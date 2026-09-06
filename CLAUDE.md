@@ -13,7 +13,8 @@ publish as a fully static site on GitHub Pages**.
 
 Design intent: dark, cinematic, one page you scroll through. Fixed
 background photo behind translucent panels, amber accents on near-black
-neutrals, full-screen scroll-snap sections, and a section navigator bar
+neutrals, full-screen sections with plain (non-snapping) scroll, and a
+section navigator bar
 that fades in across the top once you scroll past the hero.
 
 ## Stack
@@ -302,8 +303,11 @@ table and a feature list once it reaches the electronics.
   Reuse it verbatim for new cards so the sections stay visually
   consistent. `[corner-shape:bevel]` is the site's signature — it
   degrades gracefully to plain rounded corners where unsupported.
-- **Sections** are `min-h-screen snap-start px-6 py-12 lg:py-24`. The
-  tighter vertical padding below `lg` is deliberate — phones need the
+- **Sections** are `min-h-screen px-6 py-12 lg:py-24`. Scrolling is plain
+  (no CSS scroll-snap) — the scroll container is just
+  `overflow-y-scroll scroll-smooth`; `ScrollCue` and `SectionNav` both
+  navigate via `scrollIntoView({ behavior: "smooth" })`, which doesn't
+  depend on snap. The tighter vertical padding below `lg` is deliberate — phones need the
   space for content. On `lg` the 96px top padding is also what keeps a
   section's heading clear of the fixed top `SectionNav` bar (~53px
   tall), so don't reduce it there.

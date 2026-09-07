@@ -423,9 +423,13 @@ Rules to hold to:
   don't add a dependency without saying why it can't be done with what's
   already here.
 - **CI stays least-privilege.** `.github/workflows/deploy.yml` grants
-  only `contents: read`, `pages: write`, `id-token: write` — do not
-  widen it, do not add a `pull_request_target` trigger, and do not let
-  workflow steps interpolate untrusted input into shell commands.
+  only `contents: read`, `pages: write`, `id-token: write`;
+  `.github/workflows/rsync-deploy.yml` grants only `contents: read`. Do
+  not widen either, do not add a `pull_request_target` trigger, and do
+  not let workflow steps interpolate untrusted input into shell
+  commands — `rsync-deploy.yml`'s secret and variables are maintainer-set
+  repository config, not attacker-reachable, which is what makes
+  embedding them via `env:` safe.
 - GitHub Pages serves over HTTPS and sets its own headers; a
   `Content-Security-Policy` can only be added here as a `<meta>` tag in
   `index.html`. If added, it must allow `fonts.googleapis.com` /
@@ -446,8 +450,22 @@ which builds and publishes `dist/` to GitHub Pages. The `react` branch
 is where day-to-day work happens; it only goes live once merged into
 `main`, typically via a PR.
 
+A push to `main` also triggers
+[`.github/workflows/rsync-deploy.yml`](.github/workflows/rsync-deploy.yml),
+which builds `dist/` again and rsyncs it to a second host over SSH — a
+CI-native mirror of [`scripts/deploy.ps1`](scripts/deploy.ps1) (same
+origin-rewrite step, same two-pass `--exclude='*.html'` then `--delete`
+rsync order, for the same reason: the remote docroot is served live with
+no build/release staging). It needs a repository **secret**
+`DEPLOY_SSH_KEY` (the private key, PEM contents) and repository
+**variables** `DEPLOY_USER` / `DEPLOY_HOST`; the job no-ops (skips
+rather than fails) if `DEPLOY_HOST`/`DEPLOY_USER` aren't set, so forks
+and repos that haven't configured a target are unaffected. The host key
+is trusted on first connection via `ssh-keyscan` inside the job — there
+is no repo-tracked `known_hosts` to pin it against.
+
 Don't commit or push unless asked. If pushing, remember that a push to
-`main` (or a merge into it) deploys the live site.
+`main` (or a merge into it) deploys the live site(s).
 
 ## Keeping this file current
 

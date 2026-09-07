@@ -6,7 +6,7 @@ export function Header() {
   return (
     <header
       id="home"
-      className="flex min-h-screen snap-start flex-col items-center justify-center gap-6 px-6 text-center lg:gap-8"
+      className="flex min-h-screen flex-col items-center justify-center gap-6 px-6 text-center lg:gap-8"
     >
       <img
         src={profile}

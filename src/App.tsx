@@ -8,7 +8,7 @@ import { Backdrop } from "./components/Backdrop";
 
 function App() {
   return (
-    <div className="relative isolate h-screen snap-y snap-proximity overflow-y-scroll scroll-smooth bg-neutral-950">
+    <div className="relative isolate h-screen overflow-y-scroll scroll-smooth bg-neutral-950">
       <Backdrop />
 
       <SectionNav />

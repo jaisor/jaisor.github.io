@@ -1,0 +1,89 @@
+name: Rsync deploy
+
+# Mirrors scripts/deploy.ps1 (see that file for the full rationale), but
+# runs natively on the Linux runner instead of shelling out to WSL — a
+# GitHub Actions ubuntu runner already has ssh and rsync, so none of
+# deploy.ps1's WSL/permission-bit workarounds are needed here.
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rsync-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    # Skip on forks / repos that haven't configured a deploy target,
+    # rather than failing the run.
+    if: vars.DEPLOY_HOST != '' && vars.DEPLOY_USER != ''
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: npm
+
+      - run: npm ci
+      - run: npm run build
+
+      # The canonical origin is baked into dist/'s HTML/XML/TXT output as
+      # plain text (canonical links, og:url/og:image, twitter:image, the
+      # JSON-LD blocks, sitemap.xml, robots.txt) rather than templated at
+      # build time — see CLAUDE.md's SEO section. Rewrite every
+      # https://jaisor.github.io reference to this deploy target's own
+      # origin so a build shipped here doesn't self-report as the GitHub
+      # Pages origin in its meta tags, sitemap, and structured data.
+      - name: Rewrite site origin for this deploy target
+        env:
+          DEPLOY_HOST: ${{ vars.DEPLOY_HOST }}
+        run: |
+          set -euo pipefail
+          old_origin="https://jaisor.github.io"
+          new_origin="https://$DEPLOY_HOST"
+          if [ "$old_origin" != "$new_origin" ]; then
+            grep -rlZ "$old_origin" dist --include='*.html' --include='*.xml' --include='*.txt' \
+              | xargs -0 -r sed -i "s#$old_origin#$new_origin#g"
+          fi
+
+      - name: Set up SSH
+        env:
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          DEPLOY_HOST: ${{ vars.DEPLOY_HOST }}
+        run: |
+          set -euo pipefail
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts
+
+      # This target is served live straight out of the synced directory
+      # (no build/release staging on the remote end), so a single rsync
+      # pass isn't safe: rsync gives no ordering guarantee between
+      # overwriting an HTML entry file and finishing the upload of the
+      # content-hashed JS/CSS assets it references, nor between deleting
+      # an orphaned old asset and finishing the new HTML that stops
+      # referencing it. A visitor hitting the site mid-sync could land on
+      # a brand-new index.html whose bundle hasn't arrived yet (or was
+      # just deleted).
+      #
+      # Fix (same as scripts/wsl-rsync-deploy.sh): push every non-HTML
+      # file first with no deletion, so every asset a new HTML page could
+      # reference is already in place, then push everything (HTML
+      # included) with --delete last, so no HTML file goes live before
+      # its assets exist, and stale assets are only removed once nothing
+      # new needs them.
+      - name: Rsync dist/ to remote host
+        env:
+          SSH_OPTS: -i ~/.ssh/deploy_key -o IdentitiesOnly=yes
+          REMOTE_TARGET: ${{ vars.DEPLOY_USER }}@${{ vars.DEPLOY_HOST }}:dist/
+        run: |
+          set -euo pipefail
+          rsync -avz --exclude='*.html' -e "ssh $SSH_OPTS" dist/ "$REMOTE_TARGET"
+          rsync -avz --delete -e "ssh $SSH_OPTS" dist/ "$REMOTE_TARGET"

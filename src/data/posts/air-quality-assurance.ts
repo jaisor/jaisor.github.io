@@ -7,15 +7,15 @@ const post: Post = {
   title: "Air Quality Assurance",
   date: "2026-09-05",
   excerpt:
-    "Adding BME688 gas sensing and a BSEC-style IAQ estimator to a WiFi climate sensor, then building a Grafana dashboard for it, to verify office air filtration before moving from PLA/PETG to more aggressive filaments.",
+    "Adding BME688 gas sensing and a BSEC-style IAQ estimator to my WiFi climate sensor, then building a Grafana dashboard for it, to verify office air filtration before moving from PLA/PETG to more aggressive filaments.",
   tags: ["electronics", "software-engineering"],
   image: dashboard,
   body: [
     { kind: "heading", text: "Problem" },
-    "My home office  doubles as my maker space. I 3D print, solder electronics and occasionally glue and paint miniatures. Filament in regular use is PLA and PETG, both low-emission at typical nozzle temperatures. Moving to more aggressive materials (ABS, ASA, nylon, and similar) raises VOC and ultrafine-particle output during printing. The room has carbon and HEPA filtration installed, but its effectiveness had never been measured, only assumed from the filter's rated specifications.",
-    "The requirement was a continuous, quantified air-quality reading in the room, so filtration performance can be verified before more aggressive filaments are introduced, and any degradation over a filter's service life is visible before it becomes a problem.",
+    "My home office  doubles as my maker space. I 3D print, solder electronics and occasionally glue and paint miniatures. I want to try more aggressive materials (ABS, ASA, nylon, and similar) with higher VOC and ultrafine-particle output during printing. I am installing a carbon and HEPA filtration system to my printer, but want to confirm its effectiveness.",
+    "I am leveraging few of my past projects, including my WiFi climate sensor, Grafana dashboards, and Home Assistant integrations.",
     { kind: "heading", text: "Approach" },
-    "An existing project of mine, [wifi-climate-sensor](https://github.com/jaisor/wifi-climate-sensor), already covers temperature and humidity: ESP8266/ESP32 firmware with a built-in web UI, MQTT publishing, including Home Assistant auto-discovery, across AHT20, BME280, DHT22, and DS18B20 sensors. None of those expose gas resistance, so none can drive an air-quality metric. I had to add BME688 support first.",
+    "An existing project of mine, [wifi-climate-sensor](https://github.com/jaisor/wifi-climate-sensor), already covers temperature and humidity: ESP8266/ESP32 firmware with a built-in web UI, MQTT publishing, including Home Assistant auto-discovery, across AHT20, BME280, DHT22, and DS18B20 sensors. I just need to add support for an air-sniffer sensor.",
     "The BME688 and BME680 answer on the same I2C address and share a chip ID; a repeated-start read of the variant register is what tells them apart. Detection is automatic at boot, alongside the existing sensor autodetection, and the result is persisted so a restart does not repeat the I2C probe.",
     {
       kind: "table",
@@ -27,7 +27,7 @@ const post: Post = {
         ["gas_resistance", "BME688 gas heater", "raw ohms; heated plate resistance, falls as VOC concentration rises"],
       ],
     },
-    "The gas heater takes on the order of a few hundred milliseconds to settle, so a reading is split into `beginReading()` and a later `endReading()` poll rather than blocking the sensor loop for that duration.",
+    "The gas heater takes a moment to settle, so a reading is split into `beginReading()` and a later `endReading()` poll rather than blocking the sensor loop for that duration.",
     { kind: "heading", text: "Estimating IAQ" },
     {
       kind: "note",
@@ -88,7 +88,7 @@ iaq   = (100 - score) * 5                           // 0-500, lower is cleaner`,
     "The MQTT JSON payload gains `gas_resistance_ohms`, `iaq`, `iaq_rating`, `iaq_accuracy`, and `iaq_accuracy_text` alongside the existing temperature and humidity fields, published on the same topic and interval as before. Home Assistant MQTT auto-discovery adds two entities: an `iaq` sensor with `rating` and `accuracy` carried as JSON attributes on the same state topic, and a separate `iaq_accuracy` sensor for the raw 0-3 value, so either can drive an automation or a dashboard card directly without a template sensor.",
     "The device's own web UI gained a gas-sensor panel: the live IAQ value, its rating and accuracy text, tracked time, compensated gas resistance, and baseline, plus a rolling sparkline of IAQ and baseline over the last 12 hours, sampled every 15 minutes and held in RAM rather than flash to avoid wearing it at that write cadence.",
     { kind: "heading", text: "Dashboard" },
-    "The existing MQTT-to-Grafana pipeline (a Mosquitto broker, a JSON-to-Prometheus exporter, and Grafana, described in an [earlier post](/posts/mqtt-to-grafana-dashboards/)) already scrapes this device's topic, so the new fields were available as Prometheus series without further plumbing. The dashboard itself was built by giving an AI assistant a sample MQTT payload from the device plus a couple of existing dashboards in this Grafana instance as a style reference, then iterating on panel choice and threshold coloring.",
+    "My existing MQTT-to-Grafana pipeline (a Mosquitto broker, a JSON-to-Prometheus exporter, and Grafana, described in an [earlier post](/posts/mqtt-to-grafana-dashboards/)) already polls this device's topic, so the new fields were available as Prometheus series without further plumbing. The dashboard itself was built by giving an AI assistant a sample MQTT payload from the device plus a couple of my existing sensor dashboards as a style reference.",
     {
       kind: "code",
       label: "IAQ gauge query",

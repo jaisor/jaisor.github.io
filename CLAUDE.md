@@ -13,7 +13,8 @@ publish as a fully static site on GitHub Pages**.
 
 Design intent: dark, cinematic, one page you scroll through. Fixed
 background photo behind translucent panels, amber accents on near-black
-neutrals, full-screen scroll-snap sections, and a section navigator bar
+neutrals, full-screen sections with plain (non-snapping) scroll, and a
+section navigator bar
 that fades in across the top once you scroll past the hero.
 
 ## Stack
@@ -173,14 +174,19 @@ components.** Components are presentation only.
   `body` is a `Block[]`: a bare string is a paragraph, and the tagged
   variants (`heading`, `code`, `list`, `note`/`warn`, `steps`, `table`,
   `image`) cover longer technical posts. `PostBody.tsx` renders them. Inside any
-  text field, backtick-delimited spans become inline code and
-  `[label](href)` becomes a link — that is the *only* markup. Both are
-  tokenised into React elements by
+  text field, backtick-delimited spans become inline code,
+  `[label](href)` becomes a link, `*text*` becomes bold, and `_text_`
+  becomes italic — that is the *only* markup. All four are tokenised
+  into React elements by
   [`Inline.tsx`](src/components/Inline.tsx), never parsed as HTML, so
   the no-unescaped-HTML rule holds. `Inline` fails closed on any href
   that isn't `http(s):`, `mailto:`, `/`, or `#` (rendering the label as
   plain text), and gives external ones `target="_blank" rel="noreferrer"`
-  automatically — so don't hand-write those attributes in copy.
+  automatically — so don't hand-write those attributes in copy. Bold
+  and italic delimiters require non-space on the inner edge and
+  non-word characters on the outer edge, so a stray `*`
+  (multiplication) or `_` (a snake_case identifier) in prose isn't
+  swallowed as markup.
   `image` is optional; without it, cards and pages draw a gradient
   placeholder carrying the first tag's icon, so no stock photo or
   remote image is ever needed.
@@ -297,8 +303,11 @@ table and a feature list once it reaches the electronics.
   Reuse it verbatim for new cards so the sections stay visually
   consistent. `[corner-shape:bevel]` is the site's signature — it
   degrades gracefully to plain rounded corners where unsupported.
-- **Sections** are `min-h-screen snap-start px-6 py-12 lg:py-24`. The
-  tighter vertical padding below `lg` is deliberate — phones need the
+- **Sections** are `min-h-screen px-6 py-12 lg:py-24`. Scrolling is plain
+  (no CSS scroll-snap) — the scroll container is just
+  `overflow-y-scroll scroll-smooth`; `ScrollCue` and `SectionNav` both
+  navigate via `scrollIntoView({ behavior: "smooth" })`, which doesn't
+  depend on snap. The tighter vertical padding below `lg` is deliberate — phones need the
   space for content. On `lg` the 96px top padding is also what keeps a
   section's heading clear of the fixed top `SectionNav` bar (~53px
   tall), so don't reduce it there.
@@ -414,9 +423,13 @@ Rules to hold to:
   don't add a dependency without saying why it can't be done with what's
   already here.
 - **CI stays least-privilege.** `.github/workflows/deploy.yml` grants
-  only `contents: read`, `pages: write`, `id-token: write` — do not
-  widen it, do not add a `pull_request_target` trigger, and do not let
-  workflow steps interpolate untrusted input into shell commands.
+  only `contents: read`, `pages: write`, `id-token: write`;
+  `.github/workflows/rsync-deploy.yml` grants only `contents: read`. Do
+  not widen either, do not add a `pull_request_target` trigger, and do
+  not let workflow steps interpolate untrusted input into shell
+  commands — `rsync-deploy.yml`'s secret and variables are maintainer-set
+  repository config, not attacker-reachable, which is what makes
+  embedding them via `env:` safe.
 - GitHub Pages serves over HTTPS and sets its own headers; a
   `Content-Security-Policy` can only be added here as a `<meta>` tag in
   `index.html`. If added, it must allow `fonts.googleapis.com` /
@@ -437,8 +450,22 @@ which builds and publishes `dist/` to GitHub Pages. The `react` branch
 is where day-to-day work happens; it only goes live once merged into
 `main`, typically via a PR.
 
+A push to `main` also triggers
+[`.github/workflows/rsync-deploy.yml`](.github/workflows/rsync-deploy.yml),
+which builds `dist/` again and rsyncs it to a second host over SSH — a
+CI-native mirror of [`scripts/deploy.ps1`](scripts/deploy.ps1) (same
+origin-rewrite step, same two-pass `--exclude='*.html'` then `--delete`
+rsync order, for the same reason: the remote docroot is served live with
+no build/release staging). It needs a repository **secret**
+`DEPLOY_SSH_KEY` (the private key, PEM contents) and repository
+**variables** `DEPLOY_USER` / `DEPLOY_HOST`; the job no-ops (skips
+rather than fails) if `DEPLOY_HOST`/`DEPLOY_USER` aren't set, so forks
+and repos that haven't configured a target are unaffected. The host key
+is trusted on first connection via `ssh-keyscan` inside the job — there
+is no repo-tracked `known_hosts` to pin it against.
+
 Don't commit or push unless asked. If pushing, remember that a push to
-`main` (or a merge into it) deploys the live site.
+`main` (or a merge into it) deploys the live site(s).
 
 ## Keeping this file current
 

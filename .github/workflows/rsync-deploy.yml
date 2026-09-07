@@ -4,31 +4,39 @@ name: Rsync deploy
 # runs natively on the Linux runner instead of shelling out to WSL — a
 # GitHub Actions ubuntu runner already has ssh and rsync, so none of
 # deploy.ps1's WSL/permission-bit workarounds are needed here.
+#
+# The deploy target's firewall only accepts SSH from Google's IAP range
+# (35.235.240.0/20), not from the runner's ephemeral Azure address, so the
+# runner federates into GCP with its OIDC token and reaches port 22 through
+# an IAP TCP tunnel bound to localhost instead of dialing the host directly.
+
 on:
   push:
     branches: [main]
 
 permissions:
   contents: read
+  id-token: write # required to mint the OIDC token for Workload Identity Federation
 
 concurrency:
   group: rsync-deploy
   cancel-in-progress: true
+
+env:
+  TUNNEL_PORT: "2222"
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     # Skip on forks / repos that haven't configured a deploy target,
     # rather than failing the run.
-    if: vars.DEPLOY_HOST != '' && vars.DEPLOY_USER != ''
+    if: vars.DEPLOY_HOST != '' && vars.DEPLOY_USER != '' && vars.GCP_INSTANCE != ''
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: lts/*
           cache: npm
-
       - run: npm ci
       - run: npm run build
 
@@ -54,14 +62,54 @@ jobs:
       - name: Set up SSH
         env:
           DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
-          DEPLOY_HOST: ${{ vars.DEPLOY_HOST }}
+          DEPLOY_HOST_KEY: ${{ vars.DEPLOY_HOST_KEY }}
         run: |
           set -euo pipefail
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
           printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts 2>/dev/null || true
+          # The host isn't reachable on :22 from the runner any more, so
+          # ssh-keyscan against DEPLOY_HOST can't work. Pin the VM's public
+          # host key (contents of its /etc/ssh/ssh_host_ed25519_key.pub)
+          # against the tunnel's local endpoint instead. Without the var set,
+          # StrictHostKeyChecking=accept-new below degrades to trust-on-first-
+          # use, which on an ephemeral runner means no verification at all.
+          if [ -n "${DEPLOY_HOST_KEY:-}" ]; then
+            printf '[localhost]:%s %s\n' "$TUNNEL_PORT" "$DEPLOY_HOST_KEY" > ~/.ssh/known_hosts
+            chmod 600 ~/.ssh/known_hosts
+          fi
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          project_id: ${{ vars.GCP_PROJECT }}
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+
+      - uses: google-github-actions/setup-gcloud@v2
+
+      - name: Open IAP tunnel to the VM's SSH port
+        env:
+          GCP_INSTANCE: ${{ vars.GCP_INSTANCE }}
+          GCP_ZONE: ${{ vars.GCP_ZONE }}
+        run: |
+          set -euo pipefail
+          gcloud compute start-iap-tunnel "$GCP_INSTANCE" 22 \
+            --local-host-port="localhost:${TUNNEL_PORT}" \
+            --zone="$GCP_ZONE" \
+            > /tmp/iap-tunnel.log 2>&1 &
+          echo "$!" > /tmp/iap-tunnel.pid
+          for _ in $(seq 30); do
+            if nc -z localhost "$TUNNEL_PORT" 2>/dev/null; then
+              echo "IAP tunnel listening on localhost:${TUNNEL_PORT}"
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "IAP tunnel failed to come up:" >&2
+          cat /tmp/iap-tunnel.log >&2
+          exit 1
 
       # This target is served live straight out of the synced directory
       # (no build/release staging on the remote end), so a single rsync
@@ -79,11 +127,19 @@ jobs:
       # included) with --delete last, so no HTML file goes live before
       # its assets exist, and stale assets are only removed once nothing
       # new needs them.
-      - name: Rsync dist/ to remote host
+      - name: Rsync dist/ through the tunnel
         env:
-          SSH_OPTS: -i ~/.ssh/deploy_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new
-          REMOTE_TARGET: ${{ vars.DEPLOY_USER }}@${{ vars.DEPLOY_HOST }}:dist/
+          REMOTE_TARGET: ${{ vars.DEPLOY_USER }}@localhost:dist/
         run: |
           set -euo pipefail
+          SSH_OPTS="-i ~/.ssh/deploy_key -o IdentitiesOnly=yes"
+          SSH_OPTS="$SSH_OPTS -o StrictHostKeyChecking=accept-new -p ${TUNNEL_PORT}"
           rsync -avz --exclude='*.html' -e "ssh $SSH_OPTS" dist/ "$REMOTE_TARGET"
           rsync -avz --delete -e "ssh $SSH_OPTS" dist/ "$REMOTE_TARGET"
+
+      - name: Close IAP tunnel
+        if: always()
+        run: |
+          if [ -f /tmp/iap-tunnel.pid ]; then
+            kill "$(cat /tmp/iap-tunnel.pid)" 2>/dev/null || true
+          fi

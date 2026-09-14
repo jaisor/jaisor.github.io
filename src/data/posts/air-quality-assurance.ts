@@ -10,6 +10,8 @@ const post: Post = {
     "Adding BME688 gas sensing and a BSEC-style IAQ estimator to my WiFi climate sensor, then building a Grafana dashboard for it, to verify office air filtration before moving from PLA/PETG to more aggressive filaments.",
   tags: ["electronics", "software-engineering"],
   image: dashboard,
+  imageAlt:
+    "A dark Grafana dashboard titled Office Air Quality, with gauge and trend panels for IAQ index, calibration state, temperature, humidity, barometric pressure, and gas resistance.",
   body: [
     { kind: "heading", text: "Problem" },
     "My home office  doubles as my maker space. I 3D print, solder electronics and occasionally glue and paint miniatures. I want to try more aggressive materials (ABS, ASA, nylon, and similar) with higher VOC and ultrafine-particle output during printing. I am installing a carbon and HEPA filtration system to my printer, but want to confirm its effectiveness.",

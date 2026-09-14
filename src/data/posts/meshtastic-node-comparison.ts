@@ -166,6 +166,8 @@ const post: Post = {
     "A sortable, filterable comparison of standalone Meshtastic-compatible LoRa nodes across RF transmit power, operating power draw, and price, gathered from vendor specifications.",
   tags: ["electronics"],
   image: hero,
+  imageAlt:
+    "Illustration: six LoRa node circuit boards and four status icons linked in a mesh around a large amber question mark, with PRICE, DISTANCE, and POWER labels below it.",
   body: [
     { kind: "heading", text: "Brief" },
     "The Meshtastic-compatible hardware market now spans more than a dozen active LoRa node designs across Heltec, RAK, Seeed, and Muzi Works alone, with new SKUs appearing every few months; the [official device list](https://meshtastic.org/docs/hardware/devices/) covers several more manufacturers. Tracking capability differences by re-reading individual product pages has become a chore. Thankfully the list of important criteria is short: RF transmit power, electrical power consumption, price, and auxiliary I/O (display, GPS, I2C breakout for sensors). With the help of AI, I put this list together and plan on keeping it current as new offerings appear.",

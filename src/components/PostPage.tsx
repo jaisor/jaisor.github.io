@@ -11,7 +11,7 @@ import { TagChips } from "./TagChips";
  * container.
  */
 export function PostPage({ post }: { post: Post }) {
-  const { title, date, excerpt, tags, image, body } = post;
+  const { title, date, excerpt, tags, body } = post;
 
   return (
     <div className="relative isolate min-h-screen bg-neutral-950">
@@ -42,7 +42,7 @@ export function PostPage({ post }: { post: Post }) {
         </header>
 
         <PostImage
-          image={image}
+          photo={post}
           tags={tags}
           className="mt-10 h-64 rounded-xl border border-neutral-800 [corner-shape:bevel] lg:h-80"
         />

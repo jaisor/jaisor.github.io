@@ -43,21 +43,21 @@ export function About() {
                 href={url}
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center gap-3 rounded-xl border border-neutral-800 bg-neutral-900/50 px-4 py-3 text-sm shadow-sm shadow-black/20 transition [corner-shape:bevel] hover:border-amber-500/40 hover:shadow-md hover:shadow-black/30"
+                className="card card-link flex items-center gap-3 px-4 py-3 text-sm"
               >
                 <ScrollText className="h-4 w-4 shrink-0 text-amber-500" />
                 <span className="text-neutral-300">
                   <span className="font-medium text-amber-500">
                     US {number}
                   </span>{" "}
-                  &mdash; {title}
+                  &middot; {title}
                 </span>
               </a>
             </li>
           ))}
-          <li className="flex items-center gap-3 rounded-xl border border-neutral-800 bg-neutral-900/50 px-4 py-3 text-sm text-neutral-300 shadow-sm shadow-black/20 [corner-shape:bevel]">
+          <li className="card flex items-center gap-3 px-4 py-3 text-sm text-neutral-300">
             <Radio className="h-4 w-4 shrink-0 text-amber-500" />
-            FCC Amateur Radio (HAM) License holder &mdash; callsign KK6VYN
+            FCC Amateur Radio (HAM) License holder, callsign KK6VYN
           </li>
         </ul>
 
@@ -71,9 +71,9 @@ export function About() {
           turned out to be available on almost every new e-place
           that popped-up, so I kept picking it until it became my online identity.
           These days, if you spot "Jaisor" somewhere online, chances are
-          it's connected to me. I even designed a logo for it &mdash;
-          originally for my guitar builds &mdash; but it came out
-          stylized and techie enough to use across all my hobbies.
+          it's connected to me. I even designed a logo for it,
+          originally for my guitar builds, but it came out stylized and
+          techie enough to use across all my hobbies.
         </p>
 
         <img

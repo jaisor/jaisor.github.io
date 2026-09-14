@@ -4,6 +4,29 @@
   --font-sans: "Space Grotesk", system-ui, "Segoe UI", Roboto, sans-serif;
 }
 
+/**
+ * The site's card surface, shared by the Hobbies cards, the post cards
+ * and the Braggables rows. It used to be a ~180-character utility
+ * string copy-pasted into four components, which is exactly the kind of
+ * thing that drifts; one definition here keeps them identical and keeps
+ * the markup readable. `corner-shape` is written as plain CSS because
+ * it is the site's signature and degrades to plain rounded corners
+ * wherever it is unsupported.
+ */
+@utility card {
+  @apply rounded-xl border border-neutral-800 bg-neutral-900/50 shadow-sm shadow-black/20;
+  corner-shape: bevel;
+}
+
+/** The hover lift. Add alongside `card` when the card is a link. */
+@utility card-link {
+  @apply transition;
+
+  &:hover {
+    @apply border-amber-500/40 shadow-md shadow-black/30;
+  }
+}
+
 html {
   color-scheme: dark;
 }

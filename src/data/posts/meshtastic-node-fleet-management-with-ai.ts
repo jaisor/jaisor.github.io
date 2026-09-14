@@ -10,6 +10,8 @@ const post: Post = {
     "A single USB-connected admin node and an LLM session using meshtastic-python provide discovery, remote administration, and fleet status reporting for a multi-node Meshtastic mesh, driven by natural-language prompts.",
   tags: ["software-engineering"],
   image: meshHero,
+  imageAlt:
+    "Illustration: six hexagonal field nodes in concentric rings around the Meshtastic logo, with one admin node wired over USB to a workstation.",
   body: [
     { kind: "heading", text: "Problem" },
     "Remote administration provides reachability but not operational aggregation. Each administrative action requires a separate command specifying the port, destination node ID, and relevant flags. Failure modes are not surfaced explicitly: an omitted `--dest` flag reconfigures the local admin node instead of the target; an incorrect node ID causes the command to wait the full 300-second default timeout; an acknowledgment (ACK) confirms only that a packet was relayed, not that the change was applied. Firmware version, battery level, and uptime are queried per node and require manual aggregation across the fleet.",

@@ -19,9 +19,11 @@ const post: Post = {
   title: "An over-engineered headphone stand",
   date: "2026-02-16",
   excerpt:
-    "I wanted a headphone stand. I also wanted a better wireless charger. And I will take any excuse to add addressable LEDs to something — so all three became one object, with an ESP32-C3 and a web UI.",
+    "I wanted a headphone stand. I also wanted a better wireless charger. And I will take any excuse to add addressable LEDs to something, so all three became one object, with an ESP32-C3 and a web UI.",
   tags: ["3d-printing", "electronics"],
   image: standHero,
+  imageAlt:
+    "CAD render of a black headphone stand with a hexagonal base, lit by magenta LED strips running up the column, along the headband arm, and around the wireless charging pad in the base.",
   body: [
     "I have a weakness for neon lighting, and an ongoing habit of putting addressable LEDs on things that did not ask for them. I also genuinely needed two boring objects: somewhere to hang my headphones, and a wireless charger with more power than the one I had.",
     "Rather than buy two things, I designed one. The name is not ironic — it really is over-engineered, and that was the point.",

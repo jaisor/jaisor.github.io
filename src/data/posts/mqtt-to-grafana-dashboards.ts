@@ -11,6 +11,8 @@ const post: Post = {
     "A four-container Docker stack that stores and visualizes MQTT metrics using Prometheus and Grafana, including alerting, at no licensing cost.",
   tags: ["software-engineering"],
   image: mqttHero,
+  imageAlt:
+    "A dark Grafana dashboard with one row per room, each showing power and mode status, a room-temperature gauge and trend chart, desired temperature, fan setting, and WiFi signal.",
   body: [
     { kind: "heading", text: "Problem" },
     "Many IoT devices publish metrics over MQTT using JSON message payloads. Visualizing the data and monitoring it effectively can be challenging. There are solutions like Home Assistant but this is an alternative dashboard-first approach.",

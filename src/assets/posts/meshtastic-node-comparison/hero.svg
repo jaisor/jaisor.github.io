@@ -1,0 +1,199 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <!--
+    Hero: LoRa node boards and status icons wired into a mesh graph
+    around an angular question mark, with the three axes the post
+    compares on tagged beneath it. The mark is drawn from straight
+    segments with 12px chamfers rather than arcs, to echo the site's
+    [corner-shape:bevel] rather than read as typography.
+    Rendered through <img>, so the page's CSS and webfont don't reach
+    inside: opaque background rect, generic font stacks, site palette.
+    Crops: the post page shows roughly y 48-581 on desktop and the
+    center ~840px of width on a phone, so the mark and the three pills
+    stay well inside both bands; the outer boards are meant to clip.
+  -->
+  <defs>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.22" />
+      <stop offset="55%" stop-color="#f59e0b" stop-opacity="0.06" />
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0" />
+    </radialGradient>
+    <style>
+      .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+      .pcb { fill: #171717; stroke: #262626; stroke-width: 2; }
+      .part { fill: #0f0f0f; stroke: #2e2e2e; stroke-width: 1.5; }
+      .pad { fill: #3f3f3f; }
+      .trace { stroke: #f59e0b; stroke-opacity: 0.22; stroke-width: 1.5; fill: none; }
+      .led { fill: #f59e0b; fill-opacity: 0.8; }
+      .ring { fill: none; stroke: #f59e0b; stroke-opacity: 0.11; stroke-width: 2; }
+      .mesh { fill: none; stroke: #f59e0b; stroke-opacity: 0.2; stroke-width: 2; }
+      .icon-case { fill: #171717; stroke: #f59e0b; stroke-opacity: 0.55; stroke-width: 2.5; }
+      .icon-on { fill: #f59e0b; fill-opacity: 0.85; }
+      .icon-off { fill: #3f3f3f; }
+      .pill { fill: #171717; stroke: #f59e0b; stroke-opacity: 0.45; stroke-width: 2; }
+    </style>
+
+    <!-- Board with an OLED and a castellated LoRa can -->
+    <g id="board-oled">
+      <path class="pcb" d="M -68,-48 H 68 L 78,-38 V 38 L 68,48 H -68 L -78,38 V -38 Z" />
+      <rect class="part" x="-60" y="-38" width="74" height="36" rx="2" />
+      <rect x="-54" y="-32" width="62" height="24" fill="#0a0a0a" />
+      <rect x="-49" y="-27" width="34" height="5" fill="#f59e0b" fill-opacity="0.5" />
+      <rect x="-49" y="-18" width="46" height="4" fill="#525252" />
+      <rect class="part" x="26" y="-34" width="36" height="32" rx="2" />
+      <rect class="part" x="-24" y="6" width="58" height="28" rx="2" />
+      <path class="trace" d="M -24,14 H -44 V -2" />
+      <path class="trace" d="M 34,20 H 52" />
+      <circle cx="58" cy="20" r="6" fill="#0f0f0f" stroke="#4a4a4a" stroke-width="2" />
+      <circle class="led" cx="44" cy="4" r="3" />
+      <rect x="-78" y="-10" width="10" height="20" rx="2" fill="#3f3f3f" />
+      <g class="pad">
+        <rect x="-66" y="38" width="6" height="7" />
+        <rect x="-53" y="38" width="6" height="7" />
+        <rect x="-40" y="38" width="6" height="7" />
+        <rect x="-27" y="38" width="6" height="7" />
+        <rect x="-14" y="38" width="6" height="7" />
+        <rect x="-1" y="38" width="6" height="7" />
+        <rect x="12" y="38" width="6" height="7" />
+        <rect x="25" y="38" width="6" height="7" />
+        <rect x="38" y="38" width="6" height="7" />
+      </g>
+    </g>
+
+    <!-- Tracker board: GPS patch antenna in the corner -->
+    <g id="board-gps">
+      <path class="pcb" d="M -68,-48 H 68 L 78,-38 V 38 L 68,48 H -68 L -78,38 V -38 Z" />
+      <rect class="part" x="16" y="-40" width="46" height="46" rx="2" />
+      <rect x="22" y="-34" width="34" height="34" fill="#141414" stroke="#3a3a3a" stroke-width="1.5" />
+      <path d="M 28,-6 V -28 H 50" fill="none" stroke="#f59e0b" stroke-opacity="0.32" stroke-width="2" />
+      <rect class="part" x="-34" y="-36" width="32" height="30" rx="2" />
+      <rect class="part" x="-68" y="2" width="56" height="30" rx="2" />
+      <path class="trace" d="M -12,18 H 8 V 8" />
+      <circle cx="-70" cy="-22" r="6" fill="#0f0f0f" stroke="#4a4a4a" stroke-width="2" />
+      <circle class="led" cx="4" cy="16" r="3" />
+      <g class="pad">
+        <rect x="18" y="38" width="6" height="7" />
+        <rect x="31" y="38" width="6" height="7" />
+        <rect x="44" y="38" width="6" height="7" />
+        <rect x="57" y="38" width="6" height="7" />
+        <rect x="-66" y="-46" width="6" height="7" />
+        <rect x="-53" y="-46" width="6" height="7" />
+        <rect x="-40" y="-46" width="6" height="7" />
+      </g>
+    </g>
+
+    <!-- Bare core module: shielded can, castellated edges -->
+    <g id="board-core">
+      <path class="pcb" d="M -48,-34 H 48 L 56,-26 V 26 L 48,34 H -48 L -56,26 V -26 Z" />
+      <rect class="part" x="-34" y="-22" width="54" height="38" rx="2" />
+      <path d="M -26,-14 H 12 M -26,-4 H 12 M -26,6 H 12" stroke="#222" stroke-width="1.5" fill="none" />
+      <circle cx="36" cy="-12" r="6" fill="#0f0f0f" stroke="#4a4a4a" stroke-width="2" />
+      <circle class="led" cx="34" cy="14" r="3" />
+      <g class="pad">
+        <rect x="-44" y="-33" width="6" height="7" />
+        <rect x="-31" y="-33" width="6" height="7" />
+        <rect x="-18" y="-33" width="6" height="7" />
+        <rect x="-5" y="-33" width="6" height="7" />
+        <rect x="8" y="-33" width="6" height="7" />
+        <rect x="-44" y="26" width="6" height="7" />
+        <rect x="-31" y="26" width="6" height="7" />
+        <rect x="-18" y="26" width="6" height="7" />
+        <rect x="-5" y="26" width="6" height="7" />
+        <rect x="8" y="26" width="6" height="7" />
+        <rect x="21" y="26" width="6" height="7" />
+      </g>
+    </g>
+
+    <!--
+      The three status icons sit on a panel the same height as a board,
+      so the mesh lines terminate on a node rather than in mid-air and
+      the icons read as members of the same family.
+    -->
+    <path id="node-panel" class="pcb"
+          d="M -44,-48 H 44 L 54,-38 V 38 L 44,48 H -44 L -54,38 V -38 Z" />
+
+    <!-- Signal strength: four bars, last one unlit -->
+    <g id="icon-signal">
+      <use href="#node-panel" />
+      <rect class="icon-on" x="-29" y="7" width="10" height="16" />
+      <rect class="icon-on" x="-13" y="-3" width="10" height="26" />
+      <rect class="icon-on" x="3" y="-13" width="10" height="36" />
+      <rect class="icon-off" x="19" y="-23" width="10" height="46" />
+    </g>
+
+    <!-- Battery, two thirds charged -->
+    <g id="icon-battery">
+      <use href="#node-panel" />
+      <path class="icon-case" d="M -26,-16 H 18 L 24,-10 V 10 L 18,16 H -26 L -32,10 V -10 Z" />
+      <rect class="icon-off" x="25" y="-7" width="7" height="14" />
+      <rect class="icon-on" x="-22" y="-8" width="10" height="16" />
+      <rect class="icon-on" x="-8" y="-8" width="10" height="16" />
+      <rect class="icon-off" x="6" y="-8" width="10" height="16" />
+    </g>
+
+    <!-- Map location: chamfered pin -->
+    <g id="icon-pin">
+      <use href="#node-panel" />
+      <path class="icon-case" d="M -12,-25 H 12 L 20,-17 V -1 L 12,7 H 6 L 0,25 L -6,7 H -12 L -20,-1 V -17 Z" />
+      <path class="icon-on" d="M -3,-15 H 3 L 6,-12 V -6 L 3,-3 H -3 L -6,-6 V -12 Z" />
+    </g>
+
+    <!-- Cost: a dollar sign cut from the same chamfered segments -->
+    <g id="icon-dollar">
+      <use href="#node-panel" />
+      <g fill="none" stroke="#f59e0b" stroke-opacity="0.85" stroke-width="8">
+        <path d="M 18,-26 H -10 L -18,-18 V -8 L -10,0 H 10 L 18,8 V 18 L 10,26 H -18" />
+        <path d="M 0,-36 V 36" />
+      </g>
+    </g>
+  </defs>
+
+  <rect width="1200" height="630" fill="#0a0a0a" />
+  <ellipse cx="600" cy="300" rx="340" ry="270" fill="url(#glow)" />
+  <ellipse class="ring" cx="600" cy="300" rx="232" ry="182" stroke-dasharray="2 12" />
+
+  <!-- Mesh: every node linked to its neighbors, drawn under the nodes -->
+  <g class="mesh">
+    <path d="M 150,150 L 362,122" />
+    <path d="M 362,122 L 600,120" />
+    <path d="M 600,120 L 845,116" />
+    <path d="M 845,116 L 1058,192" />
+    <path d="M 150,150 L 112,376" />
+    <path d="M 112,376 L 228,534" />
+    <path d="M 1058,192 L 1090,388" />
+    <path d="M 1090,388 L 976,540" />
+    <path d="M 362,122 L 285,300" />
+    <path d="M 285,300 L 112,376" />
+    <path d="M 150,150 L 285,300" />
+    <path d="M 845,116 L 1090,388" />
+  </g>
+
+  <!-- Nodes: six boards and four status icons -->
+  <use href="#board-oled" transform="translate(150,150) rotate(-13)" />
+  <use href="#board-gps" transform="translate(362,122) rotate(8) scale(0.92)" />
+  <use href="#board-core" transform="translate(845,116) rotate(-9)" />
+  <use href="#board-oled" transform="translate(1058,192) rotate(11) scale(0.95)" />
+  <use href="#board-oled" transform="translate(228,534) rotate(-6) scale(0.9)" />
+  <use href="#board-gps" transform="translate(976,540) rotate(7) scale(0.95)" />
+
+  <use href="#icon-pin" transform="translate(600,120)" />
+  <use href="#icon-dollar" transform="translate(285,300)" />
+  <use href="#icon-signal" transform="translate(112,376)" />
+  <use href="#icon-battery" transform="translate(1090,388)" />
+
+  <!-- The question, built from chamfered straight segments -->
+  <path d="M 538,246 V 228 L 550,216 H 650 L 662,228 V 288 L 650,300 H 612 L 600,312 V 356"
+        fill="none" stroke="#f59e0b" stroke-width="26" stroke-linejoin="miter" />
+  <path fill="#f59e0b" d="M 592,397 H 608 L 615,404 V 420 L 608,427 H 592 L 585,420 V 404 Z" />
+
+  <!-- The three axes the post compares on -->
+  <g>
+    <path class="pill" d="M 361,484 H 471 L 479,492 V 518 L 471,526 H 361 L 353,518 V 492 Z" />
+    <text class="mono" x="417" y="513" font-size="22" letter-spacing="3" text-anchor="middle" fill="#f59e0b">PRICE</text>
+
+    <path class="pill" d="M 519,484 H 681 L 689,492 V 518 L 681,526 H 519 L 511,518 V 492 Z" />
+    <text class="mono" x="601" y="513" font-size="22" letter-spacing="3" text-anchor="middle" fill="#f59e0b">DISTANCE</text>
+
+    <path class="pill" d="M 729,484 H 839 L 847,492 V 518 L 839,526 H 729 L 721,518 V 492 Z" />
+    <text class="mono" x="785" y="513" font-size="22" letter-spacing="3" text-anchor="middle" fill="#f59e0b">POWER</text>
+  </g>
+</svg>

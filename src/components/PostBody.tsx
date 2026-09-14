@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { Block } from "../data/posts";
+import { DeviceCompareTable } from "./DeviceCompareTable";
 import { Inline } from "./Inline";
 import { Lightbox } from "./Lightbox";
 
@@ -204,5 +205,8 @@ function BlockView({
           )}
         </figure>
       );
+
+    case "deviceCompare":
+      return <DeviceCompareTable rows={block.rows} caption={block.caption} />;
   }
 }

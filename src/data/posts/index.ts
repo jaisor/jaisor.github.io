@@ -29,7 +29,38 @@ export type Block =
       /** Hi-res version; when present the image opens in a Lightbox. */
       full?: string;
     }
-  | { kind: "table"; caption?: string; head: string[]; rows: string[][] };
+  | { kind: "table"; caption?: string; head: string[]; rows: string[][] }
+  | { kind: "deviceCompare"; caption?: string; rows: DeviceCompareRow[] };
+
+/**
+ * One row of a `deviceCompare` block, rendered by `DeviceCompareTable`.
+ * The two `*Tier` values are the comparable axes: they drive the filter
+ * pills, the header sort, and a color-coded label in their own column.
+ * The literal specs a tier flattens (`chip`, `rfPowerLabel`,
+ * `features`) render as a detail line under the device name instead, so
+ * the tier columns stay scannable without losing the real numbers. `price` is a plain number for sorting (the lower bound
+ * of any quoted range) while `priceLabel` keeps the full text,
+ * including "N/A".
+ */
+export interface DeviceCompareRow {
+  device: string;
+  /** External purchase/info link. */
+  href: string;
+  /** MCU family, e.g. "nRF52840", "ESP32-S3", "RP2040". */
+  chip: string;
+  rfPowerTier: "normal" | "high" | "very-high";
+  /** Max TX power as the vendor states it. */
+  rfPowerLabel: string;
+  powerTier: "low" | "high";
+  /**
+   * Onboard auxiliary I/O only, e.g. "Screen", "GPS", "WiFi". Leave out
+   * anything every row carries — it costs a column's attention without
+   * telling the reader apart; say it in a note under the table instead.
+   */
+  features: string[];
+  price: number | null;
+  priceLabel: string;
+}
 
 export interface Post {
   /** URL segment. The dedicated page is served at /posts/<slug>/. */

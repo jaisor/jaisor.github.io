@@ -105,6 +105,7 @@ src/assets/           # background.jpg, profile.jpg (imported so Vite fingerprin
   posts/<slug>/       # one folder per post, named for its slug; photos are
                       #   imported, never linked by path
 public/               # copied verbatim to dist/, so these are stable URLs
+  favicon.ico         #   16/32/48 PNG-in-ICO, generated from favicon.jpg
   favicon.jpg         #   256×256, square-cropped from src/assets/profile.jpg
   apple-touch-icon.jpg
   robots.txt          #   points at the sitemap
@@ -224,7 +225,13 @@ components.** Components are presentation only.
   which lands around 200–280KB each); the originals off a phone are
   3–6MB apiece and this repo ships to Pages. `.NET` imaging via
   PowerShell does the job without adding a dependency. Every `image`
-  block needs real `alt` text describing the photo.
+  block needs real `alt` text describing the photo, and so does the
+  hero: `Post` is a union (`PostPhoto`) in which `image` and `imageAlt`
+  arrive together, so the compiler rejects a photo with no description.
+  `PostImage` takes the whole post as its `photo` prop rather than the
+  two fields separately, which is what carries that guarantee into the
+  JSX. Describe the subject, not the post — "a carbon-fiber quadcopter
+  on a wooden floor", not "the finished build".
   `Post.image` is cropped to a landscape band (`h-40` on cards, `h-64`
   /`lg:h-80` on the page), so give it a landscape crop — a portrait
   photo there gets sliced through the middle. Body `image` blocks keep
@@ -265,7 +272,10 @@ components.** Components are presentation only.
   carries a plain-language `description` — keep that voice: explain what
   the invention actually does, no patentese. `About.tsx` currently
   renders only the number and title.
-- Add a social link → append to `socialLinks` in `data/social.ts`.
+- Add a social link → append to `socialLinks` in `data/social.ts`. The
+  list also carries the site's only contact mechanism, a `mailto:`;
+  `Header` sets `target="_blank"` only on `http(s):` entries, since a
+  `mailto:` opened in a new tab strands a blank one behind it.
 
 Bio prose lives inline in [`Header.tsx`](src/components/Header.tsx) (the
 opening paragraph in the hero) and
@@ -321,14 +331,16 @@ table and a feature list once it reaches the electronics.
   `DeviceCompareTable`'s tier labels run
   `emerald-300` / `amber-300` / `red-300` over a `/10` fill and a `/30`
   border. Don't introduce other hues, and don't use these decoratively.
-- **Card pattern** (Hobbies, Posts, and the Braggables rows in
-  `#about` share it):
-  `rounded-xl border border-neutral-800 bg-neutral-900/50 shadow-sm
-  shadow-black/20 transition [corner-shape:bevel]
-  hover:border-amber-500/40 hover:shadow-md hover:shadow-black/30`.
-  Reuse it verbatim for new cards so the sections stay visually
-  consistent. `[corner-shape:bevel]` is the site's signature — it
-  degrades gracefully to plain rounded corners where unsupported.
+- **Card pattern:** use the `card` utility, plus `card-link` when the
+  card is a link or button (Hobbies, Posts and the Braggables rows all
+  do). Both are defined in [`src/index.css`](src/index.css) — they were
+  a ~180-character utility string copy-pasted into four components,
+  which is the kind of thing that drifts. `card` carries the
+  `corner-shape: bevel` that is the site's signature; it degrades
+  gracefully to plain rounded corners where unsupported. These two are
+  the *only* sanctioned exception to writing utilities inline: reach
+  for `@utility` when a combination is already repeated verbatim in
+  three or more components, not to pre-emptively name things.
 - **Sections** are `min-h-screen px-6 py-12 lg:py-24`. Scrolling is plain
   (no CSS scroll-snap) — the scroll container is just
   `overflow-y-scroll scroll-smooth`; `ScrollCue` and `SectionNav` both
@@ -406,8 +418,14 @@ if a custom domain is ever added, all of them change together, plus
   the ~160 characters Google will show, which costs nothing but means
   the tail is cut in a search snippet — worth keeping the first sentence
   self-contained.
-- The favicon is a square crop of `src/assets/profile.jpg`. Regenerate
-  both it and `apple-touch-icon.jpg` whenever that photo changes.
+- **Two favicons, deliberately.** `favicon.ico` (16/32/48 PNG-in-ICO)
+  exists because browsers, crawlers and link previews still probe
+  `/favicon.ico` at the root and read a JPEG-only `<link rel="icon">`
+  as no favicon at all; `favicon.jpg` stays as the 256×256 version.
+  Both, plus `apple-touch-icon.jpg`, are square crops of
+  `src/assets/profile.jpg` and must be regenerated together whenever
+  that photo changes — `scripts/make-favicon.ps1` rebuilds the `.ico`
+  from the `.jpg`.
 
 ## Security (this is a public static site)
 

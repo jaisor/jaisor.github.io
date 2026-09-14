@@ -18,9 +18,11 @@ const post: Post = {
   title: "Building an X racer",
   date: "2016-03-19",
   excerpt:
-    "Build #6, and the first proper racer — a SpaceOne Formula One 220 X with EMAX 2205s, packed into a cage with no room to spare. 411 grams, and one flight controller that had to go.",
+    "Build #6, and the first proper racer: a SpaceOne Formula One 220 X with EMAX 2205s, packed into a cage with no room to spare. 411 grams, and one flight controller that had to go.",
   tags: ["fpv-drones"],
   image: xracerHero,
+  imageAlt:
+    "A small carbon-fiber FPV racing quadcopter on a wooden floor, with four black props, red-accented motors, a forward-facing camera lens, and a battery strap across the top plate.",
   body: [
     "At this point I was turning out roughly one build a month. For number six I wanted a proper racer, built on the X frames everyone had started shouting about.",
     {

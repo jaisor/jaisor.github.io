@@ -1,24 +1,29 @@
+import type { PostPhoto } from "../data/posts";
 import { tagById, type TagId } from "../data/tags";
 
 /**
  * A post's main photo. Falls back to a generated gradient carrying the
  * first tag's icon, so a post without a photo still has a hero without
  * shipping a placeholder image or hitting a third-party host.
+ *
+ * Takes the whole `PostPhoto` union rather than `image` and `imageAlt`
+ * as separate props, so the "a photo always brings its alt text" rule
+ * survives the hop from data into JSX.
  */
 export function PostImage({
-  image,
+  photo,
   tags,
   className = "",
 }: {
-  image?: string;
+  photo: PostPhoto;
   tags: TagId[];
   className?: string;
 }) {
-  if (image) {
+  if (photo.image) {
     return (
       <img
-        src={image}
-        alt=""
+        src={photo.image}
+        alt={photo.imageAlt}
         loading="lazy"
         className={`w-full object-cover ${className}`}
       />

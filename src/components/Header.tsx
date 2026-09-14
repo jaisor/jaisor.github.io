@@ -10,7 +10,7 @@ export function Header() {
     >
       <img
         src={profile}
-        alt="Jordan Marinov"
+        alt="Jordan Marinov: dark-rimmed glasses and a gray-streaked beard, in front of a workshop lit by ring lights"
         width={152}
         height={152}
         className="h-38 w-38 rounded-full object-cover ring-4 ring-amber-500/30 shadow-lg shadow-black/40 lg:h-48 lg:w-48"
@@ -37,7 +37,7 @@ export function Header() {
           <a
             key={label}
             href={url}
-            target="_blank"
+            target={url.startsWith("http") ? "_blank" : undefined}
             rel="noreferrer"
             title={label}
             className="rounded-full p-2 text-neutral-500 transition hover:bg-neutral-900 hover:text-amber-400 lg:p-3"

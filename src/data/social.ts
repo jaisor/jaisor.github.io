@@ -1,9 +1,14 @@
 import type { IconType } from "react-icons";
 import { SiGithub, SiInstagram, SiYoutube, SiBambulab } from "react-icons/si";
-import { FaLinkedin } from "react-icons/fa";
+import { FaLinkedin, FaEnvelope } from "react-icons/fa";
 
 export interface SocialLink {
   label: string;
+  /**
+   * An `http(s):` profile or a `mailto:`. `Header` opens only the
+   * former in a new tab — a `mailto:` with `target="_blank"` leaves a
+   * blank tab behind once the mail client takes over.
+   */
   url: string;
   icon: IconType;
 }
@@ -26,4 +31,5 @@ export const socialLinks: SocialLink[] = [
     url: "https://www.instagram.com/jaisorbl/",
     icon: SiInstagram,
   },
+  { label: "Email", url: "mailto:jaisor@gmail.com", icon: FaEnvelope },
 ];

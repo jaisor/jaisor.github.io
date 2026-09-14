@@ -22,9 +22,11 @@ const post: Post = {
   title: "Solar, battery and inverter for the RV trailer",
   date: "2024-02-21",
   excerpt:
-    "A 600 W flexible-panel array, a 24 V LiFePO4 bank, and an inverter big enough to run the microwave and practically everything else — zero generator use on the first real trip. Plus a Grafana dashboard and telemetry stack that went well past what the job needed, purely because I could.",
+    "A 600 W flexible-panel array, a 24 V LiFePO4 bank, and an inverter big enough to run the microwave and practically everything else. Zero generator use on the first real trip. Plus a Grafana dashboard and telemetry stack that went well past what the job needed, purely because I could.",
   tags: ["electronics", "3d-printing"],
   image: solarInstalled,
+  imageAlt:
+    "The system installed in an RV storage bay: a blue Victron MPPT charge controller, an inverter, and a strapped-down LiFePO4 battery wired with heavy red cabling in a plywood-lined compartment.",
   body: [
     "Our RV trailer came with the usual setup: a single lead-acid battery, no real solar, and a generator for anything beyond a weekend of light use. That's fine until you actually want to camp somewhere quiet for a week — running a generator every afternoon to keep the fridge cold gets old fast. So over a winter of driveway weekends I built a proper power system: a flexible solar array, a lithium bank, and an inverter sized for real appliances, not just phone chargers.",
     "I'll admit I went further than the job needed on the monitoring side. What started as \"it would be nice to see the battery voltage from inside\" turned into a full Grafana dashboard and telemetry stack. The first real trip out ran the microwave and practically everything else on solar with zero generator use — and as a bonus, the same box that runs the dashboard also gives us WiFi and internet at the campsite.",

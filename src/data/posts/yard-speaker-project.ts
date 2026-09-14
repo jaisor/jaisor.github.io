@@ -21,9 +21,11 @@ const post: Post = {
   title: "Yard speaker project",
   date: "2020-05-04",
   excerpt:
-    "The backyard speakers were still running off the TV, which meant no sound unless the TV was on. I gave them a dedicated amp instead — a Bluetooth board, a Raspberry Pi streaming Spotify over WiFi, and a 3D-printed, wood-finished enclosure to hold it all.",
+    "The backyard speakers were still running off the TV, which meant no sound unless the TV was on. I gave them a dedicated amp instead: a Bluetooth board, a Raspberry Pi streaming Spotify over WiFi, and a 3D-printed, wood-finished enclosure to hold it all.",
   tags: ["electronics", "3d-printing"],
   image: yardHero,
+  imageAlt:
+    "A Raspberry Pi single-board computer next to a Wuzhi Audio ZK-1002 100 W stereo amplifier board on a green cutting mat.",
   body: [
     "The yard speakers came with us from the old house, but they were still wired into the TV's sound system — which meant no music unless the TV was on, and \"too much a bother\" most of the time. Three things I wanted out of a proper fix:",
     {

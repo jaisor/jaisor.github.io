@@ -2,13 +2,15 @@ import { formatPostDate, postHref, type Post } from "../data/posts";
 import { PostImage } from "./PostImage";
 import { TagChips } from "./TagChips";
 
-export function PostCard({ slug, title, date, excerpt, tags, image }: Post) {
+export function PostCard(post: Post) {
+  const { slug, title, date, excerpt, tags } = post;
+
   return (
     <a
       href={postHref(slug)}
-      className="group flex flex-col overflow-hidden rounded-xl border border-neutral-800 bg-neutral-900/50 text-left shadow-sm shadow-black/20 transition [corner-shape:bevel] hover:border-amber-500/40 hover:shadow-md hover:shadow-black/30"
+      className="card card-link group flex flex-col overflow-hidden text-left"
     >
-      <PostImage image={image} tags={tags} className="h-40 shrink-0" />
+      <PostImage photo={post} tags={tags} className="h-40 shrink-0" />
 
       <div className="flex flex-1 flex-col p-5 lg:p-6">
         <time

@@ -62,7 +62,7 @@ export interface DeviceCompareRow {
   priceLabel: string;
 }
 
-export interface Post {
+interface PostFields {
   /** URL segment. The dedicated page is served at /posts/<slug>/. */
   slug: string;
   title: string;
@@ -71,16 +71,39 @@ export interface Post {
   /** One or two sentences. Shown on the card and as the page's lede. */
   excerpt: string;
   tags: TagId[];
-  /**
-   * Main photo. Import the asset so Vite fingerprints it, e.g.
-   * `import hero from "../../assets/posts/<slug>/hero.jpg"` — each post
-   * keeps its photos in its own folder. Cards and post
-   * pages fall back to a generated placeholder when this is absent.
-   */
-  image?: string;
   /** Body content. Bare strings are paragraphs; see `Block`. */
   body: Block[];
 }
+
+/**
+ * A post's main photo, modelled as a union so a photo cannot be added
+ * without its alt text: the compiler rejects `image` on its own. The
+ * hero renders on the card *and* on the post page, so an empty `alt`
+ * here was the site's largest accessibility hole — ten of twelve images
+ * on the home page carried no description at all.
+ */
+export type PostPhoto =
+  | {
+      /**
+       * Import the asset so Vite fingerprints it, e.g.
+       * `import hero from "../../assets/posts/<slug>/hero.jpg"` — each
+       * post keeps its photos in its own folder.
+       */
+      image: string;
+      /**
+       * What the photo shows, for screen readers and crawlers. Describe
+       * the subject, not the post: "a carbon-fiber quadcopter on a
+       * wooden floor", not "the finished build".
+       */
+      imageAlt: string;
+    }
+  | {
+      /** No photo: cards and pages draw the generated placeholder. */
+      image?: never;
+      imageAlt?: never;
+    };
+
+export type Post = PostFields & PostPhoto;
 
 /**
  * Every other file in this folder default-exports one `Post`. Adding a

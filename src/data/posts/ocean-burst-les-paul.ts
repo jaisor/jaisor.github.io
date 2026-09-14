@@ -36,9 +36,11 @@ const post: Post = {
   title: "An LP that looks like the ocean",
   date: "2023-09-04",
   excerpt:
-    "My third guitar kit build, made as a gift for a friend who wanted something that \"looks like the ocean.\" A botched dye job pushed me into learning to airbrush for the first time — the finish came out better than anything I'd built before it.",
+    "My third guitar kit build, made as a gift for a friend who wanted something that \"looks like the ocean.\" A botched dye job pushed me into learning to airbrush for the first time, and the finish came out better than anything I'd built before it.",
   tags: ["guitars"],
   image: oceanHero,
+  imageAlt:
+    "Close-up of a Les Paul style guitar body finished in a teal, blue, and purple burst over figured veneer, with cream binding, a chrome bridge, and amber bell knobs.",
   body: [
     "This was my third guitar kit build, made as a gift for a good friend from work. His main request going in was that it should \"look like the ocean or the beach\" — vague enough to give me some creative buffer to absorb any mishaps along the way.",
     { kind: "heading", text: "A rough start" },

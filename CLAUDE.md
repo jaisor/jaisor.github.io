@@ -80,6 +80,9 @@ src/components/
   PostCard.tsx        # one post teaser: photo, date, excerpt, tags, link
   PostPage.tsx        # the /posts/<slug>/ page + PostNotFound
   PostBody.tsx        # renders Block[] — paragraphs, code, tables, callouts
+  DeviceCompareTable.tsx # renders `deviceCompare` blocks: client-side
+                      #   sort (click a column header) + filter pills over
+                      #   a static DeviceCompareRow[] passed in as post data
   Inline.tsx          # shared inline markup: `code` and [label](href)
   PostImage.tsx       # post photo, or a gradient+icon placeholder if absent
   Lightbox.tsx        # full-screen viewer for a clicked post photo
@@ -173,7 +176,25 @@ components.** Components are presentation only.
   site with no code-splitting to gain from laziness.
   `body` is a `Block[]`: a bare string is a paragraph, and the tagged
   variants (`heading`, `code`, `list`, `note`/`warn`, `steps`, `table`,
-  `image`) cover longer technical posts. `PostBody.tsx` renders them. Inside any
+  `image`, `deviceCompare`) cover longer technical posts. `PostBody.tsx`
+  renders them. `deviceCompare` is the one interactive block: it takes a
+  `DeviceCompareRow[]` and renders through
+  [`DeviceCompareTable.tsx`](src/components/DeviceCompareTable.tsx),
+  which adds filter pills for the two tiered columns and click-to-sort
+  headers for all four — client-side state over data that's static at
+  build time, same as everywhere else on the site. The split in a row is
+  deliberate: the two tiers (`rfPowerTier`, `powerTier`) are the
+  comparable axes and get their own color-coded column, while the
+  literal specs a tier flattens (`chip`, `rfPowerLabel`, `features`)
+  render as a detail line under the device name, so the tier columns
+  stay scannable without losing the real numbers. Both tier
+  scales live as one ordered array each in that component — array index
+  *is* the sort rank, and each entry carries its pill label, cell label
+  and color — so adding a tier is one entry plus the union in
+  `DeviceCompareRow`. Reach for it only when a post needs to compare
+  several products/parts across more than one axis; a plain `table`
+  block covers everything else. See `meshtastic-node-comparison.ts` for
+  the shape. Inside any
   text field, backtick-delimited spans become inline code,
   `[label](href)` becomes a link, `*text*` becomes bold, and `_text_`
   becomes italic — that is the *only* markup. All four are tokenised
@@ -294,7 +315,12 @@ table and a feature list once it reaches the electronics.
   are written inline in JSX — there is no CSS module or styled-component
   layer to add to.
 - **Palette:** `neutral-950/900/800` surfaces, `neutral-300/400/500`
-  text, `amber-400/500` accents. Stay inside it.
+  text, `amber-400/500` accents. Stay inside it. The one sanctioned
+  exception is a *severity* scale, where the color carries the meaning
+  rather than the brand: `note`/`warn` callouts use `red-400/500`, and
+  `DeviceCompareTable`'s tier labels run
+  `emerald-300` / `amber-300` / `red-300` over a `/10` fill and a `/30`
+  border. Don't introduce other hues, and don't use these decoratively.
 - **Card pattern** (Hobbies, Posts, and the Braggables rows in
   `#about` share it):
   `rounded-xl border border-neutral-800 bg-neutral-900/50 shadow-sm
